@@ -102,24 +102,24 @@ abstract class Mnix_ORM_Prototype
                 //Many:many
                 if (isset($value['jtable'])) {
                     //Узнаём параметры создаваемого класса, обрабатываем атрибуты
-					/*$param2 = Mnix_ORM_Prototype::takeParam($value['class']);
-                    foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
+					$param2 = Mnix_ORM_Prototype::takeParam($value['class']);
+                    //foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
                     $select = Mnix_Db::connect()
                             ->select()
-                            ->from(
-                                array($this->_table, $value['jtable'], $param2['table']),
-                                $param2['fields'])
+                            ->from($this->_table)
+                            ->from($value['jtable'])
+                            ->from($param2['table'], $param2['fields'])
                             ->where(
                                 '?t = ?t AND ?t = ?t AND ?t = ?i',
                                 array(
                                     $this->_table.'.id',
-                                    $value['jtable'].'.'.$value['key'],
+                                    $value['jtable'].'.'.$value['id'],
                                     $param2['table'].'.id',
                                     $value['jtable'].'.'.$value['fk'],
                                     $this->_table.'.id',
                                     $this->_cortege['id']
                                 )
-                            );*/
+                            );
                 //1:many
                 } else {
                     $param = Mnix_ORM_Prototype::takeParam($value['class']);

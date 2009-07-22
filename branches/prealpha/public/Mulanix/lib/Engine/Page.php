@@ -15,7 +15,7 @@ class Mnix_Engine_Page extends Mnix_ORM_Prototype
     protected $_has_many = array(
 		'template' => array(
 				'class'  => 'Mnix_Engine_Template',
-				'key' 	 => 'page_id',
+				'id' 	 => 'page_id',
 				'fk' 	 => 'template_id',
 				'jtable' => 'mnix_page2template'));
 }
