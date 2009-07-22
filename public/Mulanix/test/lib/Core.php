@@ -30,21 +30,31 @@ class Test_Mnix_Core extends Mnix_Core
         parent::__destruct();
     }
     /**
-     * Тестируем
+     * Порядок тестирования
      */
     protected function _test()
     {
+        //Наиболее важные компоненты тестируются всегда
         $this->_suite->addTestSuite('Test_Mnix_CacheTest');
-
+        //Подгрузка конфига
         Mnix_Config::load();
-
+        //Дампы БД
         Test_Mnix_Db::dump1();
-        $this->_suite->addTestSuite('Test_Mnix_DbTest');
-
-        $this->_suite->addTestSuite('Test_Mnix_Db_SelectTest');
-
-        //Test_Mnix_Db::dump2();
-        
-        $this->_suite->addTestSuite('Test_Mnix_ORM_PrototypeTest');
+        Test_Mnix_Db::dump2();
+        //Если в запросе не указано конкретного класса, то тастируется всё
+        if ($_SERVER['REQUEST_URI'] === '/test/' || $_SERVER['REQUEST_URI'] === '/test') {
+            $this->_suite->addTestSuite('Test_Mnix_DbTest');
+            $this->_suite->addTestSuite('Test_Mnix_Db_SelectTest');
+            $this->_suite->addTestSuite('Test_Mnix_ORM_PrototypeTest');
+        } else $this->_selectTest();
+    }
+    /**
+     * Указания тестирвоания только одного класса
+     */
+    protected function _selectTest()
+    {
+        $class = str_replace(array('test', '/'), '', $_SERVER['REQUEST_URI']);
+        echo 'Testing: ' . $class;
+        $this->_suite->addTestSuite($class);
     }
 }
