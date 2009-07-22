@@ -193,27 +193,35 @@ abstract class Mnix_Db_Criterion {
     /**
      * Хелпер к Собирателю SQL
      *
+     * На вход:
+     * <code>
+     * array(
+     *     0 => array(
+     *         'data' => 'table'
+     *         'sql'  => '?t'
+     *  )
      * Стуктура возвращаемого массива:
      * <code>
      * array(
      *     'data' => array(
-     *         0 => 'data'
+     *         0  => 'table'
      *      )
-     *     'sql' => 'sql'
+     *     'sql'  => '?t'
      * )
      * </code>
      * @param array $arr
      * @return array
      */
-    protected function _helpBuild($arr)
-    {
-        $data = array();
-        foreach ($arr as $temp) {
-            $sql[] = $temp['sql'];
-            $data = array_merge($data, $temp['data']);
-        }
-        $build['sql'] = implode(', ', $sql);
-        $build['data'] = $data;
-        return $build;
+    protected function _helpBuild($arr) {
+        if (isset($arr)) {
+            $data = array();
+            foreach ($arr as $temp) {
+                $sql[] = $temp['sql'];
+                $data = array_merge($data, $temp['data']);
+            }
+            $build['sql'] = implode(', ', $sql);
+            $build['data'] = $data;
+            return $build;
+        } else return array('sql' => null, 'data' => array());
     }
 }

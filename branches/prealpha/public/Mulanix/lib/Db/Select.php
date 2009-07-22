@@ -20,15 +20,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
      * <code>
      * //SELECT table.* FROM table
      * $db->select()
-     *    ->from('table')
-     *    ->query();
-     * </code>
-     * 
-     * Указываем таблицу и её псевдоним:
-     * <code>
-     * //SELECT t.* FROM table AS t
-     * $db->select()
-     *    ->from(array('table'=>'t'))
+     *    ->from('table', '*')
      *    ->query();
      * </code>
      * 
@@ -52,7 +44,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
      *
      * Указываем несколько таблиц + в первой уточняем столбцы:
      * <code>
-     * //SELECT table.id AS 'i', table.text AS 'tx', table2.* FROM table, table2
+     * //SELECT table.id AS 'i', table.text AS 'tx' FROM table, table2
      * $db->select()
      *    ->from('table')
      *    ->from('table2')
@@ -114,13 +106,15 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
                         $column_arr[count($column_arr)-1]['data'][] = $table.'.'.$column;
                         $column_arr[count($column_arr)-1]['data'][] = $alias;
                     } else {
-                        $column_arr[]['sql'] = '?t';
-                        $column_arr[count($column_arr)-1]['data'][] = $table.'.'.$column;
+                        if ($column === '*') {
+                            $column_arr[]['sql'] = '?t.*';
+                            $column_arr[count($column_arr)-1]['data'][] = $table;
+                        } else {
+                            $column_arr[]['sql'] = '?t';
+                            $column_arr[count($column_arr)-1]['data'][] = $table.'.'.$column;
+                        }
                     }
                 }
-            } else {
-                $column_arr[]['sql'] = '?t.*';
-                $column_arr[count($column_arr)-1]['data'][] = $table;
             }
             //Table
             $table_arr[]['data'][] = $table;
