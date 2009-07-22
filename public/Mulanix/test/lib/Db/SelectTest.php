@@ -20,6 +20,9 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('table', null,
+                array('sql' => 'SELECT  FROM ?t',
+                        'data' => array('table'))),
+            array('table', '*',
                 array('sql' => 'SELECT ?t.* FROM ?t',
                         'data' => array('table', 'table'))),
             array('table', 'id',
@@ -44,9 +47,8 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
         $sel1->from('table1')
                ->from('table2', array('id', 'text'));
         $res1 = array(
-                'sql'  => 'SELECT ?t.*, ?t, ?t FROM ?t, ?t',
+                'sql'  => 'SELECT ?t, ?t FROM ?t, ?t',
                 'data' => array(
-                                'table1',
                                 'table2.id',
                                 'table2.text',
                                 'table1',
@@ -97,7 +99,7 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     {
         $db = Mnix_Db::connect();
         $select = new Test_Mnix_Db_Select($db);
-        $select->from($table)
+        $select->from($table, '*')
                 ->where($condition, $data);
         $build = $select->build();
         $this->assertEquals($build, $result);
@@ -129,10 +131,10 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     public function providerJoinLeft()
     {
         return array(
-            array('table', null, array('jtable' => 'table'), array('id' => 'fk'), null,
+            array('table', '*', array('jtable' => 'table'), array('id' => 'fk'), null,
                 array('sql' => 'SELECT ?t.* FROM ?t LEFT JOIN ?t ON ?t = ?t',
                     'data' => array('table','table', 'jtable', 'table.fk', 'jtable.id'))),
-            array('table', null, array('jtable' => 'table'), array('id' => 'fk'), array('id', 'field1'),
+            array('table', '*', array('jtable' => 'table'), array('id' => 'fk'), array('id', 'field1'),
                 array('sql' => 'SELECT ?t.*, ?t, ?t FROM ?t LEFT JOIN ?t ON ?t = ?t',
                     'data' => array('table', 'jtable.id', 'jtable.field1', 'table', 'jtable', 'table.fk', 'jtable.id'))),
             array('table', 
@@ -152,7 +154,7 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     {
         $db = Mnix_Db::connect();
         $select = new Test_Mnix_Db_Select($db);
-        $select->from('table')
+        $select->from('table', '*')
                 ->limit($first, $last);
         $this->assertEquals($select->build(), $result);
     }
@@ -183,9 +185,9 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     public function providerQuery()
     {
         return array(
-            array('test_table', null, '?t = ?i', array('id', 1),
+            array('test_table', '*', '?t = ?i', array('id', 1),
                 array('id'=>1, 'num'=>11, 'text'=>'text1')),
-            array('test_table', null, '?t = ?i', array('test_table.id', 2),
+            array('test_table', '*', '?t = ?i', array('test_table.id', 2),
                 array('id'=>2, 'text'=>'text2', 'num'=>22))
         );
     }

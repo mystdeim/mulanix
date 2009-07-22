@@ -33,7 +33,7 @@ abstract class Mnix_ORM_Prototype
 	protected function _select() 
 	{
         if (!isset($this->_table)) Mnix_Core::putMessage(__CLASS__, 'err', 'No table in ' . get_class($this));
-		$this->_select = Mnix_Db::connect()->select()->from($this->_table);
+		$this->_select = Mnix_Db::connect()->select()->from($this->_table, '*');
 	}	
 	/*public function save()
 	{
@@ -102,7 +102,7 @@ abstract class Mnix_ORM_Prototype
                 //Many:many
                 if (isset($value['jtable'])) {
                     //Узнаём параметры создаваемого класса, обрабатываем атрибуты
-					$param2 = Mnix_ORM_Prototype::takeParam($value['class']);
+					/*$param2 = Mnix_ORM_Prototype::takeParam($value['class']);
                     foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
                     $select = Mnix_Db::connect()
                             ->select()
@@ -119,13 +119,13 @@ abstract class Mnix_ORM_Prototype
                                     $this->_table.'.id',
                                     $this->_cortege['id']
                                 )
-                            );
+                            );*/
                 //1:many
                 } else {
                     $param = Mnix_ORM_Prototype::takeParam($value['class']);
                     $select = Mnix_Db::connect()
                             ->select()
-                            ->from($param['table'])
+                            ->from($param['table'], '*')
                             ->where('?t = ?i',
                                 array(
                                     $param['table'].'.'.$value['fk'],
