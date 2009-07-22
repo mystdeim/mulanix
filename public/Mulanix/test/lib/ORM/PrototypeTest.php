@@ -68,17 +68,18 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
          $tables3 = $table1->getTables3();
          $tables3->join('table2');
          $tables3->load();
-         //var_dump($tables3);
          foreach ($tables3 as $table3) {
-             //var_dump($table3);
              $table2 = $table3->getTable2();
-             //var_dump($table2);
-             //var_dump($table2->getText());
              $this->assertEquals($table2->getText(), 'text22');
          }
      }
      public function testHasMany2Many()
      {
-         
+         $table1 = new Test_Mnix_ORM_Table1(2);
+         $tables4 = $table1->getTables4();
+         $tables4->load();
+         foreach ($tables4 as $table4) {
+             $this->assertEquals($table4->getText(), 'text42');
+         }
      }
 }
