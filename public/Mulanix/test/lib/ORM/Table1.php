@@ -20,7 +20,7 @@ class Test_Mnix_ORM_Table1 extends Test_Mnix_ORM_Prototype
                 'class'  => 'Test_Mnix_ORM_Table4',
                 'jtable' => 'mnix_test_table124',
                 'fk'     => 'table1_id',
-                'id'    => 'table4_id'
+                'id'     => 'table4_id'
         )
     );
 }

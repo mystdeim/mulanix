@@ -73,7 +73,7 @@ abstract class Mnix_ORM_Prototype
      */
 	protected function _setRelations()
     {
-        //Проверяем кортеж на "жадность"
+        //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
         foreach ($this->_cortege as $key => $value) {
             $field = explode('.', $key);
             if (isset($field[1])) {
@@ -99,6 +99,8 @@ abstract class Mnix_ORM_Prototype
                     //Удаляем ненужный внешний ключ
                     unset($this->_cortege[$value['id']]);
                 }
+                //Добавляем в объект данные из жадного запроса, если они существуют
+                if (isset($this->_cortege[$key])) $obj->set($this->_cortege[$key]);
                 $this->_cortege[$key] = $obj;
 			}
 		}
