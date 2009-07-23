@@ -10,7 +10,14 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
      */
     public function testParam()
     {
-        $db = Test_Mnix_Db::connect('DB0');
+        $db_param = array(
+            'type'  => 'MySql',
+            'host'  => 'localhost',
+            'login' => 'testuser',
+            'pass'  => '12345',
+            'base'  => 'cmf1'
+        );
+        $db = Test_Mnix_Db::connect($db_param);
         $param = $db->getParam();
         $this->assertEquals($param['type'], 'MySql');
         $this->assertEquals($param['host'], 'localhost');
@@ -23,12 +30,18 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
      */
     public function testConnect()
     {
+        $db_param = array(
+            'type'  => 'MySql',
+            'host'  => 'localhost',
+            'login' => 'testuser',
+            'pass'  => '12345',
+            'base'  => 'cmf1'
+        );
         $db = Test_Mnix_Db::connect('DB0');
+        $db = Test_Mnix_Db::connect($db_param);
         $db = Test_Mnix_Db::connect();
         $db = Test_Mnix_Db::connect();
         $db = Test_Mnix_Db::connect();
-        $db = Test_Mnix_Db::connect();
-
         $this->assertEquals(count(Test_Mnix_Db::getInstance()), 1);
     }
     /**
@@ -43,13 +56,17 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
     public function providerShielding()
     {
         return array(
+            array(null, 'i', 0), //TODO: Тут нужно бросать исключение
+            array('0', 'i', 0),
+            array('false', 'i', 0),
             array('123', 'i', 123),
             array('123.4', 'i', 123),
+            array('123,4', 'i', 123),
+            array('123d', 'i', 123),
+            array('d123', 'i', 0),
             array('abcdef', 's', "'abcdef'"),
             array('1223.3', 'f', 1223.3),
             array('dghf123', 'n', 'dghf123'),
-            array('123d', 'i', 123),
-            array('d123', 'i', 0),
             array('table', 't', '`table`'),
             array('table.field', 't', '`table`.`field`')
         );
@@ -60,7 +77,7 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
      */
     public function testPlaceHolder($condition, $data, $result)
     {
-        $db = Test_Mnix_Db::connect();
+        $db = Test_Mnix_Db::connect('DB0');
         $this->assertEquals($db->placeHolder($condition, $data), $result);
     }
     public function providerPlaceHolder()
@@ -78,7 +95,7 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
      */
     public function testQuery($sql, $data, $result)
     {
-        $db = Mnix_Db::connect();
+        $db = Test_Mnix_Db::connect('DB0');
         $res = $db->query($sql, $data);
         $this->assertEquals($res[0], $result);
     }

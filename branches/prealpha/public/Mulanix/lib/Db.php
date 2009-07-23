@@ -13,13 +13,29 @@
  */
 class Mnix_Db
 {
+    /**
+     * Параметры соеденения с базой
+     * @var array
+     */
     protected $_param;
-    protected $_con; //указатель coединения c cерверoм
+    /**
+     * Указатель coединения c cерверoм
+     * @var object(mysqli)
+     */
+    protected $_con;
+    /**
+     * Объект драйвера базы данных
+     * @var object(driver_db)
+     */
     protected $_db;
+    /**
+     * Массив, содержащий параметры подключенний
+     * @var array
+     */
     static protected $_instance = null;
     /**
      * Устанавливаем параметры соеднения с базой или указываем имя базы
-     * @param mixed $nameDB
+     * @param mixed
      */
     public static function connect($param = MNIX_DEFAULT_DB)
     {
@@ -41,6 +57,10 @@ class Mnix_Db
         Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
         return end(self::$_instance[$paramObj['type']]);
 
+    }
+    protected function __construct($param)
+    {
+        $this->_param = $param;
     }
     /**
      * Кладём указатель на соединение бд
@@ -168,9 +188,5 @@ class Mnix_Db
             case 's':
                 return "'".mysqli_escape_string($this->_con, $value)."'";
         }
-    }
-    protected function __construct($param)
-    {
-        $this->_param = $param;
     }
 }

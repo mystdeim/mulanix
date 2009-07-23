@@ -9,5 +9,5 @@ class Test_Mnix_ORM_Table2 extends Test_Mnix_ORM_Prototype {
 	protected $_has_one = array(
 		'table1' => array(
 				'class'  => 'Test_Mnix_ORM_Table1',
-				'fk' 	 => 'table1_id'));
+				'id' 	 => 'table1_id'));
 }

@@ -33,46 +33,46 @@ class Mnix_Core
         Mnix_Config::load();
 
         //Создаём юзера
-        $user = Mnix_Auth_User::current();
+        //$user = Mnix_Auth_User::current();
 
         //Получаем группу
-        $group = $user->getGroup();
+        //$group = $user->getGroup();
 
         //Парсим урл
-        $url = Mnix_Uri::current();
+        //$url = Mnix_Uri::current();
 
         //Получаем страницу
-        $page = $url->getPage();
+        //$page = $url->getPage();
 
         //Проверяем разрешение на страницу группе
-        $acl = new Mnix_Acl();
-        $acl->role($group);
-        if ($acl->isAllowed('view', $page)) {
+        //$acl = new Mnix_Acl();
+        //$acl->role($group);
+        //if ($acl->isAllowed('view', $page)) {
 
             //Получаем шаблоны
-            $templates = $page->getTemplate();
+            //$templates = $page->getTemplate();
  
             //Обходим шаблоны
-            foreach ($templates as $template) {
+            //foreach ($templates as $template) {
                 //var_dump($template);
 
                 //Смотрим права
-                $rights = $acl->allowed($template);
+                //$rights = $acl->allowed($template);
                 //var_dump($rights);
-                if (isset($rights)) {
+                //if (isset($rights)) {
 
-                }
+                //}
 
                 //Создаём контроллер и выполняем его
-            }
-        } else {
-            die('Pemission denied!');
-        }
+            //}
+        //} else {
+            //die('Pemission denied!');
+        //}
         //$a++;
         try {
-            $a++;
-            throw new Mnix_Db_Select_Exception('error');
-        } catch(Exception $e) {
+            //$a++;
+            //throw new Mnix_Db_Select_Exception('error');
+        } catch(E_NOTICE $e) {
             var_dump($e);
             Mnix_Core::putMessage(__CLASS__, 'err', $e->getMessage());
         }
