@@ -185,10 +185,10 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     public function providerQuery()
     {
         return array(
-            array('test_table', '*', '?t = ?i', array('id', 1),
-                array('id'=>1, 'num'=>11, 'text'=>'text1')),
-            array('test_table', '*', '?t = ?i', array('test_table.id', 2),
-                array('id'=>2, 'text'=>'text2', 'num'=>22))
+            array('mnix_test_table1', '*', '?t = ?i', array('id', 1),
+                array('id'=>1, 'text'=>'text11')),
+            array('mnix_test_table1', '*', '?t = ?i', array('mnix_test_table1.id', 2),
+                array('id'=>2, 'text'=>'text12'))
         );
     }
 }

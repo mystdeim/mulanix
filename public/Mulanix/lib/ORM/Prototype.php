@@ -83,11 +83,14 @@ abstract class Mnix_ORM_Prototype
         }
         //1:1
 		if (isset($this->_has_one)) {
+            //Тут ошибка в логике
 			foreach ($this->_has_one as $key => $value) {
-                $class = $value['class'];
+                /*$class = $value['class'];
+                var_dump($value);
+                var_dump($this);
                 $obj = new $class($this->_cortege[$value['fk']]);
                 if (is_array($this->_cortege[$key])) $obj->set($this->_cortege[$key]);
-                $this->_cortege[$key] = $obj;
+                $this->_cortege[$key] = $obj;*/
                 //Удаляем ненужный внешний ключ //Хз зачем тут это 
                 //var_dump($this->_cortege[$value['fk']]);
                 //unset($this->_cortege[$value['fk']]);
@@ -225,7 +228,8 @@ abstract class Mnix_ORM_Prototype
 		foreach ($atts as $att) {
             
             //Проверяем кортеж
-            if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
+            //if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
+            if (isset($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
 		}
 		if (isset($data)) {
             //Если запрос одного аттрибу, то его и возвращаем

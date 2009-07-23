@@ -14,7 +14,7 @@ class Mnix_Core
     protected static $_crash;
     protected static $_time;
     protected static $_hot_log;
-    protected static $_count;
+    protected static $_count = array('cache_l'=>0,'cache_r'=>0,'class'=>0,'cache_s'=>0,'cache_d'=>0);
 	public function __construct()
     {
 		$this->_crash = true;
@@ -54,11 +54,11 @@ class Mnix_Core
  
             //Обходим шаблоны
             foreach ($templates as $template) {
-                var_dump($template);
+                //var_dump($template);
 
                 //Смотрим права
                 $rights = $acl->allowed($template);
-                var_dump($rights);
+                //var_dump($rights);
                 if (isset($rights)) {
 
                 }
@@ -68,7 +68,14 @@ class Mnix_Core
         } else {
             die('Pemission denied!');
         }
-
+        //$a++;
+        try {
+            $a++;
+            throw new Mnix_Db_Select_Exception('error');
+        } catch(Exception $e) {
+            var_dump($e);
+            Mnix_Core::putMessage(__CLASS__, 'err', $e->getMessage());
+        }
 
         //Выполнение не было прервано
         $this->_crash =false;
