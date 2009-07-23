@@ -12,8 +12,20 @@
  * @package Mnix_Db
  */
 abstract class Mnix_Db_Criterion {
+    /**
+     * Объект Mnix-Db
+     * @var object(Mnix_Db)
+     */
     protected $_db;
+    /**
+     * Массив условий where
+     * @var array()
+     */
 	protected $_where = array();
+    /**
+     * Строка с уловием лимита(строка вместо массива, для быстроты)
+     * @var string
+     */
 	protected $_limit = null;
     /**
      * Массив таблиц
@@ -32,9 +44,17 @@ abstract class Mnix_Db_Criterion {
      * @var array
      */
 	protected $_table = array();
-    protected $_data;
+    /**
+     * Конструктор
+     *
+     * @param Mnix_Db $obj
+     */
+    public function __construct($obj)
+	{
+		$this->_db = $obj;
+	}
 	/**
-     * Указываем таблицы
+     * Указываем таблицу
      * @param mixed $table
      * @return object(Mnix_Db_Criterion)
      */
@@ -68,9 +88,9 @@ abstract class Mnix_Db_Criterion {
      *
      * Простой пример
      * <code>
-     * //SELECT * FROM table WHERE field = 5
+     * //SELECT table.* FROM table WHERE field = 5
      * $db->select()
-     *    ->from('table')
+     *    ->from('table', '*')
      *    ->where('?t = ?i', array('field', 5))
      * </code>
      *
@@ -88,58 +108,6 @@ abstract class Mnix_Db_Criterion {
 
 		return $this;
 	}
-	/*public function in($table, $data, $mode) {
-		$in = NULL;
-		foreach ($data as $temp) $in[] = $this->shielding($temp, $mode);
-		$in = $this->shielding($table, 't').' IN ('.implode(', ', $in).')';
-		if (empty($this->_where)) $this->_where = $in;
-		else $this->_where .= ' AND '.$in;
-		return $this;
-	}
-	
-	public function andIn($table, $data, $mode) {
-		$this->in($table, $data, $mode);
-	}
-	
-	public function orIn($table, $data, $mode) {
-		$in = NULL;
-		foreach ($data as $temp) $in[] = $this->shielding($temp, $mode);
-		$in = $this->shielding($table, 't').' IN ('.implode(', ', $in).')';
-		if (empty($this->_where)) $this->_where = $in;
-		else $this->_where .= ' OR '.$in;
-		return $this;
-	}*/
-	
-	
-	//SET, VALUE
-	public function set($name, $data = NULL) 
-	{
-	    if ($data !== NULL) {
-	        if (!is_array($data)) $data = array($data);
-	        else reset($data);
-	    }
-		foreach ($name as $key => $value) {
-		    if ($data !== NULL) {
-		        
-		    }
-			$this->set_arr[$this->shielding($key, 't')] =  $this->PlaceHolder($value, $data);
-		}
-		return $this;
-	}
-	
-	public function value($name, $data = NULL) 
-	{
-		foreach ($name as $key => $value) {
-			$this->set_arr[$this->shielding($key, 't')] =  $this->PlaceHolder($value, $data);
-		}
-		return $this;
-	}	
-	//Join
-	public function join($data) 
-	{
-		
-	}
-	
 	/**
      * Лимит выборки
      * @param mixed $first
@@ -152,27 +120,15 @@ abstract class Mnix_Db_Criterion {
 		if (isset($last)) $this->_limit .= ', '.(int)$last;
 		return $this;
 	}
+    /**
+     * Выполнение запроса через объект Mnix_Db
+     * @return array()
+     */
     public function query()
     {
         $arr = $this->_build();
         return $this->_db->query($arr['sql'], $arr['data']);
     }
-    /**
-     * Конструктор
-     * 
-     * @param Mnix_Db $obj
-     */
-    public function __construct($obj)
-	{
-		$this->_db = $obj;
-	}
-	
-	//Вспомогательные функции
-	protected function _orderHelper($condition, $desc) {
-		if (empty($this->order)) $this->order = $this->shielding($condition, 't');
-		else $this->order .= ', '.$this->shielding($condition, 't');	
-		if ($desc) $this->order .= ' DESC';
-	}
     /**
      * Собиратель SQL
      *

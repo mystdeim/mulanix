@@ -2,6 +2,17 @@
 /**
  * Mulanix Framework
  *
+ * Отношения 1:1
+ * Потомок внешний ключ 'fk', указывающий на предка
+ * <code>
+ * $_has_one = array(
+ *     'name' => array (
+ *         'class' => 'Class_Name'
+ *         'fk'    => 'field'
+ *      )
+ * )
+ * </code>
+ *
  * @package Mnix_ORM
  * @author deim
  * @copyright 2009
@@ -34,18 +45,7 @@ abstract class Mnix_ORM_Prototype
 	{
         if (!isset($this->_table)) Mnix_Core::putMessage(__CLASS__, 'err', 'No table in ' . get_class($this));
 		$this->_select = Mnix_Db::connect()->select()->from($this->_table, '*');
-	}	
-	/*public function save()
-	{
-	    testr($this->_cortege);
-	    foreach ($this->_cortege as $key => $val) {
-	        if (!is_array($val)) {
-	            $arr[$key] = '?s';
-	            $data[] = $val;
-	        }
-	    }
-	    lib_Database_Factory::connect()->insert()->into($this->_table)->set($arr, $data)->execute();
-	}*/
+	}
 	/**
      * Загрузка данных из бд
      */
@@ -83,20 +83,26 @@ abstract class Mnix_ORM_Prototype
         }
         //1:1
 		if (isset($this->_has_one)) {
-            //Тут ошибка в логике
 			foreach ($this->_has_one as $key => $value) {
-                /*$class = $value['class'];
-                var_dump($value);
-                var_dump($this);
-                $obj = new $class($this->_cortege[$value['fk']]);
-                if (is_array($this->_cortege[$key])) $obj->set($this->_cortege[$key]);
-                $this->_cortege[$key] = $obj;*/
-                //Удаляем ненужный внешний ключ //Хз зачем тут это 
-                //var_dump($this->_cortege[$value['fk']]);
-                //unset($this->_cortege[$value['fk']]);
+                $class = $value['class'];
+                if (isset($value['fk'])) {
+                    $param = Mnix_ORM_Prototype::takeParam($class);
+                    $obj = new $class;
+                    $obj->find('?t = ?i',
+                                array(
+                                    $param['table'].'.'.$value['fk'],
+                                    $this->_cortege['id']
+                                )
+                        );
+                } else {
+                    $obj = new $class($this->_cortege[$value['id']]);
+                    //Удаляем ненужный внешний ключ
+                    unset($this->_cortege[$value['id']]);
+                }
+                $this->_cortege[$key] = $obj;
 			}
 		}
-        //Many
+        //many:many
 		if (isset($this->_has_many)) {
 			foreach ($this->_has_many as $key => $value) {
                 //Создаём коллекцию
@@ -216,7 +222,11 @@ abstract class Mnix_ORM_Prototype
 					break;
 		}
 	}
-	
+	/**
+     * Запрос аттрибута
+     * @param mixed $atts
+     * @return mixed
+     */
 	protected function _getAttribute($atts)
     {
 		if (!$this->_isLoad) $this->_load();
@@ -239,7 +249,7 @@ abstract class Mnix_ORM_Prototype
 		} else return null;
 	}
     /**
-     *
+     * Запрос парметров класса(таблица, поля и тп)
      * @param string $name
      * @return array
      */
