@@ -11,7 +11,8 @@
  * @category Mulanix
  * @package Mnix_Db
  */
-class Mnix_Db_Select extends Mnix_Db_Criterion {
+class Mnix_Db_Select extends Mnix_Db_Criterion
+{
 	//protected $_column = array();
 	/**
      * Добавление предложения FROM
@@ -94,7 +95,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
      */
     protected function _build()
     {
-        $build['sql'] .= 'SELECT ';
+        $build['sql'] = 'SELECT ';
         $build['data'] = array();
         //FROM
         foreach ($this->_table as $table => $value) {
@@ -141,6 +142,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
                 $table_arr[count($table_arr)-1]['sql'] = '?t';
             }
         }
+        if (!isset($column_arr)) $column_arr = null;
         $arr = $this->_helpBuild($column_arr);
         $build['sql'] .= $arr['sql'];
         $build['data'] = array_merge($build['data'], $arr['data']);
@@ -165,7 +167,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion {
             if (is_int(key($column))) {
                 foreach ($column as $key => $val) $columns[$val] = null;
             } else $columns = $column;
-        }
+        } else $columns = null;
         return $columns;
     }
 }

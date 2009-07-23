@@ -25,8 +25,7 @@ class Test_Mnix_Core extends Mnix_Core
         echo '<pre>';
         $reporter = PHPUnit_TextUI_TestRunner::run($this->_suite);
         echo '</pre>';
-        Test_Mnix_Db::dump1end();
-        //Test_Mnix_Db::dump2end();
+        //Test_Mnix_Db::dump_end();
         parent::__destruct();
     }
     /**
@@ -39,8 +38,7 @@ class Test_Mnix_Core extends Mnix_Core
         //Подгрузка конфига
         Mnix_Config::load();
         //Дампы БД
-        Test_Mnix_Db::dump1();
-        Test_Mnix_Db::dump2();
+        //Test_Mnix_Db::dump();
         //Если в запросе не указано конкретного класса, то тастируется всё
         if ($_SERVER['REQUEST_URI'] === '/test/' || $_SERVER['REQUEST_URI'] === '/test') {
             $this->_suite->addTestSuite('Test_Mnix_DbTest');

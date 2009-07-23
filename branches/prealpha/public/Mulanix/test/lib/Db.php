@@ -35,63 +35,7 @@ class Test_Mnix_Db extends Mnix_Db
         $this->_setDb();
         return $this->_placeHolder($condition, $data);
     }
-    public static function dump1()
-    {
-        $db = Test_Mnix_Db::connect('DB0');
-        $db->query(
-            'CREATE TABLE test_table (
-                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                num INT NOT NULL,
-                text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE = InnoDB;');
-        $db->query(
-            "INSERT INTO test_table (
-                id,
-                num,
-                text
-            )
-            VALUES (
-                NULL , '11', 'text1'
-            ), (
-                NULL , '22', 'text2'
-            ), (
-                NULL , '33', 'test3'
-            ), (
-                NULL , '44', 'test4'
-            ), (
-                NULL , '55', 'test5'
-            );");
-        $db->query(
-            'CREATE TABLE test_table_j1 (
-                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                num INT NOT NULL,
-                text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-            ) ENGINE = InnoDB;');
-        $db->query(
-            "INSERT INTO test_table_j1 (
-                id,
-                num,
-                text
-            )
-            VALUES (
-                NULL , '1', 'text11'
-            ), (
-                NULL , '2', 'text22'
-            ), (
-                NULL , '3', 'test33'
-            ), (
-                NULL , '4', 'test44'
-            ), (
-                NULL , '5', 'test55'
-            );");
-    }
-    public static function dump1end()
-    {
-        $db = Test_Mnix_Db::connect('DB0');
-        $db->query('DROP TABLE test_table');
-        $db->query('DROP TABLE test_table_j1');
-    }
-    public static function dump2()
+    public static function dump()
     {
         $db = Test_Mnix_Db::connect('DB0');
         //--------------------------------------------------------------------------------------------------------------
@@ -213,7 +157,7 @@ class Test_Mnix_Db extends Mnix_Db
             );");
         //--------------------------------------------------------------------------------------------------------------
     }
-    public static function dump2end()
+    public static function dump_end()
     {
         $db = Test_Mnix_Db::connect('DB0');
         $db->query('DROP TABLE mnix_test_table1');
