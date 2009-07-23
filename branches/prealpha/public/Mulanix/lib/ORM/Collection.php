@@ -53,6 +53,7 @@ class Mnix_ORM_Collection implements Iterator
     {
 		return $this->_select;
 	}*/
+    //TODO Нужно учесть что в отношении 1:1 могут быть ключи в разных объектах
 	public function join($name) {
 		if (empty($this->_select)) $this->_select();
 		$param1 = Mnix_ORM_Prototype::takeParam($this->_param['class']);
@@ -71,7 +72,7 @@ class Mnix_ORM_Collection implements Iterator
             }
             $this->_select->from($param1['table'], $param1['fields'])
                           ->joinLeft(array($param2['table'] => $param1['table']),
-                                     array('id'             => $param1['has_one'][$name]['fk']),
+                                     array('id'             => $param1['has_one'][$name]['id']),
                                      $param2['fields']
             );
             //var_dump($this->_select->query());
