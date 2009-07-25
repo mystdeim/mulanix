@@ -100,12 +100,20 @@ abstract class Mnix_Db_Criterion {
      */
 	public function where($condition, $data = null)
 	{
-		$this->_where[]['sql'] = $condition;
-        if (isset($data)) {
-            if (!is_array($data)) $this->_where[count($this->_where)-1]['data'][] = $data;
-            else $this->_where[count($this->_where)-1]['data'] = array_merge($data);
+        if (!count($this->_where)) {
+            $this->_where[]['sql'] = $condition;
+            if (isset($data)) {
+                if (!is_array($data)) $this->_where[count($this->_where)-1]['data'][] = $data;
+                else $this->_where[count($this->_where)-1]['data'] = array_merge($data);
+            }
+        } else {
+            $this->_where[count($this->_where)-1]['sql'] .=' ?n '.$condition;
+            if (isset($data)) {
+                $this->_where[count($this->_where)-1]['data'][] = 'AND';
+                if (!is_array($data)) $this->_where[count($this->_where)-1]['data'][] = $data;
+                else $this->_where[count($this->_where)-1]['data'] = array_merge($this->_where[count($this->_where)-1]['data'], $data);
+            }
         }
-
 		return $this;
 	}
 	/**

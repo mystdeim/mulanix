@@ -44,6 +44,7 @@ class Test_Mnix_Core extends Mnix_Core
             $this->_suite->addTestSuite('Test_Mnix_DbTest');
             $this->_suite->addTestSuite('Test_Mnix_Db_SelectTest');
             $this->_suite->addTestSuite('Test_Mnix_ORM_PrototypeTest');
+            $this->_suite->addTestSuite('Test_Mnix_ORM_CollectionTest');
         } else $this->_selectTest();
     }
     /**

@@ -56,7 +56,7 @@ abstract class Mnix_ORM_Prototype
         //Проверяем индитификатор
 		if (count($this->_cortege) === 1 && isset($this->_cortege['id'])) $this->_select->where('?t = ?i', array($this->_table.'.id', $this->_cortege['id']));
 		$res = $this->_select
-			->limit(1)
+            ->limit(1)
 			->query();
 		//Проверяем отношения
 		if ($res) {
@@ -176,23 +176,25 @@ abstract class Mnix_ORM_Prototype
 		foreach ($sel as $temp) $data['fields'][] = $temp['Field'];
 		return $data;
 	}
-	/*public function join($name)
+    public function join($name)
     {
-		if (empty($this->_select)) $this->_select();
-		if (isset($this->_has_one)) {
-			foreach ($this->_has_one as $key => $val) {
-				if ($name == $key) {
-					$param1 = lib_ORM_Prototype::takeParam(get_class($this));
-					$param2 = lib_ORM_Prototype::takeParam($val['class']);
-					foreach ($param1['fields'] as $key => &$value) $value = $param1['table'].'.'.$value." AS '$value'";
-					foreach ($param2['fields'] as $key => &$value) $value = $param2['table'].'.'.$value." AS '$name.$value'";
-					$this->_select->from($param1['table'], array_merge($param1['fields'], $param2['fields']));
-					$this->_select->join(array($this->_table => $param2['table']), array($val['fk'] => 'id'));
-					$this->_isLoad = FALSE;
-				}
-			}
-		} else Mnix_Core::putMessage(__CLASS__, 'err', 'Соединение в классе "'.get_class($this).'" к атрибуту "'.$name.'" не может быть применино');
-	}*/
+        if (isset($this->_has_one[$name])) {
+            $jclass = $this->_has_one[$name]['class'];
+            $jparam = Mnix_ORM_Prototype::takeParam($jclass);
+            //Пересчитываем столбцы для соединямой таблицы
+            foreach ($jparam['fields'] as $key => $value) {
+                $jparam['fields'][$value] = $name.'.'.$value;
+                unset($jparam['fields'][$key]);
+            }
+            $this->_select = Mnix_Db::connect()->select()
+                ->from($this->_table, '*')
+                ->joinLeft(
+                    array($jparam['table']             => $this->_table),
+                    array($this->_has_one[$name]['fk'] => 'id'),
+                    $jparam['fields']);
+        }
+        return $this;
+    }
     /**
      * Get & Set методы
      * @param string $name
@@ -223,6 +225,7 @@ abstract class Mnix_ORM_Prototype
 					} 
 					break;
 		}
+        //Есле не Get, Set кидать исключение
 	}
 	/**
      * Запрос аттрибута
