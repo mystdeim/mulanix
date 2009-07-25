@@ -21,14 +21,14 @@ class Test_Mnix_ORM_CollectionTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($val->getText(), 'text31');
         $this->assertEquals($key, 0);
     }
-    /*public function testHasMany2() {
+    public function testHasMany2() {
         $table1 = new Test_Mnix_ORM_Table1();
         $tables3 = $table1->getTables3();
         $tables3->load();
         foreach ($tables3 as $table3) {
             $table2 = $table3->getTable2();
-            $this->assertEquals($table2->getText(), 'text22');
         }
+        $this->assertEquals($table2->getText(), 'text24');
         //Join
         $table1 = new Test_Mnix_ORM_Table1();
         $tables3 = $table1->getTables3();
@@ -36,8 +36,9 @@ class Test_Mnix_ORM_CollectionTest extends PHPUnit_Framework_TestCase {
         $tables3->load();
         foreach ($tables3 as $table3) {
             $table2 = $table3->getTable2();
-            $this->assertEquals($table2->getText(), 'text22');
+
         }
+        $this->assertEquals($table2->getText(), 'text24');
     }
     public function testHasMany2Many() {
         $table1 = new Test_Mnix_ORM_Table1(2);
@@ -46,5 +47,5 @@ class Test_Mnix_ORM_CollectionTest extends PHPUnit_Framework_TestCase {
         foreach ($tables4 as $table4) {
             $this->assertEquals($table4->getText(), 'text42');
         }
-    }*/
+    }
 }

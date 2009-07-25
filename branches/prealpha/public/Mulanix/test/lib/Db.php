@@ -65,50 +65,50 @@ class Test_Mnix_Db extends Mnix_Db
             'CREATE TABLE mnix_test_table2 (
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 table1_id INT NOT NULL,
+                table3_id INT NOT NULL,
                 text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
             ) ENGINE = InnoDB;');
         $db->query(
             "INSERT INTO mnix_test_table2 (
                 id,
                 text,
-                table1_id
+                table1_id,
+                table3_id
             )
             VALUES (
-                '1', 'text21', 1
+                '1', 'text21', 1, 5
             ), (
-                '2', 'text22', 2
+                '2', 'text22', 2, 4
             ), (
-                '3', 'text23', 3
+                '3', 'text23', 3, 3
             ), (
-                '4', 'text24', 4
+                '4', 'text24', 4, 2
             ), (
-                '5', 'text25', 5
+                '5', 'text25', 5, 1
             );");
         //--------------------------------------------------------------------------------------------------------------
         $db->query(
             'CREATE TABLE mnix_test_table3 (
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 table1_id INT NOT NULL,
-                table2_id INT NOT NULL,
                 text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
             ) ENGINE = InnoDB;');
         $db->query(
             "INSERT INTO mnix_test_table3 (
                 id,
                 text,
-                table1_id,
-                table2_id
+                table1_id
             )
             VALUES (
-                '1', 'text31', 1, 2
+                '1', 'text31', 1
             ), (
-                '2', 'text32', 1, 2
+                '2', 'text32', 1
             ), (
-                '3', 'text33', 2, 3
+                '3', 'text33', 2
             ), (
-                '4', 'text34', 2, 4
+                '4', 'text34', 2
             ), (
-                '5', 'text35', 2, 5
+                '5', 'text35', 2
             );");
         //--------------------------------------------------------------------------------------------------------------
         $db->query(

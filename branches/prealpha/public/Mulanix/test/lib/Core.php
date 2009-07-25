@@ -37,7 +37,7 @@ class Test_Mnix_Core extends Mnix_Core
         $this->_suite->addTestSuite('Test_Mnix_CacheTest');
         //Подгрузка конфига
         Mnix_Config::load();
-        //Дампы БД
+        //Дамп БД
         //Test_Mnix_Db::dump();
         //Если в запросе не указано конкретного класса, то тастируется всё
         if ($_SERVER['REQUEST_URI'] === '/test/' || $_SERVER['REQUEST_URI'] === '/test') {
