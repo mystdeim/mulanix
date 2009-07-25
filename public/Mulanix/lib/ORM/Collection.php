@@ -53,7 +53,7 @@ class Mnix_ORM_Collection implements Iterator
     {
 		return $this->_select;
 	}*/
-    //TODO Нужно учесть что в отношении 1:1 могут быть ключи в разных объектах
+    //
 	public function join($name) {
 		if (empty($this->_select)) $this->_select();
 		$param1 = Mnix_ORM_Prototype::takeParam($this->_param['class']);

@@ -77,79 +77,6 @@ abstract class Mnix_ORM_Prototype
 		unset($this->_select);
         return $this;
 	}
-    /**
-     * Проверяем отношения и инстанируем пустые объекты
-     */
-	protected function _setRelations()
-    {
-        //1:1
-		if (isset($this->_has_one)) {
-			foreach ($this->_has_one as $key => $value) {
-                $class = $value['class'];
-                if (isset($value['fk'])) {
-                    $param = Mnix_ORM_Prototype::takeParam($class);
-                    $obj = new $class;
-                    $obj->find('?t = ?i',
-                                array(
-                                    $param['table'].'.'.$value['fk'],
-                                    $this->_cortege['id']
-                                )
-                        );
-                } else {
-                    $obj = new $class($this->_cortege[$value['id']]);
-                    //Удаляем ненужный внешний ключ
-                    unset($this->_cortege[$value['id']]);
-                }
-                //Добавляем в объект данные из жадного запроса, если они существуют
-                if (isset($this->_cortege[$key])) $obj->set($this->_cortege[$key]);
-                $this->_cortege[$key] = $obj;
-			}
-		}
-        //many:many
-		if (isset($this->_has_many)) {
-			foreach ($this->_has_many as $key => $value) {
-                //Создаём коллекцию
-                $collection = new Mnix_ORM_Collection($value['class']);
-                //Формируем критерий поиска
-                //Many:many
-                if (isset($value['jtable'])) {
-                    //Узнаём параметры создаваемого класса, обрабатываем атрибуты
-					$param2 = Mnix_ORM_Prototype::takeParam($value['class']);
-                    //foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
-                    $select = Mnix_Db::connect()
-                            ->select()
-                            ->from($this->_table)
-                            ->from($value['jtable'])
-                            ->from($param2['table'], $param2['fields'])
-                            ->where(
-                                '?t = ?t AND ?t = ?t AND ?t = ?i',
-                                array(
-                                    $this->_table.'.id',
-                                    $value['jtable'].'.'.$value['id'],
-                                    $param2['table'].'.id',
-                                    $value['jtable'].'.'.$value['fk'],
-                                    $this->_table.'.id',
-                                    $this->_cortege['id']
-                                )
-                            );
-                //1:many
-                } else {
-                    $param = Mnix_ORM_Prototype::takeParam($value['class']);
-                    $select = Mnix_Db::connect()
-                            ->select()
-                            ->from($param['table'], '*')
-                            ->where('?t = ?i',
-                                array(
-                                    $param['table'].'.'.$value['fk'],
-                                    $this->_cortege['id']
-                                )
-                            );
-                }
-                $collection->putSelect($select);
-                $this->_cortege[$key] = $collection;
-			}
-		}
-	}
 	/**
      * Поиск, аналагочен методу where() из Mnix_Db_Select
      * @param string $condition
@@ -264,6 +191,47 @@ abstract class Mnix_ORM_Prototype
             //Добавляем в объект данные из жадного запроса, если они существуют
             if (isset($this->_cortege[$name])) $obj->set($this->_cortege[$name]);
             return $obj;
+		}
+        //many
+		if (isset($this->_has_many[$name])) {
+                //Создаём коллекцию
+                $collection = new Mnix_ORM_Collection($this->_has_many[$name]['class']);
+                //Many:many
+                if (isset($this->_has_many[$name]['jtable'])) {
+                    //Узнаём параметры создаваемого класса, обрабатываем атрибуты
+					$param2 = Mnix_ORM_Prototype::takeParam($this->_has_many[$name]['class']);
+                    //foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
+                    $select = Mnix_Db::connect()
+                            ->select()
+                            ->from($this->_table)
+                            ->from($this->_has_many[$name]['jtable'])
+                            ->from($param2['table'], $param2['fields'])
+                            ->where(
+                                '?t = ?t AND ?t = ?t AND ?t = ?i',
+                                array(
+                                    $this->_table.'.id',
+                                    $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['id'],
+                                    $param2['table'].'.id',
+                                    $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['fk'],
+                                    $this->_table.'.id',
+                                    $this->_cortege['id']
+                                )
+                            );
+                //1:many
+                } else {
+                    $param = Mnix_ORM_Prototype::takeParam($this->_has_many[$name]['class']);
+                    $select = Mnix_Db::connect()
+                            ->select()
+                            ->from($param['table'], '*')
+                            ->where('?t = ?i',
+                                array(
+                                    $param['table'].'.'.$this->_has_many[$name]['fk'],
+                                    $this->_cortege['id']
+                                )
+                            );
+                }
+                $collection->putSelect($select);
+                return $collection;
 		}
     }
     /**
