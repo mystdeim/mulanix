@@ -71,11 +71,10 @@ class Mnix_ORM_Collection implements Iterator
                 unset($param2['fields'][$key]);
             }
             $this->_select->from($param1['table'], $param1['fields'])
-                          ->joinLeft(array($param2['table'] => $param1['table']),
-                                     array('id'             => $param1['has_one'][$name]['id']),
+                          ->joinLeft(array($param2['table']                => $param1['table']),
+                                     array($param1['has_one'][$name]['fk'] => 'id'),
                                      $param2['fields']
             );
-            //var_dump($this->_select->query());
 		}
 		
 		//die('Collection!!!! Тут надо исправить джойн!');
