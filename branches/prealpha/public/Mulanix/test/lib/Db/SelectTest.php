@@ -95,25 +95,48 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
      * Проверяем Where
      * @dataProvider providerWhere
      */
-   public function testWhere($table, $condition, $data, $result)
+    public function testWhere($table, $condition, $data, $result)
     {
         $db = Mnix_Db::connect();
         $select = new Test_Mnix_Db_Select($db);
         $select->from($table, '*')
-                ->where($condition, $data);
+            ->where($condition, $data);
         $build = $select->build();
         $this->assertEquals($build, $result);
     }
     public function providerWhere()
     {
         return array(
-            array('table', 'field = ?i', 1,
-                array('sql' => 'SELECT ?t.* FROM ?t WHERE field = ?i',
-                        'data' => array('table','table', 1))),
-            array('table', '?t = ?i', array('field', 5),
-                array('sql' => 'SELECT ?t.* FROM ?t WHERE ?t = ?i',
-                        'data' => array('table','table', 'field', 5)))
+        array('table', 'field = ?i', 1,
+        array('sql' => 'SELECT ?t.* FROM ?t WHERE field = ?i',
+        'data' => array('table','table', 1))),
+        array('table', '?t = ?i', array('field', 5),
+        array('sql' => 'SELECT ?t.* FROM ?t WHERE ?t = ?i',
+        'data' => array('table','table', 'field', 5)))
         );
+    }
+    public function testWhereDf()
+    {
+        $db = Mnix_Db::connect();
+        //1
+        $select = new Test_Mnix_Db_Select($db);
+        $select->from('mnix_test_table1', '*')
+            ->where('?t = 1', 'id')
+            ->where('?t = ?s', array('text', 'text11'));
+        $result = array(
+            'sql' => 'SELECT ?t.* FROM ?t WHERE ?t = 1 ?n ?t = ?s',
+            'data' => array('mnix_test_table1', 'mnix_test_table1', 'id', 'AND', 'text', 'text11'));
+        $this->assertEquals($select->build(), $result);
+        //2
+        $select = new Test_Mnix_Db_Select($db);
+        $select->from('mnix_test_table1', '*')
+            ->where('?t = 1', 'id')
+            ->where('?t = 5', 'table2_id')
+            ->where('?t = ?s', array('text', 'text11'));
+        $result = array(
+            'sql' => 'SELECT ?t.* FROM ?t WHERE ?t = 1 ?n ?t = 5 ?n ?t = ?s',
+            'data' => array('mnix_test_table1', 'mnix_test_table1', 'id', 'AND','table2_id','AND', 'text', 'text11'));
+        $this->assertEquals($select->build(), $result);
     }
     /**
      * Проверяем JoinLeft
