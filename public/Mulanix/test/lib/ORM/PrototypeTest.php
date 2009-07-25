@@ -13,6 +13,30 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
     public function testGet()
     {
         //1
+        $table1 = new Test_Mnix_ORM_Table1(1);
+        $table1->load();
+        //2
+        $table2 = new Test_Mnix_ORM_Table2(1);
+        $id = $table1->getId();
+        $this->assertEquals($id, 1);
+        //3
+        $text = $table1->get('text');
+        $this->assertEquals($text, 'text11');
+        //4
+        $arr = $table1->get(array('id', 'text'));
+        $this->assertEquals($arr, array('id' => 1, 'text' => 'text11'));
+        //5
+        $obj = $table1->getTable2();
+        $this->assertEquals(get_class($obj), 'Test_Mnix_ORM_Table2');
+    }
+    public function testSet()
+    {
+        //1
+
+    }
+    /*public function testGet()
+    {
+        //1
         $table1 = new Test_Mnix_ORM_Table1();
         $table1->load();
         //2
@@ -43,13 +67,6 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
         $table1 = new Test_Mnix_ORM_Table1();
         $table1->setId(3);
         $this->assertEquals($table1->getId(), 3);
-        //4
-        /*$table1 = new Test_Mnix_ORM_Table1();
-        $table2 = new Test_Mnix_ORM_Table2();
-        $table2->set(array('id' => 1, 'text' => 'text21'));
-        $table1->set(array('table2' => $table2));
-        $table2 = $table1->getTable2();
-        $this->assertEquals($table2->get(array('id', 'text')), array('id' => 1, 'text' => 'text21'));*/
     }
     public function testHasOne()
     {
@@ -121,5 +138,5 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
          foreach ($tables4 as $table4) {
              $this->assertEquals($table4->getText(), 'text42');
          }
-     }
+     }*/
 }
