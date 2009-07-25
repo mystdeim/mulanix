@@ -61,8 +61,17 @@ abstract class Mnix_ORM_Prototype
 		//Проверяем отношения
 		if ($res) {
             $this->_cortege = $res[0];
-            $this->_setRelations();
-        } else $this->_cortege = array();
+            //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
+            foreach ($this->_cortege as $key => $value) {
+                $field = explode('.', $key);
+                if (isset($field[1])) {
+                    $this->_cortege[$field[0]][$field[1]] = $value;
+                    unset($this->_cortege[$key]);
+                }
+            }
+        } else {
+            //TODO тут нужно кидать исключение
+        }
 		$this->_isLoad = TRUE;
 		//Следующию сточку можно будет удалить!
 		unset($this->_select);
@@ -73,14 +82,6 @@ abstract class Mnix_ORM_Prototype
      */
 	protected function _setRelations()
     {
-        //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
-        foreach ($this->_cortege as $key => $value) {
-            $field = explode('.', $key);
-            if (isset($field[1])) {
-                $this->_cortege[$field[0]][$field[1]] = $value;
-                unset($this->_cortege[$key]);
-            }
-        }
         //1:1
 		if (isset($this->_has_one)) {
 			foreach ($this->_has_one as $key => $value) {
@@ -219,37 +220,50 @@ abstract class Mnix_ORM_Prototype
                             $this->_cortege = $arg[0];
                             //return $this;
                         }
-                        $this->_setRelations();
+                        //$this->_setRelations();
 					} 
 					break;
 		}
 	}
 	/**
      * Запрос аттрибута
-     * @param mixed $atts
+     * @param array $atts
      * @return mixed
      */
-	protected function _getAttribute($atts)
-    {
-		if (!$this->_isLoad) $this->_load();
-
-        //$obj->get(), возвращантся весь кортеж
-		if (empty($atts[0])) $atts = array_keys($this->_cortege);
-
+    protected function _getAttribute($atts) {
+        if (!$this->_isLoad) $this->_load();
         //Обходим аттрибуты
-		foreach ($atts as $att) {
-            
-            //Проверяем кортеж
-            //if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
-            if (isset($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
+        foreach ($atts as $att) {
+        //Проверяем кортеж, если в кортеже есть массив, то это "жадные" данные!
+            if (isset($this->_cortege[$att]) && !is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
+            else {
+            //Проверяем отношения
+                $data[$att] = $this->_getRelation($att);
+            }
+        }
+        //Если запрос одного аттрибу, то его и возвращаем
+        if (count($data) == 1) return current($data);
+        //В противном случае массив
+        else return $data;
+    }
+    protected function _getRelation($name)
+    {
+        //1:1
+		if (isset($this->_has_one[$name])) {
+            $class = $this->_has_one[$name]['class'];
+            $param = Mnix_ORM_Prototype::takeParam($class);
+            $obj = new $class;
+            $obj->find('?t = ?i',
+                array(
+                $param['table'].'.'.$this->_has_one[$name]['fk'],
+                $this->_cortege['id']
+                )
+            );
+            //Добавляем в объект данные из жадного запроса, если они существуют
+            if (isset($this->_cortege[$name])) $obj->set($this->_cortege[$name]);
+            return $obj;
 		}
-		if (isset($data)) {
-            //Если запрос одного аттрибу, то его и возвращаем
-			if (count($data) == 1) return current($data);
-            //В противном случае массив
-			else return $data;
-		} else return null;
-	}
+    }
     /**
      * Запрос парметров класса(таблица, поля и тп)
      * @param string $name
