@@ -215,12 +215,11 @@ abstract class Mnix_ORM_Prototype
                         $this->_isLoad = true;
 						if (!is_array($arg[0])) {
                             $this->_cortege[strtolower(substr($name, 3))] = $arg[0];
-                            //return $this;
+                            return $this;
                         } else {
                             $this->_cortege = $arg[0];
-                            //return $this;
+                            return $this;
                         }
-                        //$this->_setRelations();
 					} 
 					break;
 		}
