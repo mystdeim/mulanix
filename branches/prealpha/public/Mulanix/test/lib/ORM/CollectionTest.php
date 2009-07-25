@@ -4,7 +4,7 @@ class Test_Mnix_ORM_CollectionTest extends PHPUnit_Framework_TestCase {
         parent::__construct($name, $data, $dataName);
     }
     public function testHasMany1() {
-        /*$table1 = new Test_Mnix_ORM_Table1();
+        $table1 = new Test_Mnix_ORM_Table1();
         $table1->find('id=?i', 1)->load();
         $tables3 = $table1->getTables3();
         $tables3->load();
@@ -19,7 +19,7 @@ class Test_Mnix_ORM_CollectionTest extends PHPUnit_Framework_TestCase {
         $val = $tables3->current();
         $key = $tables3->key();
         $this->assertEquals($val->getText(), 'text31');
-        $this->assertEquals($key, 0);*/
+        $this->assertEquals($key, 0);
     }
     /*public function testHasMany2() {
         $table1 = new Test_Mnix_ORM_Table1();
