@@ -7,7 +7,7 @@
  * @copyright 2009
  */
 /**
- * @package MMnix_Engine_Controller
+ * @package Mnix_Engine_Controller
  */
 class Mnix_Engine_Controller extends Mnix_ORM_Prototype
 {

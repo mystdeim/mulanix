@@ -4,16 +4,19 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @version 2009-05-07
+ * @subpackage Select
+ * @version 2009-07-25
  * @since 2008-10-01
  */
 /**
+ * Представляет объектно-ориентированный интерфейс создания SQl-запросов
+ *
  * @category Mulanix
  * @package Mnix_Db
+ * @subpackage Select
  */
 class Mnix_Db_Select extends Mnix_Db_Criterion
 {
-	//protected $_column = array();
 	/**
      * Добавление предложения FROM
      *
@@ -90,7 +93,6 @@ class Mnix_Db_Select extends Mnix_Db_Criterion
         return $this;
     }
     /**
-     *
      * @see Mnix_Db_Criterion::_build()
      */
     protected function _build()
@@ -160,6 +162,25 @@ class Mnix_Db_Select extends Mnix_Db_Criterion
         if (isset($this->_limit)) $build['sql'] .= $this->_limit;
         return $build;
     }
+    /**
+     * Хелпер
+     *
+     * Приводит массив полей к стандартному виду:
+     * <code>
+     * array(
+     *     'field1' => 'alias1'
+     *     'field2' => 'alias2')
+     * </code>
+     * Если нет аливсов, то:
+     * <code>
+     * array(
+     *     'field1' => 'null'
+     *     'field2' => 'null')
+     * </code>
+     *
+     * @param array $column
+     * @return array
+     */
     protected function _helpColumn($column)
     {
         if (isset($column)) {
