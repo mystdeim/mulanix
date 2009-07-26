@@ -105,25 +105,33 @@ abstract class Mnix_ORM_Prototype
 		$res = $this->_select
             ->limit(1)
 			->query();
-		//Проверяем отношения
 		if ($res) {
-            $this->_cortege = $res[0];
-            //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
-            foreach ($this->_cortege as $key => $value) {
-                $field = explode('.', $key);
-                if (isset($field[1])) {
-                    $this->_cortege[$field[0]][$field[1]] = $value;
-                    unset($this->_cortege[$key]);
-                }
-            }
+            $this->_setCortege($res[0]);
         } else {
             //TODO тут нужно кидать исключение
         }
-		$this->_isLoad = TRUE;
 		//Следующию сточку можно будет удалить!
 		unset($this->_select);
         return $this;
 	}
+    /**
+     * Записываем кортеж
+     *
+     * @param array $arr
+     */
+    protected function _setCortege($arr)
+    {
+        $this->_cortege = $arr;
+        //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
+        foreach ($this->_cortege as $key => $value) {
+            $field = explode('.', $key);
+            if (isset($field[1])) {
+                $this->_cortege[$field[0]][$field[1]] = $value;
+                unset($this->_cortege[$key]);
+            }
+        }
+        $this->_isLoad = TRUE;
+    }
 	/**
      * Поиск, аналагочен методу where() из Mnix_Db_Select
      *
@@ -193,10 +201,10 @@ abstract class Mnix_ORM_Prototype
                     if (isset($arg[0])) {
                         $this->_isLoad = true;
 						if (!is_array($arg[0])) {
-                            $this->_cortege[strtolower(substr($name, 3))] = $arg[0];
+                            $this->_setCortege(array(strtolower(substr($name, 3)) => $arg[0]));
                             return $this;
                         } else {
-                            $this->_cortege = $arg[0];
+                            $this->_setCortege($arg[0]);
                             return $this;
                         }
 					} 
@@ -215,11 +223,14 @@ abstract class Mnix_ORM_Prototype
         //Обходим аттрибуты
         foreach ($atts as $att) {
         //Проверяем кортеж, если в кортеже есть массив, то это "жадные" данные!
-            if (isset($this->_cortege[$att]) && !is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
-            else {
-            //Проверяем отношения
-                $data[$att] = $this->_getRelation($att);
-            }
+            if (isset($this->_cortege[$att])) {
+                if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
+                else {
+                    $obj = new $this->_has_one[$att]['class'];
+                    $obj->set($this->_cortege[$att]);
+                    $data[$att] = $obj;
+                }
+            } else $data[$att] = $this->_getRelation($att);
         }
         //Если запрос одного аттрибу, то его и возвращаем
         if (count($data) == 1) return current($data);
@@ -257,13 +268,12 @@ abstract class Mnix_ORM_Prototype
                             ->from($this->_table)
                             ->from($this->_has_many[$name]['jtable'])
                             ->from($param2['table'], $param2['fields'])
-                            ->where(
-                                '?t = ?t AND ?t = ?t AND ?t = ?i',
+                            ->where('?t = ?t AND ?t = ?t AND ?t = ?i',
                                 array(
                                     $this->_table.'.id',
-                                    $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['id'],
-                                    $param2['table'].'.id',
                                     $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['fk'],
+                                    $param2['table'].'.id',
+                                    $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['id'],
                                     $this->_table.'.id',
                                     $this->_cortege['id']
                                 )

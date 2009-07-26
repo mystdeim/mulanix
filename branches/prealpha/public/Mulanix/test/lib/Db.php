@@ -66,6 +66,7 @@ class Test_Mnix_Db extends Mnix_Db
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 table1_id INT NOT NULL,
                 table3_id INT NOT NULL,
+                table4_id INT NOT NULL,
                 text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
             ) ENGINE = InnoDB;');
         $db->query(
@@ -73,18 +74,19 @@ class Test_Mnix_Db extends Mnix_Db
                 id,
                 text,
                 table1_id,
-                table3_id
+                table3_id,
+                table4_id
             )
             VALUES (
-                '1', 'text21', 1, 5
+                '1', 'text21', 1, 5, 1
             ), (
-                '2', 'text22', 2, 4
+                '2', 'text22', 2, 4, 2
             ), (
-                '3', 'text23', 3, 3
+                '3', 'text23', 3, 3, 3
             ), (
-                '4', 'text24', 4, 2
+                '4', 'text24', 4, 2, 4
             ), (
-                '5', 'text25', 5, 1
+                '5', 'text25', 5, 1, 5
             );");
         //--------------------------------------------------------------------------------------------------------------
         $db->query(
