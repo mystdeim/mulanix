@@ -28,6 +28,7 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
         //5
         $obj = $table1->getTable2();
         $this->assertEquals(get_class($obj), 'Test_Mnix_ORM_Table2');
+        $this->assertEquals($obj->getText(), 'text21');
     }
     public function testSet()
     {
