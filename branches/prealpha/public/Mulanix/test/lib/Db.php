@@ -91,24 +91,26 @@ class Test_Mnix_Db extends Mnix_Db
             'CREATE TABLE mnix_test_table3 (
                 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 table1_id INT NOT NULL,
+                table4_id INT NOT NULL,
                 text VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
             ) ENGINE = InnoDB;');
         $db->query(
             "INSERT INTO mnix_test_table3 (
                 id,
                 text,
-                table1_id
+                table1_id,
+                table4_id
             )
             VALUES (
-                '1', 'text31', 1
+                '1', 'text31', 1, 5
             ), (
-                '2', 'text32', 1
+                '2', 'text32', 1, 4
             ), (
-                '3', 'text33', 2
+                '3', 'text33', 2, 3
             ), (
-                '4', 'text34', 2
+                '4', 'text34', 2, 2
             ), (
-                '5', 'text35', 2
+                '5', 'text35', 2, 1
             );");
         //--------------------------------------------------------------------------------------------------------------
         $db->query(

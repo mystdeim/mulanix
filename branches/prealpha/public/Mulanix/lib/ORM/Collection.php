@@ -2,11 +2,15 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_ORM
- * @author deim
- * @copyright 2009
+ * @version 2009-07-25
+ * @since 2008-10-01
  */
 /**
+ * Коллекция
+ *
+ * @category Mulanix
  * @package Mnix_ORM
  */
 class Mnix_ORM_Collection implements Iterator
@@ -17,6 +21,7 @@ class Mnix_ORM_Collection implements Iterator
 	protected $_param;
     /**
      * Индекс элемента коллекции
+     *
      * @var int
      */
     protected $_currIndex = 0;
@@ -31,6 +36,7 @@ class Mnix_ORM_Collection implements Iterator
 		$this->_select = Mnix_Db::connect()->select()->from($this->_param['table']);
 	}
     /**
+     * Передача заранее сформированного селекта
      *
      * @param Mnix_Db_Select $obj 
      */
@@ -45,15 +51,12 @@ class Mnix_ORM_Collection implements Iterator
 		$this->_isLoad = false;
 		return $this;
 	}
-	/*public function add($data)
-    {
-	    
-	}		
-	public function getSelect()
-    {
-		return $this->_select;
-	}*/
-    //
+    /**
+     * Имитация LEFT JOIN`a - "Жадный запрос"
+     *
+     * @param string $name
+     * @return object($this)
+     */
 	public function join($name) {
 		if (empty($this->_select)) $this->_select();
 		$param1 = Mnix_ORM_Prototype::takeParam($this->_param['class']);
@@ -114,32 +117,23 @@ class Mnix_ORM_Collection implements Iterator
 	//Переопределение виртуальных методов Iterator
 	public function rewind()
     {
-		//$this->_currIndex = 0;
         reset($this->_members);
     }
 	public function next()
     {
-		//$this->_currIndex++;
         next($this->_members);
 	}
 	public function current()
     {
 		if (!$this->_isLoad) $this->_load();
-		//return $this->_members[$this->_currIndex];
         return current($this->_members);
 	}
 	public function key()
     {
-		//return $this->_currIndex;
         return key($this->_members);
 	}
 	public function valid()
     {
-		//return $this->_currIndex < count($this->_members);
         return $this->current() !== false;
 	}
-	/*public function getAll() {
-		if (empty($this->_members)) $this->_load();
-		return $this->_members;
-	}*/
 }
