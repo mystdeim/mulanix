@@ -2,11 +2,13 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Core
  * @author deim
  * @copyright 2009
  */
 /**
+ * @category Mulanix
  * @package Mnix_Core
  */
 class Mnix_Core

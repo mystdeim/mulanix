@@ -4,10 +4,15 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @version 2009-05-08
  * @since 2008-10-01
+ * @version 2009-05-08
  */
 /**
+ * Абстракция базы данных
+ *
+ * Пока поддерживается только MySql, больше пока и не требуется.
+ * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ * 
  * @category Mulanix
  * @package Mnix_Db
  */
@@ -15,27 +20,53 @@ class Mnix_Db
 {
     /**
      * Параметры соеденения с базой
+     *
      * @var array
      */
     protected $_param;
     /**
      * Указатель coединения c cерверoм
+     *
      * @var object(mysqli)
      */
     protected $_con;
     /**
      * Объект драйвера базы данных
+     *
      * @var object(driver_db)
      */
     protected $_db;
     /**
      * Массив, содержащий параметры подключенний
+     *
      * @var array
      */
     static protected $_instance = null;
     /**
-     * Устанавливаем параметры соеднения с базой или указываем имя базы
-     * @param mixed
+     * Соединяемся с базой данных
+     * 
+     * Примеры использования:
+     * 1. Использую дефолтную БД("DB0")
+     * <code>
+     * $db = Mnix_Db::connect();
+     * </code>
+     * 2. Явно передавая имя базы данных
+     * <code>
+     * $db = Mnix_Db::connect('DB0');
+     * </code>
+     * 3. Передавая параметры вручную
+     * <code>
+     * $param = array(
+     *     'type'  => 'MySql',
+     *     'login' => 'user',
+     *     'pass'  => 'pass',
+     *     'host'  => 'localhost',
+     *     'base'  => 'database')
+     * $db = Mnix_Db::connect($param);
+     * </code>
+     *
+     * @param array|string|null
+     * @return object(Mnix_Db)
      */
     public static function connect($param = MNIX_DEFAULT_DB)
     {
@@ -58,12 +89,18 @@ class Mnix_Db
         return end(self::$_instance[$paramObj['type']]);
 
     }
+    /**
+     * Защищенный конструктор
+     *
+     * @param array $param
+     */
     protected function __construct($param)
     {
         $this->_param = $param;
     }
     /**
      * Кладём указатель на соединение бд
+     *
      * @param object(mysqli) $con
      */
     public function putCon($con)
@@ -72,6 +109,7 @@ class Mnix_Db
     }
     /**
      * Возвращаем параметры соединения с бд
+     *
      * @return array
      */
     public function getParam()
@@ -80,12 +118,18 @@ class Mnix_Db
     }
     /**
      * Возвращаем указатель на соединение бд
+     *
      * @return object(mysqli)
      */
     public function getCon()
     {
         return $this->_con;
     }
+    /**
+     * Возвращаем объект Mnix_Db_Select
+     *
+     * @return object(Mnix_Db_Select)
+     */
     public function select()
     {
         return new Mnix_Db_Select($this);
@@ -104,6 +148,8 @@ class Mnix_Db
     }
     /**
      * Запрос к БД
+     *
+     * Если $data не пусто, то сработает _placeHolder
      *
      * @param string $sql
      * @param mixed $data
@@ -134,8 +180,16 @@ class Mnix_Db
     /**
      * Плэйсхолдер
      *
+     * Пример:
+     * <code>
+     * $string = 'SELECT * FROM ?t WHERE ?t = ?i;
+     * $data = array('table','field', '5');
+     * $result = $this->_placeHolder($string, $data);
+     * echo $result; //SELECT * FROM `table` WHERE `field` = 5
+     * </code>
+     *
      * @param string $condition
-     * @param mixed $data
+     * @param array|string|float|int|null $data
      * @return string
      */
     protected function _placeHolder($condition, $data = null)
@@ -155,14 +209,16 @@ class Mnix_Db
     /**
      * Экранирование
      *
+     * Пример:
      * <code>
      * array(
      *     't' => '`table`',
      *     'i' => (int)5,
      *     'f' => (float)45.98,
      *     'n' => 'text',
-     *     's' => "'".mysqli_escape_string('text')."'"
-     * )
+     *     's' => "'".mysqli_escape_string('text')."'")
+     * $string = 'table';
+     * echo $this->_shielding($string, 't'); //`table`
      * </code>
      * 
      * @param string $value
@@ -175,7 +231,6 @@ class Mnix_Db
             //Экранирование таблицы, возможно составное имя
             case 't':
                 $dot = strpos($value, '.');
-                //if ($dot) return '`'.mysqli_escape_string($this->_con, substr($value, 0, $dot)).'`'.substr($value, $dot++);
                 if ($dot) return '`' . mysqli_escape_string($this->_con, substr($value, 0, $dot)) .
                     '`.`' . mysqli_escape_string($this->_con, substr($value, ++$dot)) . '`';
                 else return '`'.mysqli_escape_string($this->_con, $value).'`';

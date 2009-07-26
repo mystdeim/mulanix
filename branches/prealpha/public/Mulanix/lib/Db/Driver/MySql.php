@@ -4,17 +4,31 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Mnix_Db_Driver
+ * @subpackage Driver
  * @version 2009-05-07
  */
 /**
+ * Драйвер доступа к MySql
+ * 
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Mnix_Db_Driver
+ * @subpackage Driver
  */
 class Mnix_Db_Driver_MySql
 {
+    /**
+     * Указатель coединения c cерверoм
+     *
+     * @var object(mysqli)
+     */
 	protected $_con;
+    /**
+     * Коструктор
+     *
+     * В параметре передаёться объект Mnix_Db
+     *
+     * @param oblect(Mnix_Db) $obj
+     */
 	public function __construct($obj)
     {
 		$param = $obj->getParam();
@@ -30,6 +44,12 @@ class Mnix_Db_Driver_MySql
 			$obj->putCon($this->_con);
 		} else $this->_con = $obj->getCon();
 	}
+    /**
+     * Выполнение запросса к БД
+     *
+     * @param string $sql
+     * @return array
+     */
 	public function execute($sql)
     {
 		$result = mysqli_query($this->_con, $sql);
@@ -39,6 +59,11 @@ class Mnix_Db_Driver_MySql
 			return $data;
 		} else return $result;
 	}
+    /**
+     * Получение ошибок
+     *
+     * @return string
+     */
 	public function getError()
     {
 		return mysqli_error($this->_con);

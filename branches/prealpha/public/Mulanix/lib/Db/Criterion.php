@@ -4,26 +4,33 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @version 2009-05-08
+ * @version 2009-07-22
  * @since 2008-10-01
  */
 /**
+ * Формирование SQL-запроса
+ *
+ * Абстракный класс, содержащий некоторые повторяющиеся методы: where(), limit() и тп.
+ *
  * @category Mulanix
  * @package Mnix_Db
  */
 abstract class Mnix_Db_Criterion {
     /**
      * Объект Mnix-Db
+     *
      * @var object(Mnix_Db)
      */
     protected $_db;
     /**
      * Массив условий where
+     *
      * @var array()
      */
 	protected $_where = array();
     /**
      * Строка с уловием лимита(строка вместо массива, для быстроты)
+     *
      * @var string
      */
 	protected $_limit = null;
@@ -47,7 +54,7 @@ abstract class Mnix_Db_Criterion {
     /**
      * Конструктор
      *
-     * @param Mnix_Db $obj
+     * @param object(Mnix_Db) $obj
      */
     public function __construct($obj)
 	{
@@ -55,6 +62,7 @@ abstract class Mnix_Db_Criterion {
 	}
 	/**
      * Указываем таблицу
+     *
      * @param mixed $table
      * @return object(Mnix_Db_Criterion)
      */
@@ -65,6 +73,7 @@ abstract class Mnix_Db_Criterion {
 	}
 	/**
      * Сортировки
+     *
      * @param mixed $condition
      * @param mixed $desc
      * @return object(Mnix_Db_Criterion)
@@ -86,12 +95,21 @@ abstract class Mnix_Db_Criterion {
 	/**
      * Добавление предложения WHERE
      *
-     * Простой пример
+     * Примеры:
+     * 1. SELECT table.* FROM table WHERE field = 5
      * <code>
-     * //SELECT table.* FROM table WHERE field = 5
      * $db->select()
      *    ->from('table', '*')
      *    ->where('?t = ?i', array('field', 5))
+     *    ->query();
+     * </code>
+     * 2. SELECT table.* FROM table WHERE field > 5 AND field2 = 'ыыыыы'
+     * <code>
+     * $db->select()
+     *    ->from('table', '*')
+     *    ->where('?t > ?i', array('field', 5))
+     *    ->where('?t = ?s', array('field2', 'ыыыыы'))
+     *    ->query();
      * </code>
      *
      * @param mixed $condition текстовое условие
@@ -118,6 +136,23 @@ abstract class Mnix_Db_Criterion {
 	}
 	/**
      * Лимит выборки
+     * 
+     * Примеры:
+     * 1. SELECT table.* FROM table WHERE LIMIT 5
+     * <code>
+     * $db->select()
+     *    ->from('table', '*')
+     *    ->limit(5)
+     *    ->query();
+     * </code>
+     * 2. SELECT table.* FROM table WHERE LIMIT 5, 10
+     * <code>
+     * $db->select()
+     *    ->from('table', '*')
+     *    ->limit(5, 10)
+     *    ->query();
+     * </code>
+     *
      * @param mixed $first
      * @param mixed $last
      * @return object(Mnix_Db_Criterion)
@@ -130,6 +165,7 @@ abstract class Mnix_Db_Criterion {
 	}
     /**
      * Выполнение запроса через объект Mnix_Db
+     *
      * @return array()
      */
     public function query()
@@ -147,10 +183,15 @@ abstract class Mnix_Db_Criterion {
      *         'data' => array(
      *             0 => 'data'
      *          )
-     *         'sql' => 'sql'
-     *     )
+     *         'sql' => 'sql'),
+     *     1 => array(
+     *         'data' => array(
+     *             0 => 'data'
+     *          )
+     *         'sql' => 'sql')
      * )
      * </code>
+     * 
      * @return array
      */
 	abstract protected function _build();
@@ -173,6 +214,7 @@ abstract class Mnix_Db_Criterion {
      *     'sql'  => '?t'
      * )
      * </code>
+     *
      * @param array $arr
      * @return array
      */
