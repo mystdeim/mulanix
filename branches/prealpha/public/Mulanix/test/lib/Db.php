@@ -4,14 +4,17 @@ class Test_Mnix_Db extends Mnix_Db
     public static function connect($param = MNIX_DEFAULT_DB)
     {
         if (!is_array($param)) {
-            $paramObj['type'] = constant('MNIX_DB_' . $param .'_TYPE');
-            $paramObj['login'] = constant('MNIX_DB_' . $param .'_LOGIN');
-            $paramObj['pass'] = constant('MNIX_DB_' . $param .'_PASS');
-            $paramObj['host'] = constant('MNIX_DB_' . $param .'_HOST');
-            $paramObj['base'] = constant('MNIX_DB_' . $param .'_BASE');
+            if (defined('MNIX_DB_' . $param .'_TYPE')) {
+                $paramObj['type'] = constant('MNIX_DB_' . $param .'_TYPE');
+                $paramObj['login'] = constant('MNIX_DB_' . $param .'_LOGIN');
+                $paramObj['pass'] = constant('MNIX_DB_' . $param .'_PASS');
+                $paramObj['host'] = constant('MNIX_DB_' . $param .'_HOST');
+                $paramObj['base'] = constant('MNIX_DB_' . $param .'_BASE');
+            } else throw new Exception('Not exist "' . $param . '" database.');
         } else {
             $paramObj = $param;
         }
+
         if (isset(self::$_instance[$paramObj['type']])) {
             foreach (self::$_instance[$paramObj['type']] as $temp) {
                 if ($temp->getParam() === $paramObj) return $temp;
@@ -20,6 +23,7 @@ class Test_Mnix_Db extends Mnix_Db
         self::$_instance[$paramObj['type']][] = new Test_Mnix_Db($paramObj);
         Test_Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
         return end(self::$_instance[$paramObj['type']]);
+        
     }
     public static function getInstance()
     {

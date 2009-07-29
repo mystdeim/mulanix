@@ -43,6 +43,11 @@ class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
         $db = Test_Mnix_Db::connect();
         $db = Test_Mnix_Db::connect();
         $this->assertEquals(count(Test_Mnix_Db::getInstance()), 1);
+        try {
+            $db = Test_Mnix_Db::connect('DB00');
+        } catch (Exception $e) {
+            $this->assertEquals($e->getMessage(), 'Not exist "DB00" database.');
+        }
     }
     /**
      * Проверяем экранирование

@@ -60,11 +60,11 @@ class Mnix_Db_Select extends Mnix_Db_Criterion
      * @param mixed $columns столбцы
      * @return object(Mnix_Db_Select)
      */
-	public function from($table, $column = null)
+    public function from($table, $column = null)
     {
         $this->_table[$table]['column'] = $this->_helpColumn($column);
 		return $this;
-	}
+    }
     /**
      * Добавление предложения FROM LEFT JOIN
      *
