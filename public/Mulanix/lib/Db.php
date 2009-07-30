@@ -77,7 +77,7 @@ class Mnix_Db
                 $paramObj['pass'] = constant('MNIX_DB_' . $param .'_PASS');
                 $paramObj['host'] = constant('MNIX_DB_' . $param .'_HOST');
                 $paramObj['base'] = constant('MNIX_DB_' . $param .'_BASE');
-            } else throw new Exception('Not exist "' . $param . '" database.');
+            } else throw new Exception('Not exist "' . $param . '" database');
         } else {
             $paramObj = $param;
         }
