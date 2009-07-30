@@ -244,12 +244,19 @@ abstract class Mnix_ORM_Prototype
             $class = $this->_has_one[$name]['class'];
             $param = Mnix_ORM_Prototype::takeParam($class);
             $obj = new $class;
-            $obj->find('?t = ?i',
-                array(
-                $param['table'].'.'.$this->_has_one[$name]['fk'],
-                $this->_cortege['id']
-                )
-            );
+            if (isset($this->_has_one[$name]['fk'])) {
+                $obj->find('?t = ?i',
+                    array(
+                        $param['table'].'.'.$this->_has_one[$name]['fk'],
+                        $this->_cortege['id']));
+            } else {
+                $obj->find('?t = ?i',
+                    array(
+                        $param['table'].'.id',
+                        $this->_cortege[$this->_has_one[$name]['id']]));
+                //Удалям лишнее поле
+                unset($this->_cortege[$this->_has_one[$name]['id']]);
+            }
             //Добавляем в объект данные из жадного запроса, если они существуют
             if (isset($this->_cortege[$name])) $obj->set($this->_cortege[$name]);
             return $obj;

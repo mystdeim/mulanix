@@ -64,21 +64,6 @@ class Mnix_Core
      */
     public function run()
     {
-        //Грузим конфиг
-        Mnix_Config::load();
-
-        //Создаём юзера
-        //$user = Mnix_Auth_User::current();
-
-        //Получаем группу
-        //$group = $user->getGroup();
-
-        //Парсим урл
-        //$url = Mnix_Uri::current();
-
-        //Получаем страницу
-        //$page = $url->getPage();
-
         //Проверяем разрешение на страницу группе
         //$acl = new Mnix_Acl();
         //$acl->role($group);
@@ -105,8 +90,22 @@ class Mnix_Core
         //}
         //$a++;
         try {
-            //$db = Mnix_Db::connect('DB00');
-        } catch(Exception $e) {
+            //Грузим конфиг
+            Mnix_Config::load();
+                
+            //Создаём юзера
+            $user = Mnix_Auth_User::current();
+            
+            //Получаем группу
+            $group = $user->getGroup();
+            
+            //Парсим урл
+            //$url = Mnix_Uri::current();
+            
+            //Получаем страницу
+            //$page = $url->getPage();
+
+            } catch(Exception $e) {
             //var_dump($e);
             $trace = $e->getTrace();
             Mnix_Core::putMessage($trace[0]['class'], 'err', $e->getMessage(), $trace);

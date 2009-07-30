@@ -58,11 +58,15 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
          $table1->find('id=?i', 1);
          $table2 = $table1->getTable2();
          $this->assertEquals($table2->getText(), 'text21');
-
          //3 JOIN
          $table1 = new Test_Mnix_ORM_Table1(1);
          $table1->join('table2');
          $table2 = $table1->getTable2();
          $this->assertEquals($table2->getText(), 'text21');
+         //4
+         $table3 = new Test_Mnix_ORM_Table3();
+         $table3->find('id=?i', 1);
+         $table1 = $table3->getTable1();
+         $this->assertEquals($table1->getText(), 'text11');
      }
 }
