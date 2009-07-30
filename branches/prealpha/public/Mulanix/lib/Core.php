@@ -1,22 +1,49 @@
 <?php
-/**
+ /**
  * Mulanix Framework
  *
  * @category Mulanix
  * @package Mnix_Core
- * @author deim
- * @copyright 2009
+ * @since 2008-10-01
+ * @version 2009-07-30
  */
 /**
+ * Ядро системы
+ *
+ * Управляет очередностью загрузки, ведёт лог
+ *
  * @category Mulanix
  * @package Mnix_Core
  */
 class Mnix_Core
 {
+    /**
+     * Указывает, было ли завершение аварийным
+     *
+     * @var boolean
+     */
     protected static $_crash;
+    /**
+     * Счетчики времени
+     *
+     * @var array
+     */
     protected static $_time;
+    /**
+     * Содержит текущей лог
+     *
+     * @var string
+     */
     protected static $_hot_log;
+    /**
+     * Различные счетчики
+     *
+     * @var array
+     */
     protected static $_count = array('cache_l'=>0,'cache_r'=>0,'class'=>0,'cache_s'=>0,'cache_d'=>0);
+    /**
+     * Конструктор
+     */
 	public function __construct()
     {
 		$this->_crash = true;
@@ -24,11 +51,17 @@ class Mnix_Core
         self::$_count['db_q'] = 0;
         spl_autoload_register('Mnix_Core::_autoload');
 	}
+    /**
+     * Деструктор
+     */
 	public function __destruct()
     {
         $this->_end();
         echo self::$_hot_log;
 	}
+    /**
+     * Менеджер
+     */
     public function run()
     {
         //Грузим конфиг
@@ -72,11 +105,11 @@ class Mnix_Core
         //}
         //$a++;
         try {
-            //$a++;
-            //throw new Mnix_Db_Select_Exception('error');
-        } catch(E_NOTICE $e) {
-            var_dump($e);
-            Mnix_Core::putMessage(__CLASS__, 'err', $e->getMessage());
+            //$db = Mnix_Db::connect('DB00');
+        } catch(Exception $e) {
+            //var_dump($e);
+            $trace = $e->getTrace();
+            Mnix_Core::putMessage($trace[0]['class'], 'err', $e->getMessage(), $trace);
         }
 
         //Выполнение не было прервано
@@ -88,10 +121,15 @@ class Mnix_Core
      * @param string $class_name
      * @param string $mode
      * @param string $note
+     * @param array $traces
      */
-    public static function putMessage($class_name, $mode, $note)
+    public static function putMessage($class_name, $mode, $note, $traces = null)
     {
 		$class_name = '<font color="blue">'.$class_name.'</font>';
+        if (isset($traces)) {
+            $note .= '~Trace:';
+            foreach ($traces as $trace) $note .= ' '.$trace['class'].$trace['type'].$trace['function'];
+        }
 		switch ($mode) {
 			case 'err':
 				$note = '<font color="red">'.$note.'</font>';
@@ -102,6 +140,13 @@ class Mnix_Core
 		}
 		self::$_hot_log = self::$_hot_log.self::_getTime().' | '.$mode.' | <b>'.$class_name.'~'.$note.'</b><br />';
 	}
+    /**
+     * Засекаем время
+     *
+     * @param string $thing
+     * @param boolean $end
+     * @return string
+     */
     public static function putTime($thing, $end = false)
     {
 		if ($end) {
@@ -110,15 +155,29 @@ class Mnix_Core
             return $time;
 		} else self::$_time[$thing]['start'] = microtime();;
     }
+    /**
+     * Обновляем счетчик
+     *
+     * @param string $thing
+     * @param int $number
+     */
     public static function putCount($thing, $number = 1)
     {
         self::$_count[$thing] += $number;
     }
+    /**
+     * Показывает время
+     *
+     * @return string
+     */
     protected static function _getTime()
     {
 		$t = microtime(true);
 		return date('Y.m.d / H.i', $t).' | '.number_format($t - MNIX_STARTTIME, 5);
 	}
+    /**
+     * Нормальное завершение
+     */
     protected function _end()
     {
 		Mnix_Core::putMessage(__CLASS__, 'sys', 'Ending...');
