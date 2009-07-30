@@ -2,15 +2,22 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Auth
- * @author deim
- * @copyright 2009
+ * @since 2008-10-01
+ * @version 2009-07-30
  */
 /**
- * @package Mnix_Auth_Group
+ * Группа пользователей
+ *
+ * @category Mulanix
+ * @package Mnix_Auth
  */
 class Mnix_Auth_Group extends Mnix_ORM_Prototype
 {
     protected $_table = 'mnix_group';
-    //put your code here
+    protected $_has_many = array(
+		'users' => array(
+				'class'  => 'Mnix_Auth_User',
+				'fk'	 => 'group_id'));
 }

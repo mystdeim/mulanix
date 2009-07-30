@@ -2,12 +2,16 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Auth
- * @author deim
- * @copyright 2009
+ * @since 2008-10-01
+ * @version 2009-07-30
  */
 /**
- * @package Mnix_Auth_User
+ * Авторизация пользователей
+ *
+ * @category Mulanix
+ * @package Mnix_Auth
  */
 class Mnix_Auth_User extends Mnix_ORM_Prototype
 {
@@ -15,7 +19,7 @@ class Mnix_Auth_User extends Mnix_ORM_Prototype
     protected $_has_one = array(
 		'group' => array(
 				'class'  => 'Mnix_Auth_Group',
-				'fk'	 => 'group_id'));
+				'id'	 => 'group_id'));
     public static function current()
     {
         return new Mnix_Auth_User(1);
