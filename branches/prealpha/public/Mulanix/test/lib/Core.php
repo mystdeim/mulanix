@@ -34,17 +34,19 @@ class Test_Mnix_Core extends Mnix_Core
     protected function _test()
     {
         //Наиболее важные компоненты тестируются всегда
-        $this->_suite->addTestSuite('Test_Mnix_CacheTest');
+        //$this->_suite->addTestSuite('Test_Mnix_CacheTest');
         //Подгрузка конфига
         Mnix_Config::load();
         //Дамп БД
         //Test_Mnix_Db::dump();
         //Если в запросе не указано конкретного класса, то тастируется всё
         if ($_SERVER['REQUEST_URI'] === '/test/' || $_SERVER['REQUEST_URI'] === '/test') {
+            $this->_suite->addTestSuite('Test_Mnix_CacheTest');
             $this->_suite->addTestSuite('Test_Mnix_DbTest');
             $this->_suite->addTestSuite('Test_Mnix_Db_SelectTest');
             $this->_suite->addTestSuite('Test_Mnix_ORM_PrototypeTest');
             $this->_suite->addTestSuite('Test_Mnix_ORM_CollectionTest');
+            $this->_suite->addTestSuite('Test_Mnix_UriTest');
         } else $this->_selectTest();
     }
     /**
