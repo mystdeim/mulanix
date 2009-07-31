@@ -319,4 +319,11 @@ abstract class Mnix_ORM_Prototype
 		//}
 		return $data; 
 	}
+    /**
+     * Ручная загрузка
+     */
+    public function load()
+    {
+        $this->_load();
+    }
 }
