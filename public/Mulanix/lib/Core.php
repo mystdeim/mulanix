@@ -91,16 +91,14 @@ class Mnix_Core
         //$a++;
         try {
             //Грузим конфиг
-            Mnix_Config::load();
-                
+            Mnix_Config::load();  
             //Создаём юзера
             $user = Mnix_Auth_User::current();
-            
             //Получаем группу
             $group = $user->getGroup();
-            
             //Парсим урл
-            //$url = Mnix_Uri::current();
+            $url = Mnix_Uri::current();
+            var_dump($url);
             
             //Получаем страницу
             //$page = $url->getPage();
