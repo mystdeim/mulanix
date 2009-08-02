@@ -16,15 +16,38 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
     public function providerParts()
     {
         return array(
-            array('', array('/')),
-            array('/', array('/')),
-            array('//////////', array('/')),
-            array('/page', array('/', 'page')),
-            array('/page/', array('/', 'page')),
-            array('/page////////', array('/', 'page')),
-            array('/page1/page2', array('/', 'page1', 'page2')),
-            array('/page1/page2////page3////', array('/', 'page1', 'page2', 'page3')),
-            array('/page1/page2////7/', array('/', 'page1', 'page2', '7'))
+            array('', array()),
+            array('/', array()),
+            array('//////////', array()),
+            array('/page', array('page')),
+            array('/page/', array('page')),
+            array('/page////////', array('page')),
+            array('/page1/page2', array('page1', 'page2')),
+            array('/page1/page2////page3////', array('page1', 'page2', 'page3')),
+            array('/page1/page2////7/', array('page1', 'page2', '7'))
+        );
+    }
+    /**
+     * Проверяем _parse()
+     * @dataProvider providerParse
+     */
+    public function testParse($data, $result)
+    {
+        $this->assertEquals(Test_Mnix_Uri::parse($data), $result);
+    }
+    public function providerParse()
+    {
+        return array(
+            array('', 1),
+            array('/', 1),
+            array('//////////', 1),
+            array('/ru', 1),
+            array('/ru///', 1),
+            array('/rU', 1),
+            array('/ruS', 1),
+            array('/faq', 2),
+            array('/ru/faq', 2),
+            array('/en//faq///', 2)
         );
     }
 }

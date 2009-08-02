@@ -1,6 +1,11 @@
 <?php
-$s = 0.93;
-for ($i=0; $i<1000; $i++) {
-    $s = $s * 1.0225;
-    echo $s.'<br />';
+$value = preg_match('/^$/', NULL, $val);
+var_dump($value);
+//if (is_array($var))
+var_dump($val);
+$arr = array('a', 'b', 'c');
+foreach ($arr as $t) {
+    var_dump($t);
+    //continue;
+    var_dump($t);
 }
