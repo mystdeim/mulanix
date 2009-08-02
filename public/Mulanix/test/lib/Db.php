@@ -164,6 +164,36 @@ class Test_Mnix_Db extends Mnix_Db
                 '4', '5'
             );");
         //--------------------------------------------------------------------------------------------------------------
+        $db->query(
+            'CREATE TABLE mnix_test_uri (
+                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+                regular VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+                `group` INT,
+                parent INT,
+                parametr VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+                `order` TINYINT,
+                page_id INT
+            ) ENGINE = InnoDB;');
+        $db->query(
+            "INSERT INTO mnix_test_uri (
+                id,
+                title,
+                regular,
+                `group`,
+                parent,
+                parametr,
+                `order`,
+                page_id
+            )
+            VALUES (
+                '1', 'index', NULL,        1, 0, NULL, NULL, 1
+            ), (
+                '2', 'lang',  '(ru)|(en)', 2, 1, NULL, NULL, 1
+            ), (
+                '3', 'faq',   'faq',       3, 2, NULL, NULL, 2
+            );");
+        //--------------------------------------------------------------------------------------------------------------
     }
     public static function dump_end()
     {
@@ -173,5 +203,6 @@ class Test_Mnix_Db extends Mnix_Db
         $db->query('DROP TABLE mnix_test_table3');
         $db->query('DROP TABLE mnix_test_table4');
         $db->query('DROP TABLE mnix_test_table124');
+        $db->query('DROP TABLE mnix_test_uri');
     }
 }
