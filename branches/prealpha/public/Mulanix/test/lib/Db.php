@@ -173,7 +173,8 @@ class Test_Mnix_Db extends Mnix_Db
                 parent INT,
                 parametr VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
                 `order` TINYINT,
-                page_id INT
+                page_id INT,
+                `obligate` TINYINT NOT NULL DEFAULT 1
             ) ENGINE = InnoDB;');
         $db->query(
             "INSERT INTO mnix_test_uri (
@@ -187,11 +188,11 @@ class Test_Mnix_Db extends Mnix_Db
                 page_id
             )
             VALUES (
-                '1', 'index', NULL,        1, 0, NULL, NULL, 1
+                '1', 'index', NULL,        1, 0, NULL, NULL, 1, 0
             ), (
-                '2', 'lang',  '(ru)|(en)', 2, 1, NULL, NULL, 1
+                '2', 'lang',  '(ru)|(en)', 2, 1, NULL, NULL, 1, 0
             ), (
-                '3', 'faq',   'faq',       3, 2, NULL, NULL, 2
+                '3', 'faq',   'faq',       3, 2, NULL, NULL, 2, 1
             );");
         //--------------------------------------------------------------------------------------------------------------
     }
