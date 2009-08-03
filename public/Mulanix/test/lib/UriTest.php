@@ -16,15 +16,15 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
     public function providerParts()
     {
         return array(
-            array('', array()),
-            array('/', array()),
-            array('//////////', array()),
-            array('/page', array('page')),
-            array('/page/', array('page')),
-            array('/page////////', array('page')),
-            array('/page1/page2', array('page1', 'page2')),
-            array('/page1/page2////page3////', array('page1', 'page2', 'page3')),
-            array('/page1/page2////7/', array('page1', 'page2', '7'))
+            array('', array('/')),
+            array('/', array('/')),
+            array('//////////', array('/')),
+            array('/page', array('/', 'page')),
+            array('/page/', array('/', 'page')),
+            array('/page////////', array('/', 'page')),
+            array('/page1/page2', array('/', 'page1', 'page2')),
+            array('/page1/page2////page3////', array('/', 'page1', 'page2', 'page3')),
+            array('/page1/page2////7/', array('/', 'page1', 'page2', '7'))
         );
     }
     /**
