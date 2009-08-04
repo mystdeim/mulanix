@@ -53,8 +53,8 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
             array('/en/fag1', 3),
             array('/en/fag8', 3),
             array('/ru/fag8/course1', 3),
-            array('/ru/fag8/course', 5)/*,
-            array('/en/course2', 5)*/
+            array('/ru/fag8/course', 5),
+            array('/en/course2', 5)
         );
     }
 }

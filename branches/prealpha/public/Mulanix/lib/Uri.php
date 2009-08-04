@@ -29,181 +29,123 @@ class Mnix_Uri extends Mnix_ORM_Prototype
      */
     protected static function _parse($data = null)
     {
-        /*if (isset($data)) $requests = self::_parts($data);
-        else $requests = self::_parts($_SERVER['REQUEST_URI']);
-        $db = Mnix_Db::connect();*/
-        //Ид родительского элемента
-        /*$parent = 0;
-        foreach ($requests as $request) {
-            do {
-                //Обязательность регулярки
-                $obligate = true;
-                //Совпадение регулярки
-                $flag = true;
-                //Ищем строки по родительскому идишнику
-                $res = $db->select()->from('mnix_test_uri', '*')
-                                    ->where('?t = ?i', array('parent', $parent))
-                                    ->query();
-                var_dump($res);
-                //Распределяем по группам
-                foreach ($res as $temp) {
-                    $res[$temp['group']][$temp['order']] = $temp;
-                }
-                var_dump($res);
-                if ($res) {
-                    //Обходим урлы, соответствующие родительскому
-                    foreach ($res as $temp) {
-                        $pattern = '/^' . $temp['regular'] . '$/';
-                        $group = $temp['group'];
-                        if (preg_match($pattern, $request)) {
-                            $parent = $temp['group'];
-                            $id = $temp['page_id'];
-                            break;
-                        } else
-                            $flag = false;
-                            if (!$temp['obligate']) {
-                                $parent = $temp['group'];
-                                $id = $temp['page_id'];
-                            } else {
-                                $obligate = false;
-                            }
-                    }
-                }
-                var_dump(!$flag && !$obligate);
-                //if (!$flag && !$obligate) break;
-            } while (!$flag && $obligate);
-        }*/
-        /*$parent = 0;
-        $ii = 0;
-        //var_dump($requests);
-        foreach ($requests as $request) {
-            do {
-                //Обязательность регулярки
-                $obligate = true;
-                //Совпадение регулярки
-                $flag = true;
-                //Ищем строки по родительскому идишнику
-                $res = $db->select()->from('mnix_test_uri', '*')
-                                    ->where('?t = ?i', array('parent', $parent))
-                                    ->query();
-                if ($res) {
-                    //Распределяем по группам
-                    $data = array();
-                    foreach ($res as $key => $val) $data[$val['group']][$val['order']] = $val;
-                    unset($res);
-                    //Обходим группы
-                    foreach ($data as $group) {
-                        //var_dump($group);
-                        //Обходим урлы, соответствующие группе
-                        foreach ($group as $temp) {
-                            //var_dump($temp);
-                            $pattern = '/^' . $temp['regular'] . '$/';
-                            $group = $temp['group'];
-                            if (preg_match($pattern, $request)) {
-                                $parent = $temp['group'];
-                                $id = $temp['page_id'];
-                            } else
-                                $flag = false;
-                                if (!$temp['obligate']) {
-                                    $parent = $temp['group'];
-                                    $id = $temp['page_id'];
-                                } else {
-                                    $obligate = false;
-                                }
-                        }
-                        //Если нашли совпадения то выходим
-                        if ($flag) break;
-                    }
-                }
-            } while (!$flag && $obligate);
-        }
-        //Если не было последнего совпадения, то суём ошибку
-        if (!$flag) {
-            $res = $db->select()->from('mnix_test_uri', '*')
-                                ->where('?t = ?i', array('group', -1))
-                                ->query();
-            $id = $res[0]['page_id'];
-        }
-
-        return $id;*/
-        return self::_parse2($data);
-    }
-    protected static function _parse2($data = null)
-    {
         if (isset($data)) $requests = self::_parts($data);
         else $requests = self::_parts($_SERVER['REQUEST_URI']);
         $db = Mnix_Db::connect();
-        $state = 'first';
+        $state = 1;
+        $data = array();
         $parent = 0;
         $iii = 0;
         do {
-            var_dump('State:'.$state);
+            //var_dump('State:'.$state);
             switch ($state) {
-                case 'first':
+                //Берём слово из урл
+                case 1:
                     $request = array_shift($requests);
-                    if ($request) $state = 'request';
-                    else $state = 'end';
+                    if ($request) $state = 2;
+                    else $state = 0;
                     break;
-                case 'request':
+                //Получаем группы
+                case 2:
                     $res = $db->select()->from('mnix_test_uri', '*')
                                         ->where('?t = ?i', array('parent', $parent))
                                         ->query();
                     if ($res) {
-                        $data = array();
                         foreach ($res as $key => $val) $data[$val['group']][$val['order']] = $val;
                         unset($res);
                         //var_dump($data);
                         $group = array_shift($data);
-                        $state = 'group';
-                    } else $state = 'end';
-                    //var_dump($state);
+                        $state = 3;
+                    } else $state = 8;
                     break;
-                case 'group':
+                //Берём урл из группы
+                case 3:
                     $uri = array_shift($group);
-                    if ($uri) $state = 'uri';
+                    if ($uri) $state = 4;
+                    else $state = 8;
                     break;
-                case 'uri':
-                    //var_dump($uri)
+                //Проверяем обязательность
+                case 4:
+                    if ($uri['obligate']) {
+
+                        $parent = $uri['group'];
+                        $id = $uri['page_id'];
+
+                        $state = 5;
+                    } else $state = 9;
+                    break;
+                //Проверяем регулярку
+                case 5:
                     $pattern = '/^' . $uri['regular'] . '$/';
-                    $group = $uri['group'];
                     if (preg_match($pattern, $request)) {
                         $parent = $uri['group'];
                         $id = $uri['page_id'];
-                        $state = 'first';
-                    } else {
-                        if (!$uri['obligate']) {
-                            $parent = $uri['group'];
-                            $id = $uri['page_id'];
-                            $state = 'uri2';
-                        } else {
-                            $group = array_shift($data);
-                            if ($group) $state = 'group';
-                            else $state = 'error';
-                        }
-                    }
+                        $state = 6;
+                    } else $state = 12;
                     break;
-                case 'uri2':
-                    //var_dump($data);
-                    $group = array_shift($data);
-                    if ($group) $state = 'group';
-                    else {
-                        if ($request) $state = 'request';
-                        else $state = 'error';
-                    }
+                //Если урлов нет, то в 1
+                case 6:
+                    $uri = array_shift($group);
+                    if ($uri) $state = 7;
+                    else $state = 1;
                     break;
-                case 'error':
+                //Смотрим остались ли запросы
+                case 7:
+                    $request = array_shift($requests);
+                    if ($request) $state = 4;
+                    else $state = 0;
+                    break;
+                //Тут выдаём ошибочную страницу
+                case 8:
                     $res = $db->select()->from('mnix_test_uri', '*')
                                         ->where('?t = ?i', array('group', -1))
                                         ->query();
                     $id = $res[0]['page_id'];
-                    $state = 'end';
+                    $state = 0;
                     break;
+                //Проверяем регулярку
+                case 9:
+                    //var_dump($uri);
+                    $pattern = '/^' . $uri['regular'] . '$/';
+                    $parent = $uri['group'];
+                    $id = $uri['page_id'];
+                    if (preg_match($pattern, $request)) {
+                        $state = 6;
+                    } else $state = 10;
+                    break;
+                //Если урлов нет, то в 11
+                case 10:
+                    $uri = array_shift($group);
+                    if ($uri) $state = 4;
+                    else $state = 11;
+                    break;
+                //Проверяем остались ли группы
+                case 11:
+                    $group = array_shift($data);
+                    if ($group) $state = 3;
+                    else $state = 2;
+                    //exit();
+                    break;
+                //Проверяем остались ли группы
+                case 12:
+                    $group = array_shift($data);
+                    if ($group) $state = 3;
+                    else $state = 8;
+                    break;
+                //TODO
+                //Тут кидать исключение
                 default:
-                    var_dump('NO state!');
+                    var_dump('NO state!'.$state);
                     break;
             }
+            //Типa защита
             $iii++;
-        } while ($state !== 'end' && $iii < 100);
+            if ($iii > 100) {
+                //TODO
+                //Тут кидать исключение
+                break;
+            }
+        } while ($state);
         return $id;
     }
     /**
