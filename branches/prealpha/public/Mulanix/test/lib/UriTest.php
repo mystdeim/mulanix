@@ -49,12 +49,16 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
             array('/faqs', 2),
             array('/ru/faqs', 2),
             array('/en//faqs///', 2),
-            array('/fag1', 3),
-            array('/en/fag1', 3),
-            array('/en/fag8', 3),
-            array('/ru/fag8/course1', 3),
-            array('/ru/fag8/course', 5),
-            array('/en/course2', 5)
+            array('/faq1', 3),
+            array('/en/faq1', 3),
+            array('/en/faq8', 3),
+            array('/ru/faq8/course1', 3),
+            array('/ru/faq8/course', 5),
+            array('/en/course2', 5),
+            array('/ru/faq8/course1/term5', 3),
+            array('/ru/faq8/course1/term', 5),
+            array('/ru/faq8/term10', 3),
+            array('/ru/faq8/100', 4)
         );
     }
 }
