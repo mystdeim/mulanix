@@ -33,7 +33,6 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
      */
     public function testParse($data, $result)
     {
-        //var_dump(Test_Mnix_Uri::parse($data));
         $this->assertEquals(Test_Mnix_Uri::parse($data), $result);
     }
     public function providerParse()
@@ -58,7 +57,12 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
             array('/ru/faq8/course1/term5', 3),
             array('/ru/faq8/course1/term', 5),
             array('/ru/faq8/term10', 3),
-            array('/ru/faq8/100', 4)
+            array('/ru/faq8/100', 4),
+            array('/ru/faq8/term10/100', 5),
+            array('/ru/faq8/100/course1', 5),
+            array('/ru/faq8/0', 3),
+            array('/ru/faq8/note5', 4),
+            array('/ru/faq8/term5/note5', 4)
         );
     }
 }
