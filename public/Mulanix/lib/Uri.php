@@ -20,14 +20,39 @@ class Mnix_Uri extends Mnix_ORM_Prototype
 		'page' => array(
 				'class'  => 'Mnix_Engine_Page',
 				'id'	 => 'page_id'));
-    protected $_url;
+    /**
+     * Параметры в гет-запросе, если они есть
+     *
+     * @var array
+     */
+    protected $_param = array();
+    /**
+     * Проверяем какой параметр содержится в запросе
+     * 
+     * @param string $string
+     * @param string $regular
+     * @param string $name
+     * @return boolean|int|string
+     */
+    protected function _checkParam($string, $regular, $name)
+    {
+        if (isset($regular) && preg_match('/' . $regular . '/', $string, $matches)) {
+            $this->_param[$name] = current($matches);
+            return current($matches);
+        } else return false;
+    }
+    public function getParam()
+    {
+        if (!isset($this->_param['lang'])) $this->_param['lang'] = MNIX_DEFAULT_LANG;
+        return $this->_param;
+    }
     /**
      * Парсер строку адреса и возвращаем ид страницы
      *
      * @param string $data
      * return int
      */
-    protected static function _parse($data = null)
+    protected function _parse($data = null)
     {
         if (isset($data)) $requests = self::_parts($data);
         else $requests = self::_parts($_SERVER['REQUEST_URI']);
@@ -50,7 +75,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                     break;
                 //Берём урл
                 case 2:
-                    $res_t = $db->select()->from('mnix_test_uri2', '*')
+                    $res_t = $db->select()->from($this->_table, '*')
                                           ->where('?t = ?i', array('parent', $parent))
                                           ->query();
                     if (isset($res) && count($res)) $res = array_merge($res_t, $res);
@@ -75,12 +100,13 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                     if (preg_match($pattern, $request)) {
                         $parent = $uri['id'];
                         $id = $uri['page_id'];
+                        $this->_checkParam($request, $uri['parametr'], $uri['title']);
                         $state = 1;
                     } else $state = 7;
                     break;
                 //Тут выдаём ошибочную страницу
                 case 5:
-                    $res = $db->select()->from('mnix_test_uri2', '*')
+                    $res = $db->select()->from($this->_table, '*')
                                         ->where('?t = ?i', array('parent', -1))
                                         ->query();
                     $id = $res[0]['page_id'];
@@ -92,6 +118,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                     $parent = $uri['id'];
                     if (preg_match($pattern, $request)) {
                         $id = $uri['page_id'];
+                        $this->_checkParam($request, $uri['parametr'], $uri['title']);
                         $state = 1;
                     } else $state = 2;
                     break;
@@ -116,6 +143,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                 break;
             }
         } while ($state);
+        $this->set($uri);
         return $id;
     }
     /**
@@ -124,7 +152,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
      * @param string $data
      * return array
      */
-    protected static function _parts($data)
+    protected function _parts($data)
     {
         $requests = explode('/', $data);
         $data = array('/');
@@ -141,7 +169,8 @@ class Mnix_Uri extends Mnix_ORM_Prototype
      */
     public static function current()
     {
-        self::_parse();
-        return new Mnix_Uri(1);
+        $obj = new Mnix_Uri;
+        $obj->_parse();
+        return $obj;
     }
 }

@@ -7,11 +7,13 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
     }
     /**
      * Проверяем _parts()
+     *
      * @dataProvider providerParts
      */
     public function testParts($data, $result)
     {
-        $this->assertEquals(Test_Mnix_Uri::parts($data), $result);
+        $uri = new Test_Mnix_Uri();
+        $this->assertEquals($uri->parts($data), $result);
     }
     public function providerParts()
     {
@@ -29,11 +31,13 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
     }
     /**
      * Проверяем _parse()
+     *
      * @dataProvider providerParse
      */
     public function testParse($data, $result)
     {
-        $this->assertEquals(Test_Mnix_Uri::parse($data), $result);
+        $uri = new Test_Mnix_Uri();
+        $this->assertEquals($uri->parse($data), $result);
     }
     public function providerParse()
     {
@@ -63,6 +67,51 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
             array('/ru/faq8/0', 3),
             array('/ru/faq8/note5', 4),
             array('/ru/faq8/term5/note5', 4)
+        );
+    }
+    /**
+     * Проверяем _checkParam()
+     *
+     * @dataProvider providerCheckParam
+     */
+    public function testCheckParam($string,$regular, $result)
+    {
+        $uri = new Test_Mnix_Uri();
+        $this->assertEquals($uri->checkParam($string,$regular,''), $result);
+    }
+    public function providerCheckParam()
+    {
+        return array(
+            array('0','\d+', 0),
+            array('dfdf', '\d+', false),
+            array('dfdf123', '\d+', 123)
+        );
+    }
+    /**
+     * Проверяем как записываются параметры
+     *
+     * @dataProvider providerCheckParam2
+     */
+    public function testCheckParam2($request, $result)
+    {
+        $uri = new Test_Mnix_Uri();
+        $uri->parse($request);
+        $this->assertEquals($uri->getParam(), $result);
+    }
+    public function providerCheckParam2()
+    {
+        return array(
+            array('', array('lang'=>'ru')),
+            array('fags', array('lang'=>'ru')),
+            array('faq8', array('lang'=>'ru','faq'=>8)),
+            array('ru/faqs', array('lang'=>'ru')),
+            array('en/faq1', array('lang'=>'en','faq'=>1)),
+            array('en/faq1/course', array('lang'=>'en','faq'=>1)),
+            array('en/faq1/course5', array('lang'=>'en','faq'=>1,'course'=>5)),
+            array('en/faq1/course5/term10', array('lang'=>'en','faq'=>1,'course'=>5,'term'=>10)),
+            array('en/faq1/term10', array('lang'=>'en','faq'=>1,'term'=>10)),
+            array('en/faq1/10', array('lang'=>'en','faq'=>1,'note'=>10)),
+            array('en/faq1/term10/note1000', array('lang'=>'en','faq'=>1,'term'=>10,'note'=>1000)),
         );
     }
 }

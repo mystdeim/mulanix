@@ -97,8 +97,8 @@ class Mnix_Core
             //Получаем группу
             $group = $user->getGroup();
             //Парсим урл
-            $url = Mnix_Uri::current();
-            var_dump($url);
+            //$url = Mnix_Uri::current();
+            //var_dump($url);
             
             //Получаем страницу
             //$page = $url->getPage();
