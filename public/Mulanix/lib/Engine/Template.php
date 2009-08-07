@@ -2,12 +2,16 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Engine
- * @author deim
- * @copyright 2009
+ * @since 2008-10-01
+ * @version 2009-08-06
  */
 /**
- * @package Mnix_Engine_Template
+ * Шаблон
+ *
+ * @category Mulanix
+ * @package Mnix_Engine
  */
 class Mnix_Engine_Template extends Mnix_ORM_Prototype
 {

@@ -100,11 +100,17 @@ class Mnix_Core
             $url = Mnix_Uri::current();
             //Получаем страницу
             $page = $url->getPage();
-            //var_dump($page);
             //Получаем блоки
             $blocks = $page->getBlocks();
-            //$blocks->load();
-            //var_dump($blocks);
+            //Получаем тему
+            $theme = $user->getTheme();
+            //Создаём дом-документ для файлв стилей
+            $xsl = new DOMDocument('1.0', 'UTF-8');
+            //Грузим мастер-шаблон
+            $xsl->load(MNIX_DIR.'theme/'.$theme->getTitle().'/master.xsl');
+            //var_dump($xsl);
+            //Создаём файл с контентом
+            $xml = new DOMDocument('1.0', 'UTF-8');
             //Обходим блоки
             foreach ($blocks as $block) {
                 //var_dump($block);
@@ -112,17 +118,24 @@ class Mnix_Core
                 $templates = $block->getTemplates();
                 //Обходим шаблоны
                 foreach ($templates as $template) {
-                    var_dump($template);
+                    //var_dump($template);
                     //Компонент
                     $component = $template->getComponent();
                     //$component->load();
                     //var_dump($component);
+                    $file = MNIX_DIR.'component/'.$component->getTitle().'/template/'.$template->getTitle().'.xsl';
+                    var_dump($file);
                     //Контроллер
                     $controller = $template->getController();
                     //$controller->load();
                     //var_dump($controller);
                 }
             }
+
+            var_dump($xsl->saveXML());
+            
+            //Создаём XSLT-процессор
+            $xslt = new XSLTProcessor();
 
             } catch(Exception $e) {
             //var_dump($e);

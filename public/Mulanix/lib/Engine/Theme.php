@@ -5,16 +5,15 @@
  * @category Mulanix
  * @package Mnix_Engine
  * @since 2008-10-01
- * @version 2009-08-06
+ * @version 2009-07-30
  */
 /**
- * Компонент
+ * Тема оформления
  *
  * @category Mulanix
  * @package Mnix_Engine
  */
-class Mnix_Engine_Component extends Mnix_ORM_Prototype
+class Mnix_Engine_Theme extends Mnix_ORM_Prototype
 {
-    protected $_table = 'mnix_component';
+    protected $_table = 'mnix_theme';
 }
-?>
