@@ -19,7 +19,10 @@ class Mnix_Auth_User extends Mnix_ORM_Prototype
     protected $_has_one = array(
 		'group' => array(
 				'class'  => 'Mnix_Auth_Group',
-				'id'	 => 'group_id'));
+				'id'	 => 'group_id'),
+		'theme' => array(
+				'class'  => 'Mnix_Engine_Theme',
+				'id'	 => 'theme_id'));
     public static function current()
     {
         return new Mnix_Auth_User(1);
