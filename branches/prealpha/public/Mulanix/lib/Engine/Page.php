@@ -2,20 +2,24 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Engine
- * @author deim
- * @copyright 2009
+ * @since 2008-10-01
+ * @version 2009-07-30
  */
 /**
- * @package Mnix_Engine_Page
+ * Страница
+ *
+ * @category Mulanix
+ * @package Mnix_Engine
  */
 class Mnix_Engine_Page extends Mnix_ORM_Prototype
 {
     protected $_table = 'mnix_page';
     protected $_has_many = array(
-		'template' => array(
-				'class'  => 'Mnix_Engine_Template',
-				'id' 	 => 'page_id',
-				'fk' 	 => 'template_id',
-				'jtable' => 'mnix_page2template'));
+		'blocks' => array(
+				'class'  => 'Mnix_Engine_Block',
+				'id' 	 => 'block_id',
+				'fk' 	 => 'page_id',
+				'jtable' => 'mnix_page2block'));
 }
