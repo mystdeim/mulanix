@@ -97,11 +97,32 @@ class Mnix_Core
             //Получаем группу
             $group = $user->getGroup();
             //Парсим урл
-            //$url = Mnix_Uri::current();
-            //var_dump($url);
-            
+            $url = Mnix_Uri::current();
             //Получаем страницу
-            //$page = $url->getPage();
+            $page = $url->getPage();
+            //var_dump($page);
+            //Получаем блоки
+            $blocks = $page->getBlocks();
+            //$blocks->load();
+            //var_dump($blocks);
+            //Обходим блоки
+            foreach ($blocks as $block) {
+                //var_dump($block);
+                //Получаем шаблоны, соответствующие блоку
+                $templates = $block->getTemplates();
+                //Обходим шаблоны
+                foreach ($templates as $template) {
+                    var_dump($template);
+                    //Компонент
+                    $component = $template->getComponent();
+                    //$component->load();
+                    //var_dump($component);
+                    //Контроллер
+                    $controller = $template->getController();
+                    //$controller->load();
+                    //var_dump($controller);
+                }
+            }
 
             } catch(Exception $e) {
             //var_dump($e);
