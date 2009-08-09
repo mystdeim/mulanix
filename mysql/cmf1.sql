@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 06 2009 г., 15:18
+-- Время создания: Авг 09 2009 г., 11:12
 -- Версия сервера: 5.0.75
 -- Версия PHP: 5.2.6-3ubuntu4.1
 
@@ -18,6 +18,171 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- База данных: `cmf1`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_block`
+--
+
+DROP TABLE IF EXISTS `mnix_block`;
+CREATE TABLE IF NOT EXISTS `mnix_block` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `mnix_block`
+--
+
+INSERT INTO `mnix_block` (`id`, `title`) VALUES
+(1, 'main'),
+(2, 'left');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_block2template`
+--
+
+DROP TABLE IF EXISTS `mnix_block2template`;
+CREATE TABLE IF NOT EXISTS `mnix_block2template` (
+  `block_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL,
+  PRIMARY KEY  (`block_id`,`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `mnix_block2template`
+--
+
+INSERT INTO `mnix_block2template` (`block_id`, `template_id`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_component`
+--
+
+DROP TABLE IF EXISTS `mnix_component`;
+CREATE TABLE IF NOT EXISTS `mnix_component` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`id`,`title`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_component`
+--
+
+INSERT INTO `mnix_component` (`id`, `title`) VALUES
+(1, 'Static');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_controller`
+--
+
+DROP TABLE IF EXISTS `mnix_controller`;
+CREATE TABLE IF NOT EXISTS `mnix_controller` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `component_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_controller`
+--
+
+INSERT INTO `mnix_controller` (`id`, `title`, `component_id`) VALUES
+(1, 'simple', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_group`
+--
+
+DROP TABLE IF EXISTS `mnix_group`;
+CREATE TABLE IF NOT EXISTS `mnix_group` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_group`
+--
+
+INSERT INTO `mnix_group` (`id`, `title`) VALUES
+(1, 'anonymous');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_page`
+--
+
+DROP TABLE IF EXISTS `mnix_page`;
+CREATE TABLE IF NOT EXISTS `mnix_page` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_page`
+--
+
+INSERT INTO `mnix_page` (`id`, `title`) VALUES
+(1, 'index');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_page2block`
+--
+
+DROP TABLE IF EXISTS `mnix_page2block`;
+CREATE TABLE IF NOT EXISTS `mnix_page2block` (
+  `page_id` int(11) NOT NULL,
+  `block_id` int(11) NOT NULL,
+  PRIMARY KEY  (`page_id`,`block_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `mnix_page2block`
+--
+
+INSERT INTO `mnix_page2block` (`page_id`, `block_id`) VALUES
+(1, 1),
+(1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_template`
+--
+
+DROP TABLE IF EXISTS `mnix_template`;
+CREATE TABLE IF NOT EXISTS `mnix_template` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `controller_id` int(11) NOT NULL,
+  `component_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_template`
+--
+
+INSERT INTO `mnix_template` (`id`, `title`, `controller_id`, `component_id`) VALUES
+(1, 'index', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -176,3 +341,71 @@ INSERT INTO `mnix_test_uri2` (`id`, `title`, `regular`, `parametr`, `parent`, `p
 (7, 'term', 'term\\d+', '\\d+', 5, 3, 0),
 (8, 'note', '\\d+', '\\d+', 4, 4, 1),
 (9, 'note', 'note\\d+', '\\d+', 7, 4, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_theme`
+--
+
+DROP TABLE IF EXISTS `mnix_theme`;
+CREATE TABLE IF NOT EXISTS `mnix_theme` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `mnix_theme`
+--
+
+INSERT INTO `mnix_theme` (`id`, `title`) VALUES
+(1, 'Default'),
+(2, 'Style1');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_uri`
+--
+
+DROP TABLE IF EXISTS `mnix_uri`;
+CREATE TABLE IF NOT EXISTS `mnix_uri` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `regular` varchar(255) collate utf8_unicode_ci default NULL,
+  `parametr` varchar(255) collate utf8_unicode_ci default NULL,
+  `parent` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `obligate` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_uri`
+--
+
+INSERT INTO `mnix_uri` (`id`, `title`, `regular`, `parametr`, `parent`, `page_id`, `obligate`) VALUES
+(1, 'index', '\\/', NULL, 0, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mnix_user`
+--
+
+DROP TABLE IF EXISTS `mnix_user`;
+CREATE TABLE IF NOT EXISTS `mnix_user` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `theme_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `mnix_user`
+--
+
+INSERT INTO `mnix_user` (`id`, `title`, `group_id`, `theme_id`) VALUES
+(1, 'anonymous', 1, 1);
