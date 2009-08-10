@@ -168,6 +168,8 @@ class Mnix_Core
                     $controller = $template->getController();
                     $controller->load();
                     var_dump($controller);
+
+                    //$class = $component->getTtile().'_controller'.
                 }
             }
 
