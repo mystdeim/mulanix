@@ -104,38 +104,86 @@ class Mnix_Core
             $blocks = $page->getBlocks();
             //Получаем тему
             $theme = $user->getTheme();
+
             //Создаём дом-документ для файлв стилей
-            $xsl = new DOMDocument('1.0', 'UTF-8');
+            $xsl = new domDocument('1.0', 'UTF-8');
+            $xsl->preserveWhiteSpace = false;
             //Грузим мастер-шаблон
-            $xsl->load(MNIX_DIR.'theme/'.$theme->getTitle().'/master.xsl');
-            //var_dump($xsl);
+            $xsl->load(MNIX_DIR.'theme/'.$theme->getName().'/master.xsl');
+            $xslNodeRoot = $xsl->getElementsByTagNameNS('http://www.w3.org/1999/XSL/Transform', 'stylesheet');
+
             //Создаём файл с контентом
-            $xml = new DOMDocument('1.0', 'UTF-8');
+            $xml = new domDocument('1.0', 'UTF-8');
+            $xml->preserveWhiteSpace = false;
+            //Создаём корневой узел
+            $xmlNodeRoot = $xml->createElement('root');
+            $xml->appendChild($xmlNodeRoot);
+            //Создаём узел с заголовком и телом документа
+            $xmlNodeHead = $xml->createElement('head');
+            $xmlNodeBody = $xml->createElement('body');
+            $xmlNodeRoot->appendChild($xmlNodeHead);
+            $xmlNodeRoot->appendChild($xmlNodeBody);
+            //Создаём узел с заголовком
+            $xmlNodeTitle = $xml->createElement('title');
+            $xmlNodeTitleText = new domText($page->getName());
+            $xmlNodeTitle->appendChild($xmlNodeTitleText);
+            $xmlNodeHead->appendChild($xmlNodeTitle);
+
             //Обходим блоки
             foreach ($blocks as $block) {
                 //var_dump($block);
+
+                //Создаём в xml ноду с названием блока
+                $xmlNodeBlock = $xml->createElement($block->getName());
+                $xmlNodeBody->appendChild($xmlNodeBlock);
+
                 //Получаем шаблоны, соответствующие блоку
                 $templates = $block->getTemplates();
                 //Обходим шаблоны
                 foreach ($templates as $template) {
                     //var_dump($template);
-                    //Компонент
+
+                    //Создаём в xml ноду с названием шаблона
+                    $xmlNodeTemplate = $xml->createElement($template->getName());
+                    $xmlNodeBlock->appendChild($xmlNodeTemplate);
+
+                    //Компонент шаблона
                     $component = $template->getComponent();
-                    //$component->load();
-                    //var_dump($component);
-                    $file = MNIX_DIR.'component/'.$component->getTitle().'/template/'.$template->getTitle().'.xsl';
-                    var_dump($file);
+                    //Создаём домдокумент из шаблона
+                    $file = MNIX_DIR.'lib/'.$component->getName().'/template/'.$template->getName().'.xsl';
+                    $xslTemplate = new domDocument('1.0', 'UTF-8');
+                    $xslTemplate->preserveWhiteSpace = false;
+                    $xslTemplate->load($file);
+                    //Нода, которая, будет импортированна
+                    $xslTemplateRoot = $xslTemplate->getElementsByTagName("template")->item(0);
+                    //Импортируем в файл стилей
+                    $xslTemplateRoot = $xsl->importNode($xslTemplateRoot, true);
+                    $xsl->documentElement->appendChild($xslTemplateRoot);
+
                     //Контроллер
                     $controller = $template->getController();
                     //$controller->load();
                     //var_dump($controller);
                 }
             }
-
+            
+            //TEST!!!!
+            $xsl->formatOutput = true;
             var_dump($xsl->saveXML());
             
+            $xml->formatOutput = true;
+            var_dump($xml->saveXML());
+            ///TEST!!!!!
+
             //Создаём XSLT-процессор
             $xslt = new XSLTProcessor();
+            //Импортируем стиль
+            $xslt->importStyleSheet($xsl);
+            //Трансформируем в html
+            $xhtml = $xslt->transformToXML($xml);
+            //echo $xhtml;
+
+            var_dump($xhtml);
 
             } catch(Exception $e) {
             //var_dump($e);
