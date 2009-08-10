@@ -139,6 +139,8 @@ class Mnix_Core
 
                 //Получаем шаблоны, соответствующие блоку
                 $templates = $block->getTemplates();
+                //Уточняем поиск, выбираем шаблоны, соответствующие текущей странице
+                $templates->find('?t = ?i', array('mnix_page2template2block.page_id', $page->getId()));
                 //Обходим шаблоны
                 foreach ($templates as $template) {
                     //var_dump($template);
@@ -149,6 +151,8 @@ class Mnix_Core
 
                     //Компонент шаблона
                     $component = $template->getComponent();
+                    //$component->load();
+                    //var_dump($component);
                     //Создаём домдокумент из шаблона
                     $file = MNIX_DIR.'lib/'.$component->getName().'/template/'.$template->getName().'.xsl';
                     $xslTemplate = new domDocument('1.0', 'UTF-8');
@@ -162,8 +166,8 @@ class Mnix_Core
 
                     //Контроллер
                     $controller = $template->getController();
-                    //$controller->load();
-                    //var_dump($controller);
+                    $controller->load();
+                    var_dump($controller);
                 }
             }
 

@@ -21,5 +21,5 @@ class Mnix_Engine_Page extends Mnix_ORM_Prototype
 				'class'  => 'Mnix_Engine_Block',
 				'id' 	 => 'block_id',
 				'fk' 	 => 'page_id',
-				'jtable' => 'mnix_page2block'));
+				'jtable' => 'mnix_page2template2block'));
 }
