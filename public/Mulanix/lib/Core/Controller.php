@@ -2,12 +2,14 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Core
- * @author deim
- * @copyright 2009
+ * @version 2009-08-10
+ * @since 2009-08-10
  */
 /**
- * @package Mnix_Core_Controller
+ * @category Mulanix
+ * @package Mnix_Core
  */
 class Mnix_Core_Controller
 {

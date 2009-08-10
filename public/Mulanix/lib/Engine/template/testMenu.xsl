@@ -2,10 +2,9 @@
     <xsl:template match="testMenu">
         <p>
             <a href="/">/</a>
-            <a href="/ru">/ru</a>
-            <a href="/admin">/admin</a>
-            <a href="/ru/admin">/ru/admin</a>
-            <a href="/ru/admin/pages">/admin/pages</a>
+            <a href="/ru">ru</a>
+            <a href="/admin">admin</a>
+            <a href="/ru/admin">ru/admin</a>
         </p>
     </xsl:template>
 </xsl:stylesheet>
