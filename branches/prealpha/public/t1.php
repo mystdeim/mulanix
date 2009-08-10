@@ -1,31 +1,24 @@
 <?php
-/*
-$arr = array('', 'ru', 'rt', 'g', 'en', 'dfdf', 'ruL');
-for ($i=0; $i<count($arr); $i++) {
-    $value = preg_match('/^(ru|en|)$/', $arr[$i], $val);
-    //$value = preg_match('/^[^a-z]*$/', $arr[$i], $val);
-    var_dump($val);
-}
+$orgdoc = new DOMDocument;
+$orgdoc->formatOutput = true;
+$orgdoc->loadXML("<root><element><child>text in child</child></element></root>");
 
-$stack = array("orange", "banana", "apple", "raspberry");
-$fruit = array_shift($stack);
-var_dump($stack);
-var_dump($fruit );
+// Create a new document
+$newdoc = new DOMDocument;
+$newdoc->formatOutput = true;
+$newdoc->load('Mulanix/boot/config.xml');
 
-$arr = array('', 'word1', 'word2', 'a', 'abcd');
-foreach ($arr as $string) {
-    preg_match('/^word1|word2|^$$/', $string, $matches);
-    var_dump($matches);
-}
-*/
-preg_match('/\d+/', 'ru123', $matches);
-var_dump($matches);
+// The node we want to import to a new document
+//$node = $newdoc->getElementsByTagName("config")->item(0);
+$node = $newdoc->documentElement;
 
-//if (is_array($var))
-/*var_dump($val);
-$arr = array('a', 'b', 'c');
-foreach ($arr as $t) {
-    var_dump($t);
-    //continue;
-    var_dump($t);
-}*/
+echo "The 'org document' before copying nodes into it:\n";
+var_dump($orgdoc->saveXML());
+
+// Import the node, and all its children, to the document
+$node = $orgdoc->importNode($node, true);
+// And then append it to the "<root>" node
+$orgdoc->documentElement->appendChild($node);
+
+echo "\nThe 'new document' after copying the nodes into it:\n";
+var_dump($orgdoc->saveXML());
