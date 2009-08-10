@@ -166,14 +166,7 @@ class Mnix_Core
                     //var_dump($controller);
                 }
             }
-            
-            //TEST!!!!
-            $xsl->formatOutput = true;
-            var_dump($xsl->saveXML());
-            
-            $xml->formatOutput = true;
-            var_dump($xml->saveXML());
-            ///TEST!!!!!
+
 
             //Создаём XSLT-процессор
             $xslt = new XSLTProcessor();
@@ -181,9 +174,19 @@ class Mnix_Core
             $xslt->importStyleSheet($xsl);
             //Трансформируем в html
             $xhtml = $xslt->transformToXML($xml);
-            //echo $xhtml;
+            //Выводим
+            echo $xhtml;
+
+            //TEST!!!!
+            $xsl->formatOutput = true;
+            var_dump($xsl->saveXML());
+
+            $xml->formatOutput = true;
+            var_dump($xml->saveXML());
 
             var_dump($xhtml);
+            ///TEST!!!!!
+            
 
             } catch(Exception $e) {
             //var_dump($e);
