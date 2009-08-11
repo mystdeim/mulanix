@@ -33,7 +33,7 @@ class Mnix_ORM_Collection implements Iterator
 	}
 	protected function _select()
     {
-		$this->_select = Mnix_Db::connect()->select()->from($this->_param['table']);
+		$this->_select = Mnix_Db::connect()->select()->from($this->_param['table'], '*');
 	}
     /**
      * Передача заранее сформированного селекта

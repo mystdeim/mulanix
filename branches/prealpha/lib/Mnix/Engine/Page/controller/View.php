@@ -11,7 +11,7 @@
  * @category Mulanix
  * @package Mnix_Engine
  */
-class Mnix_Engine_controller_pagesView extends Mnix_Core_Controller
+class Mnix_Engine_controller_PagesView extends Mnix_Core_Controller
 {
 
 }

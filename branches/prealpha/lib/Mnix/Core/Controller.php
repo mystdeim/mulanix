@@ -11,20 +11,16 @@
  * @category Mulanix
  * @package Mnix_Core
  */
-class Mnix_Core_Controller
+abstract class Mnix_Core_Controller
 {
-	protected $_db;
-	protected $_param;
-    protected $_rights;
-	protected $_xml;
-	protected $_data;
-	protected $_xsl;
+	protected $_uriParam;
+	protected $_xmlNode;
 
-	public function __construct($xml, $xsl, $rights, $param)
+	public function __construct($xmlNode, $uriParam)
     {
-        $this->_xml = $xml;
-		$this->_xsl = $xsl;
-        $this->_rights = $rights;
-        $this->_param = $param;
+        $this->_xmlNode = $xmlNode;
+        $this->_uriParam = $uriParam;
 	}
+
+    abstract public function run();
 }
