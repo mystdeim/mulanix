@@ -142,7 +142,13 @@ class Mnix_Core
                     //Контроллер
                     $controller = $template->getController();
                     $controller->load();
-                    var_dump($controller);
+                    $class = $component->getName() . '_controller_' . $controller->getName();
+                    //var_dump($class);
+                    //Передаём в контроллер ноду(по ссылке!) и параметры запроса
+                    $controller = new $class(&$xmlNodeTemplate, $url->getParam());
+                    //var_dump($controller);
+                    //Выполняем
+                    $controller->run();
 
                     //$class = $component->getTtile().'_controller'.
                 }
