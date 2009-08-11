@@ -129,7 +129,7 @@ class Mnix_Core
                     //$component->load();
                     //var_dump($component);
                     //Создаём домдокумент из шаблона
-                    $file = MNIX_LIB.$component->getName().'/template/'.$template->getName().'.xsl';
+                    $file = MNIX_LIB.str_replace('_','/',$component->getName()).'/template/'.$template->getName().'.xsl';
                     $xslTemplate = new domDocument('1.0', 'UTF-8');
                     $xslTemplate->preserveWhiteSpace = false;
                     $xslTemplate->load($file);
@@ -280,12 +280,6 @@ class Mnix_Core
      */
     protected static function _getPath($class)
     {
-        $names = explode('_', $class);
-        $key = array_search('Mnix', $names);
-        if ($key !== false) $names[$key] = 'lib';
-        $key = array_search('Test', $names);
-        if ($key !== false) $names[$key] = 'test';
-        $path = MNIX_DIR . implode('/', $names).'.php';
-        return $path;
+        return MNIX_LIB . str_replace('_', '/', $class).'.php';
     }
 }

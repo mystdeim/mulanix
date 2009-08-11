@@ -18,6 +18,6 @@ define('MNIX_THEME', MNIX_PUBLIC . 'theme/');
 define('MNIX_CONFIG', MNIX_BOOT . 'config.xml');
 if (!defined('PATH_SEPARATOR')) define('PATH_SEPARATOR', getenv('COMSPEC')? ';' : ':');
 ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.MNIX_DIR);
-require_once MNIX_LIB . 'Core.php';
+require_once MNIX_LIB . 'Mnix/Core.php';
 $app = new Mnix_Core();
 $app->run();
