@@ -20,6 +20,13 @@ class Test_Mnix_Core extends Mnix_Core
         $this->_test();
         $this->_crash =false;
     }
+    public function __construct()
+    {
+		$this->_crash = true;
+        self::$_time['db']['time'] = 0;
+        self::$_count['db_q'] = 0;
+        spl_autoload_register('Test_Mnix_Core::_autoload');
+	}
     public function  __destruct()
     {
         echo '<pre>';
@@ -57,5 +64,28 @@ class Test_Mnix_Core extends Mnix_Core
         $class = str_replace(array('test', '/'), '', $_SERVER['REQUEST_URI']);
         echo 'Testing: ' . $class;
         $this->_suite->addTestSuite($class);
+    }
+
+    protected static function _autoload($class)
+    {
+        if (file_exists(self::_getPath($class))) {
+            self::putCount('class');
+            require_once self::_getPath($class);
+            Mnix_Core::putMessage(__CLASS__, 'sys', 'Load class: ' . $class);
+        } else {
+            Mnix_Core::putMessage(__CLASS__, 'err', 'Not found class: ' . $class);
+        }
+    }
+    protected static function _getPath($class)
+    {
+        //var_dump($class);
+        $names = explode('_', $class);
+        $key = array_search('Mnix', $names);
+        if ($key !== false) $names[$key] = 'lib/Mnix';
+        $key = array_search('Test', $names);
+        if ($key !== false) $names[$key] = 'test';
+        $path = MNIX_DIR . implode('/', $names).'.php';
+        //var_dump($path);
+        return $path;
     }
 }
