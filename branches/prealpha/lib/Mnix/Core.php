@@ -127,26 +127,28 @@ class Mnix_Core
                     $xmlNodeTemplate = $xml->createElement($component->getName().'_'.$template->getName());
                     $xmlNodeBlock->appendChild($xmlNodeTemplate);
 
-                    //$component->load();
-                    //var_dump($component);
                     //Создаём домдокумент из шаблона
                     $file = MNIX_LIB.str_replace('_','/',$component->getName()).'/template/'.$template->getName().'.xsl';
                     $xslTemplate = new domDocument('1.0', 'UTF-8');
                     $xslTemplate->preserveWhiteSpace = false;
                     $xslTemplate->load($file);
-                    //Нода, которая, будет импортированна
-                    $xslTemplateRoot = $xslTemplate->getElementsByTagName("template")->item(0);
-                    //Импортируем в файл стилей
-                    $xslTemplateRoot = $xsl->importNode($xslTemplateRoot, true);
-                    $xsl->documentElement->appendChild($xslTemplateRoot);
+
+                    //Импорт нод в мастер-шаблон
+                    for ($i=0; $xslTemplate->getElementsByTagName("template")->item($i); $i++) {
+                        //Нода, которая, будет импортированна
+                        $xslTemplateRoot = $xslTemplate->getElementsByTagName("template")->item($i);
+                        //Импортируем в файл стилей
+                        $xslTemplateRoot = $xsl->importNode($xslTemplateRoot, true);
+                        $xsl->documentElement->appendChild($xslTemplateRoot);
+                    }
 
                     //Контроллер
                     $controller = $template->getController();
                     $controller->load();
                     $class = $component->getName() . '_controller_' . $controller->getName();
 
-                    //Передаём в контроллер ноду(по ссылке!) и параметры запроса
-                    $controller = new $class(&$xmlNodeTemplate, $url->getParam());
+                    //Передаём в контроллер xml-документ(по ссылке!), параметры запроса, корневую ноду шаблона
+                    $controller = new $class(&$xml, $url->getParam(), $xmlNodeTemplate);
                     //var_dump($controller);
                     //Выполняем
                     $controller->run();
