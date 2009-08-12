@@ -17,10 +17,10 @@ class Mnix_Engine_controller_PagesView extends Mnix_Core_Controller
     {
         var_dump($this->_xmlNode);
         $pages = new Mnix_ORM_Collection('Mnix_Engine_Page');
-        $pages->load();
-        var_dump($pages);
         foreach ($pages as $page) {
             var_dump($page->getName());
+            $Node = new domElement($page->getName());
+            $this->_xmlNode->appendChild($Node);
         }
     }
 }

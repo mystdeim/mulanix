@@ -64,7 +64,7 @@ class Mnix_Core
      */
     public function run()
     {
-        try {
+        //try {
             //Грузим конфиг
             Mnix_Config::load();  
             //Создаём юзера
@@ -120,12 +120,13 @@ class Mnix_Core
                 foreach ($templates as $template) {
                     //var_dump($template);
 
-                    //Создаём в xml ноду с названием шаблона
-                    $xmlNodeTemplate = $xml->createElement($template->getName());
-                    $xmlNodeBlock->appendChild($xmlNodeTemplate);
-
                     //Компонент шаблона
                     $component = $template->getComponent();
+                    
+                    //Создаём в xml ноду с названием компонента + шаблон
+                    $xmlNodeTemplate = $xml->createElement($component->getName().'_'.$template->getName());
+                    $xmlNodeBlock->appendChild($xmlNodeTemplate);
+
                     //$component->load();
                     //var_dump($component);
                     //Создаём домдокумент из шаблона
@@ -143,7 +144,7 @@ class Mnix_Core
                     $controller = $template->getController();
                     $controller->load();
                     $class = $component->getName() . '_controller_' . $controller->getName();
-                    //var_dump($class);
+
                     //Передаём в контроллер ноду(по ссылке!) и параметры запроса
                     $controller = new $class(&$xmlNodeTemplate, $url->getParam());
                     //var_dump($controller);
@@ -175,11 +176,11 @@ class Mnix_Core
             ///TEST!!!!!
             
 
-            } catch(Exception $e) {
+      /*} catch(Exception $e) {
             //var_dump($e);
             $trace = $e->getTrace();
             Mnix_Core::putMessage($trace[0]['class'], 'err', $e->getMessage(), $trace);
-        }
+        }*/
 
         //Выполнение не было прервано
         $this->_crash =false;
