@@ -11,7 +11,7 @@
  * @category Mulanix
  * @package Mnix_
  */
-class Mnix_Static_controller_Simple extends Mnix_Core_Controller
+class Mnix_Engine_Static_controller_Simple extends Mnix_Core_Controller
 {
     public function run()
     {

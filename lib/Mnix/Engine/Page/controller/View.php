@@ -11,7 +11,10 @@
  * @category Mulanix
  * @package Mnix_Engine
  */
-class Mnix_Engine_controller_PagesView extends Mnix_Core_Controller
+class Mnix_Engine_Page_controller_View extends Mnix_Core_Controller
 {
-
+    public function run()
+    {
+        
+    }
 }
