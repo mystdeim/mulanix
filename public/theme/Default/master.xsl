@@ -6,17 +6,24 @@
     <xsl:template match="root">
         <html>
             <head>
-                <link href="/Mulanix/theme/Default/css/main.css" rel="stylesheet" type="text/css" />
+                <link href="/theme/Default/css/main.css" rel="stylesheet" type="text/css" />
                 <title>
                     <xsl:apply-templates select="head/title" />
                 </title>
             </head>
             <body>
-                <div>
+                <div id="top">
+                    <xsl:apply-templates select="body/top" />
+                    <hr />
+                </div>
+                <div id="left">
                     <xsl:apply-templates select="body/left" />
                 </div>
-                <div>
+                <div id="main">
                     <xsl:apply-templates select="body/main" />
+                </div>
+                <div id="bottom">
+                    <hr />
                 </div>
             </body>
         </html>

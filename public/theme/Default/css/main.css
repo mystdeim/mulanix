@@ -1,0 +1,20 @@
+/* Global */
+/* Position of blocks */
+/* top */
+#top {
+    
+}
+/* left */
+#left {
+	width: 250px;
+	float: left;
+}
+/* main */
+#main {
+	margin-left: 250px;
+	padding: 10px;
+}
+/* bottom */
+#bottom {
+    clear: both;
+}
