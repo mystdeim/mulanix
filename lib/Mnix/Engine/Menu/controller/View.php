@@ -21,7 +21,6 @@ class Mnix_Engine_Menu_controller_View extends Mnix_Core_Controller
         $menus = new Mnix_ORM_Collection('Mnix_Engine_Menu');
         $menus->find('?t = ?i', array('group', 1));
         foreach($menus as $menu) {
-            var_dump($menu->getName());
 
             //Создаём ноду 'menu'
             $node = $this->_xml->createElement('menu');
@@ -35,7 +34,7 @@ class Mnix_Engine_Menu_controller_View extends Mnix_Core_Controller
             //Создаём аттрибут 'link'
             $attr = $this->_xml->createAttribute('link');
             $node->setAttributeNode($attr);
-            $text = $this->_xml->createTextNode($menu->getName());
+            $text = $this->_xml->createTextNode($menu->getValue());
             $attr->appendChild($text);
 
             //Присоединяем ноду

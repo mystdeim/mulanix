@@ -3,9 +3,9 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Ri
+ * @package Mnix_Uri
  * @since 2008-10-01
- * @version 2009-05-08
+ * @version 2009-08-13
  */
 /**
  * Абстракция относительного пути
