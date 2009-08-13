@@ -8,8 +8,11 @@
  * @since 2009-08-10
  */
 /**
+ * Контроллер вывода списка страниц
+ *
  * @category Mulanix
  * @package Mnix_Engine
+ * @subpackage Page
  */
 class Mnix_Engine_Page_controller_View extends Mnix_Core_Controller
 {
