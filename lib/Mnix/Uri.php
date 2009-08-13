@@ -110,6 +110,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                                         ->where('?t = ?i', array('parent', -1))
                                         ->query();
                     $id = $res[0]['page_id'];
+                    $uri = $res[0];
                     $state = 0;
                     break;
                 //Проверяем регулярку

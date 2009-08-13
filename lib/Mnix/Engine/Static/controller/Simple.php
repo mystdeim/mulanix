@@ -3,13 +3,16 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_
- * @version 2009-
- * @since 2009-
+ * @package Mnix_Engine
+ * @version 2009-08-10
+ * @since 2009-08-10
  */
 /**
+ * Контроллер вывода статичного контента
+ *
  * @category Mulanix
- * @package Mnix_
+ * @package Mnix_Engine
+ * @subpackage Static
  */
 class Mnix_Engine_Static_controller_Simple extends Mnix_Core_Controller
 {
