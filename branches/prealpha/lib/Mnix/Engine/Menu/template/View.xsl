@@ -7,7 +7,7 @@
     </xsl:template>
     <xsl:template match="menu">
         <li>
-            <a href="/{@link}">
+            <a href="{@link}">
             <xsl:value-of select="@name" />
             </a>
         </li>
