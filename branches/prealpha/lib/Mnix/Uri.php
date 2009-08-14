@@ -4,8 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_Uri
- * @since 2008-10-01
- * @version 2009-08-13
+ * @version $Id$
  */
 /**
  * Абстракция относительного пути
@@ -100,7 +99,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                     if (preg_match($pattern, $request)) {
                         $parent = $uri['id'];
                         $id = $uri['page_id'];
-                        $this->_checkParam($request, $uri['parametr'], $uri['title']);
+                        $this->_checkParam($request, $uri['parametr'], $uri['name']);
                         $state = 1;
                     } else $state = 7;
                     break;
@@ -119,7 +118,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
                     $parent = $uri['id'];
                     if (preg_match($pattern, $request)) {
                         $id = $uri['page_id'];
-                        $this->_checkParam($request, $uri['parametr'], $uri['title']);
+                        $this->_checkParam($request, $uri['parametr'], $uri['name']);
                         $state = 1;
                     } else $state = 2;
                     break;

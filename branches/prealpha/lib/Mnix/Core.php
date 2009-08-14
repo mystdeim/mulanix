@@ -4,8 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_Core
- * @since 2008-10-01
- * @version 2009-07-30
+ * @version $Id$
  */
 /**
  * Ядро системы
