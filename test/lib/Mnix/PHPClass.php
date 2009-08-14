@@ -4,7 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_
- * @version SVN: $Id$
+ * @version $Id$
  * @since 2009-
  */
 /**
@@ -13,5 +13,5 @@
  */
 class PHPClass
 {
-
+    public function date();
 }
