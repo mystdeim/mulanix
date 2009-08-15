@@ -2,7 +2,7 @@
     <xsl:template match="Mnix_Engine_Uri_View">
         <p>UriView!</p>
         <ul>
-            <xsl:apply-templates select="page" />
+            <xsl:apply-templates select="uri" />
         </ul>
     </xsl:template>
     <xsl:template match="page">
