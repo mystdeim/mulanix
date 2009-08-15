@@ -4,8 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_ORM
- * @version 2009-07-25
- * @since 2008-10-01
+ * @version $Id$
  */
 /**
  * Представляет объектно-ориентированную проекцию Базы Данных
@@ -180,7 +179,30 @@ abstract class Mnix_ORM_Prototype
         return $this;
     }
     /**
+     * Перегрузка обращения к членам класса
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->_getAttribute(array($name));
+    }
+    /**
+     * Перегрузка записи членов класса
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($name, $value)
+    {
+        $this->_setCortege(array($name => $value));
+    }
+    /**
      * Get & Set методы
+     *
+     * TODO тут нужно будет оставить только функцию set()
+     * но для совместимости пока не удаляю
      *
      * @param string $name
      * @param array $arg

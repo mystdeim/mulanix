@@ -14,6 +14,21 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
     {
         //1
         $table1 = new Test_Mnix_ORM_Table1(1);
+        $this->assertEquals($table1->id, 1);
+        //1a
+        $this->assertEquals($table1->idd, null);
+    }
+    public function testSet()
+    {
+        //1
+        $table1 = new Test_Mnix_ORM_Table1();
+        $table1->id = 3;
+        $this->assertEquals($table1->id, 3);
+    }
+    public function testCallGet()
+    {
+        //1
+        $table1 = new Test_Mnix_ORM_Table1(1);
         $table1->load();
         //2
         $table2 = new Test_Mnix_ORM_Table2(1);
@@ -30,7 +45,7 @@ class Test_Mnix_ORM_PrototypeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(get_class($obj), 'Test_Mnix_ORM_Table2');
         $this->assertEquals($obj->getText(), 'text21');
     }
-    public function testSet()
+    public function testCallSet()
     {
         //1
         $table1 = new Test_Mnix_ORM_Table1();
