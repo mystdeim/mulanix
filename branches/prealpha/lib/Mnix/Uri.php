@@ -41,7 +41,7 @@ class Mnix_Uri extends Mnix_ORM_Prototype
             return current($matches);
         } else return false;
     }
-    public function getParam()
+    public function requestParam()
     {
         if (!isset($this->_param['lang'])) $this->_param['lang'] = MNIX_DEFAULT_LANG;
         return $this->_param;
