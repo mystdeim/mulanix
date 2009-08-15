@@ -96,7 +96,7 @@ class Test_Mnix_UriTest extends PHPUnit_Framework_TestCase
     {
         $uri = new Test_Mnix_Uri();
         $uri->parse($request);
-        $this->assertEquals($uri->getParam(), $result);
+        $this->assertEquals($uri->requestParam(), $result);
     }
     public function providerCheckParam2()
     {
