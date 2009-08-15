@@ -18,7 +18,8 @@ class Mnix_Uri extends Mnix_ORM_Prototype
     protected $_has_one = array(
 		'page' => array(
 				'class'  => 'Mnix_Engine_Page',
-				'id'	 => 'page_id'));
+				'id'	 => 'page_id')
+        );
     /**
      * Параметры в гет-запросе, если они есть
      *

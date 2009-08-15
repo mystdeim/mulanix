@@ -79,7 +79,7 @@ abstract class Mnix_ORM_Prototype
     /**
      * Конструктор
      *
-     * @param int $id
+     * @param int $id - индетификатор объекта
      */
 	public function __construct($id = null)
     {
@@ -196,44 +196,31 @@ abstract class Mnix_ORM_Prototype
      */
     public function __set($name, $value)
     {
+        $this->_isLoad = true;
         $this->_setCortege(array($name => $value));
     }
     /**
-     * Get & Set методы
+     * Запрос кортежа
      *
-     * TODO тут нужно будет оставить только функцию set()
-     * но для совместимости пока не удаляю
-     *
-     * @param string $name
-     * @param array $arg
-     * @return mixed
+     * @param array $arr
+     * @return array
      */
-	public function __call($name, $arg = NULL)
-    {
-        switch (substr($name, 0, 3)) {
-				case 'get':
-					if (isset($arg[0])) {
-						if (is_array($arg[0])) return $this->_getAttribute($arg[0]);
-						else return $this->_getAttribute(array($arg[0]));
-					} else {
-						return $this->_getAttribute(array(strtolower(substr($name, 3))));
-					}
-					break;
-				case 'set':
-                    if (isset($arg[0])) {
-                        $this->_isLoad = true;
-						if (!is_array($arg[0])) {
-                            $this->_setCortege(array(strtolower(substr($name, 3)) => $arg[0]));
-                            return $this;
-                        } else {
-                            $this->_setCortege($arg[0]);
-                            return $this;
-                        }
-					} 
-					break;
-		}
-        //Есле не Get, Set кидать исключение
-	}
+    public function get($arr) {
+        return $this->_getAttribute($arr);
+    }
+    /**
+     * Запись кортежа
+     * 
+     * С помощбю передачи массива в качестве аргумента
+     * 
+     * @param array $arr
+     * @return object(this)
+     */
+    public function set($arr) {
+        $this->_isLoad = true;
+        $this->_setCortege($arr);
+        return $this;
+    }
 	/**
      * Запрос аттрибута
      *
