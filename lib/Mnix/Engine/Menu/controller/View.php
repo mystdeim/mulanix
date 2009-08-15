@@ -28,13 +28,13 @@ class Mnix_Engine_Menu_controller_View extends Mnix_Core_Controller
             //Создаём аттрибут 'name'
             $attr = $this->_xml->createAttribute('name');
             $node->setAttributeNode($attr);
-            $text = $this->_xml->createTextNode($menu->getName());
+            $text = $this->_xml->createTextNode($menu->name);
             $attr->appendChild($text);
 
             //Создаём аттрибут 'link'
             $attr = $this->_xml->createAttribute('link');
             $node->setAttributeNode($attr);
-            $text = $this->_xml->createTextNode($menu->getValue());
+            $text = $this->_xml->createTextNode($menu->value);
             $attr->appendChild($text);
 
             //Присоединяем ноду
