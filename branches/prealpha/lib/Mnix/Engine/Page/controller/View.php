@@ -24,7 +24,7 @@ class Mnix_Engine_Page_controller_View extends Mnix_Core_Controller
             $node = $this->_xml->createElement('page');
             $attrName = $this->_xml->createAttribute('name');
             $node->setAttributeNode($attrName);
-            $textName = $this->_xml->createTextNode($page->getName());
+            $textName = $this->_xml->createTextNode($page->name);
             $attrName->appendChild($textName);
 
             $this->_xmlNodeTemplate->appendChild($node);

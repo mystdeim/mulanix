@@ -69,21 +69,21 @@ class Mnix_Core
             //Создаём юзера
             $user = Mnix_Auth_User::current();
             //Получаем группу
-            $group = $user->getGroup();
+            $group = $user->group;
             //Парсим урл
             $url = Mnix_Uri::current();
             //Получаем страницу
-            $page = $url->getPage();
+            $page = $url->page;
             //Получаем блоки
-            $blocks = $page->getBlocks();
+            $blocks = $page->blocks;
             //Получаем тему
-            $theme = $user->getTheme();
+            $theme = $user->theme;
 
             //Создаём дом-документ для файлв стилей
             $xsl = new domDocument('1.0', 'UTF-8');
             $xsl->preserveWhiteSpace = false;
             //Грузим мастер-шаблон
-            $xsl->load(MNIX_THEME . $theme->getName().'/master.xsl');
+            $xsl->load(MNIX_THEME . $theme->name.'/master.xsl');
             $xslNodeRoot = $xsl->getElementsByTagNameNS('http://www.w3.org/1999/XSL/Transform', 'stylesheet');
 
             //Создаём файл с контентом
@@ -99,7 +99,7 @@ class Mnix_Core
             $xmlNodeRoot->appendChild($xmlNodeBody);
             //Создаём узел с заголовком
             $xmlNodeTitle = $xml->createElement('title');
-            $xmlNodeTitleText = new domText($page->getName());
+            $xmlNodeTitleText = new domText($page->name);
             $xmlNodeTitle->appendChild($xmlNodeTitleText);
             $xmlNodeHead->appendChild($xmlNodeTitle);
 
@@ -108,26 +108,26 @@ class Mnix_Core
                 //var_dump($block);
 
                 //Создаём в xml ноду с названием блока
-                $xmlNodeBlock = $xml->createElement($block->getName());
+                $xmlNodeBlock = $xml->createElement($block->name);
                 $xmlNodeBody->appendChild($xmlNodeBlock);
 
                 //Получаем шаблоны, соответствующие блоку
-                $templates = $block->getTemplates();
+                $templates = $block->templates;
                 //Уточняем поиск, выбираем шаблоны, соответствующие текущей странице
-                $templates->find('?t = ?i', array('mnix_page2template2block.page_id', $page->getId()));
+                $templates->find('?t = ?i', array('mnix_page2template2block.page_id', $page->id));
                 //Обходим шаблоны
                 foreach ($templates as $template) {
                     //var_dump($template);
 
                     //Компонент шаблона
-                    $component = $template->getComponent();
+                    $component = $template->component;
                     
                     //Создаём в xml ноду с названием компонента + шаблон
-                    $xmlNodeTemplate = $xml->createElement($component->getName().'_'.$template->getName());
+                    $xmlNodeTemplate = $xml->createElement($component->name.'_'.$template->name);
                     $xmlNodeBlock->appendChild($xmlNodeTemplate);
 
                     //Создаём домдокумент из шаблона
-                    $file = MNIX_LIB.str_replace('_','/',$component->getName()).'/template/'.$template->getName().'.xsl';
+                    $file = MNIX_LIB.str_replace('_','/',$component->name).'/template/'.$template->name.'.xsl';
                     $xslTemplate = new domDocument('1.0', 'UTF-8');
                     $xslTemplate->preserveWhiteSpace = false;
                     $xslTemplate->load($file);
@@ -142,9 +142,9 @@ class Mnix_Core
                     }
 
                     //Контроллер
-                    $controller = $template->getController();
+                    $controller = $template->controller;
                     $controller->load();
-                    $class = $component->getName() . '_controller_' . $controller->getName();
+                    $class = $component->name . '_controller_' . $controller->name;
 
                     //Передаём в контроллер xml-документ(по ссылке!), параметры запроса, корневую ноду шаблона
                     $controller = new $class(&$xml, $url->getParam(), $xmlNodeTemplate);
