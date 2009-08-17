@@ -4,8 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_Core
- * @version 2009-08-12
- * @since 2009-08-10
+ * @version $Id$
  */
 /**
  * @category Mulanix
