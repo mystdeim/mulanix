@@ -77,7 +77,11 @@ class Mnix_Core
             //Получаем блоки
             $blocks = $page->blocks;
             //Получаем тему
-            $theme = $user->theme;
+            $theme = $group->theme;
+            //Уточняем тему, использую индетификатор страницы
+            $theme->find('?t = ?i', array('mnix_group2page2theme.page_id', $page->id));
+            //Извлекаем тему из коллекции, должна быть только одна тема
+            $theme = $theme->current();
 
             //Создаём дом-документ для файлв стилей
             $xsl = new domDocument('1.0', 'UTF-8');
