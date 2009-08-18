@@ -75,7 +75,7 @@ class Mnix_Core
             //Получаем страницу
             $page = $url->page;
             //Получаем блоки
-            $blocks = $page->blocks;
+            $regions = $page->regions;
             //Получаем тему
             $theme = $group->theme;
             //Уточняем тему, использую индетификатор страницы
@@ -108,18 +108,20 @@ class Mnix_Core
             $xmlNodeHead->appendChild($xmlNodeTitle);
 
             //Обходим блоки
-            foreach ($blocks as $block) {
-                //var_dump($block);
+            foreach ($regions as $region) {
+                //var_dump($region);
 
                 //Создаём в xml ноду с названием блока
-                $xmlNodeBlock = $xml->createElement($block->name);
-                $xmlNodeBody->appendChild($xmlNodeBlock);
+                $xmlNoderegion = $xml->createElement($region->name);
+                $xmlNodeBody->appendChild($xmlNoderegion);
 
                 //Получаем шаблоны, соответствующие блоку
-                $templates = $block->templates;
+                $templates = $region->templates;
                 //Уточняем поиск, выбираем шаблоны, соответствующие текущей странице
-                $templates->find('?t = ?i', array('mnix_page2template2block.page_id', $page->id));
+                $templates->find('?t = ?i', array('mnix_page2template2region.page_id', $page->id));
                 //Обходим шаблоны
+                //$templates->load();
+                //exit();
                 foreach ($templates as $template) {
                     //var_dump($template);
 
@@ -128,7 +130,7 @@ class Mnix_Core
                     
                     //Создаём в xml ноду с названием компонента + шаблон
                     $xmlNodeTemplate = $xml->createElement($component->name.'_'.$template->name);
-                    $xmlNodeBlock->appendChild($xmlNodeTemplate);
+                    $xmlNoderegion->appendChild($xmlNodeTemplate);
 
                     //Создаём домдокумент из шаблона
                     $file = MNIX_LIB.str_replace('_','/',$component->name).'/template/'.$template->name.'.xsl';

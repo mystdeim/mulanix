@@ -17,9 +17,9 @@ class Mnix_Engine_Page extends Mnix_ORM_Prototype
 {
     protected $_table = 'mnix_page';
     protected $_has_many = array(
-		'blocks' => array(
-				'class'  => 'Mnix_Engine_Block',
-				'id' 	 => 'block_id',
+		'regions' => array(
+				'class'  => 'Mnix_Engine_Region',
+				'id' 	 => 'region_id',
 				'fk' 	 => 'page_id',
-				'jtable' => 'mnix_page2template2block'));
+				'jtable' => 'mnix_page2template2region'));
 }

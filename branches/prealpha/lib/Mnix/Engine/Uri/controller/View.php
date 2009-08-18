@@ -43,28 +43,28 @@ class Mnix_Engine_Uri_controller_View extends Mnix_Core_Controller
             $textName = $this->_xml->createTextNode($page->name);
             $attrName->appendChild($textName);
             $node->appendChild($nodePage);
-            //uri->page->blocks
-            $blocks = $page->blocks;
-            foreach ($blocks as $block) {
-                //uri->page->block
-                $nodeBlock = $this->_xml->createElement('block');
+            //uri->page->regions
+            $regions = $page->regions;
+            foreach ($regions as $region) {
+                //uri->page->region
+                $noderegion = $this->_xml->createElement('region');
                 $attrName = $this->_xml->createAttribute('name');
-                $nodeBlock->setAttributeNode($attrName);
-                $textName = $this->_xml->createTextNode($block->name);
+                $noderegion->setAttributeNode($attrName);
+                $textName = $this->_xml->createTextNode($region->name);
                 $attrName->appendChild($textName);
-                $nodePage->appendChild($nodeBlock);
+                $nodePage->appendChild($noderegion);
                 //uri->page->templates
-                $templates = $block->templates;
+                $templates = $region->templates;
                 //Уточняем поиск, выбираем шаблоны, соответствующие текущей странице
-                $templates->find('?t = ?i', array('mnix_page2template2block.page_id', $page->id));
+                $templates->find('?t = ?i', array('mnix_page2template2region.page_id', $page->id));
                 foreach ($templates as $template) {
-                    //uri->page->block
+                    //uri->page->region
                     $nodeTemplate = $this->_xml->createElement('template');
                     $attrName = $this->_xml->createAttribute('name');
                     $nodeTemplate->setAttributeNode($attrName);
                     $textName = $this->_xml->createTextNode($template->name);
                     $attrName->appendChild($textName);
-                    $nodeBlock->appendChild($nodeTemplate);
+                    $noderegion->appendChild($nodeTemplate);
                 }
             }
 

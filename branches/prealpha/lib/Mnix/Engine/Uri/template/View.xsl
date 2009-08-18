@@ -14,8 +14,8 @@
                 <xsl:value-of select="@name"/>" -> page: "
                 <xsl:value-of select="page/@name"/>"
                 <p>
-                    <ul class="uri_block">
-                        <xsl:apply-templates select="page/block" />
+                    <ul class="uri_region">
+                        <xsl:apply-templates select="page/region" />
                     </ul>
                 </p>
             </h3>
@@ -28,7 +28,7 @@
 
     </xsl:template>
 
-    <xsl:template match="block">
+    <xsl:template match="region">
         <li>
             <xsl:value-of select="@name"/>
             <ul class="uri_template">
