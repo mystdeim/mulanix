@@ -101,7 +101,7 @@ class Mnix_ORM_Collection implements Iterator
     {
 		if (empty($this->_select)) $this->_select();
 		$res = $this->_select->query();
-		
+
 		//Создаём элементы коллекции
 		foreach ($res as $temp) {
 			$obj = new $this->_param['class'];
