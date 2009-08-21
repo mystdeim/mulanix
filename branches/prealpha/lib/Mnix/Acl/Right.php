@@ -2,12 +2,15 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Acl
- * @author deim
- * @copyright 2009
+ * @version $Id$
  */
 /**
- * @package Mnix_Acl_Right
+ * 
+ *
+ * @category Mulanix
+ * @package Mnix_Acl
  */
 class Mnix_Acl_Right extends Mnix_ORM_Prototype
 {
