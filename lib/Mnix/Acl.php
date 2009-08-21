@@ -2,11 +2,14 @@
 /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Acl
- * @author deim
- * @copyright 2009
+ * @version $Id$
  */
 /**
+ * Реализация списка прав доступа
+ *
+ * @category Mulanix
  * @package Mnix_Acl
  */
 class Mnix_Acl
@@ -26,6 +29,13 @@ class Mnix_Acl
     {
         $this->_resource = $resource;
     }
+    /**
+     * Проверить, разрешено ли действие
+     *
+     * @param string $action
+     * @param object $resource
+     * @return boolean
+     */
     public function isAllowed($action, $resource = null)
     {
         $this->_action = $action;
@@ -39,7 +49,8 @@ class Mnix_Acl
     }
     /**
      * Возвращаем массив с разрешенными правами
-     * @param Object $resource
+     * 
+     * @param object $resource
      * @return array
      */
     public function allowed($resource = null)
