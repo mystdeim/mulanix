@@ -14,20 +14,54 @@
  */
 class Mnix_Acl
 {
+    /**
+     * Роль - объект, который может запрашивать доступ к ресурсу
+     *
+     * @var object
+     */
     protected $_role;
+    /**
+     * Ресурс - объект, доступ к которому контролируется
+     *
+     * @var object
+     */
     protected $_resource;
+    /**
+     * Действие
+     *
+     * @var string
+     */
     protected $_action;
+    /**
+     * Конструктор
+     *
+     * @param object $role
+     */
     public function  __construct($role = null)
     {
         $this->_role = $role;
     }
+    /**
+     * Устанавливаем объект, запрашивающий доступ
+     *
+     * @param object $role
+     * @return this
+     */
     public function role($role)
     {
         $this->_role = $role;
+        return $this;
     }
+    /**
+     * Устанавливаем объект, доступ к которому контролируется
+     *
+     * @param object $resource
+     * @return this
+     */
     public function resource($resource)
     {
         $this->_resource = $resource;
+        return $this;
     }
     /**
      * Проверить, разрешено ли действие
@@ -40,15 +74,12 @@ class Mnix_Acl
     {
         $this->_action = $action;
         if (isset($resource)) $this->_resource = $resource;
-        $res = $this->_load();
-        if (isset($res) && ($res['resorce_id'] === $this->_resource->getId() || $res['resorce_id'] === null)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->_load();
     }
     /**
      * Возвращаем массив с разрешенными правами
+     *
+     * TODO: старый запрос, нуждается в обновлении
      * 
      * @param object $resource
      * @return array
@@ -73,7 +104,7 @@ class Mnix_Acl
                     ?t = ?s AND ?t = ?i',
             array(
                     'a0.name', 'role', 'r.role_id', 'role_id',
-                    'a1.name', 'resource', 'r.resource_id', 'resource_id',
+                    'a1.name', 'resource', 'r.criterion_id', 'criterion_id',
                     'a2.name', 'action',
                 'mnix_right', 'r',
                 'mnix_alias', 'a0',
@@ -91,15 +122,22 @@ class Mnix_Acl
         return $arr;
 
     }
+    /**
+     * Загрузка результатов
+     *
+     * @return boolean
+     */
     protected function _load()
     {
         $db = Mnix_Db::connect();
         $res = $db->query(
                 'SELECT
                     ?t AS ?s, ?t AS ?s, 
-                    ?t AS ?s, ?t AS ?s,
-                    ?t AS ?s
+                    ?t AS ?s,
+                    ?t AS ?s, ?t AS ?s, ?t AS ?s
                 FROM ?t AS ?t
+                LEFT JOIN ?t AS ?t
+                    ON ?t = ?t
                 LEFT JOIN ?t AS ?t
                     ON ?t = ?t
                 LEFT JOIN ?t AS ?t
@@ -111,8 +149,8 @@ class Mnix_Acl
                     ?t = ?s AND ?t = ?s',
             array(
                     'a0.name', 'role', 'r.role_id', 'role_id',
-                    'a1.name', 'resource', 'r.resource_id', 'resource_id',
-                    'a2.name', 'action',
+                    'a1.name', 'resource',
+                    'c.field', 'field', 'c.predicate', 'predicate', 'c.value', 'value',
                 'mnix_right', 'r',
                 'mnix_alias', 'a0',
                     'a0.id', 'r.role',
@@ -120,10 +158,34 @@ class Mnix_Acl
                     'a1.id', 'r.resource',
                 'mnix_alias', 'a2',
                     'a2.id', 'r.action',
-                    'a0.name', get_class($this->_role), 'r.role_id', $this->_role->getId(),
+                'mnix_criterion', 'c',
+                    'r.criterion_id', 'c.id',
+                    'a0.name', get_class($this->_role), 'r.role_id', $this->_role->id,
                     'a1.name', get_class($this->_resource), 'a2.name', $this->_action
             )
         );
-        return $res[0];
+        //Если запрос вернул результат, парсим, иначе фолз
+        if (isset($res[0])) return $this->_parse($res);
+        else return false;
+    }
+    /**
+     * Обработка результата запроса
+     *
+     * @param array $res
+     * @return boolean
+     */
+    protected function _parse($res)
+    {
+        foreach ($res as $temp) {
+            //Смотрим предикат
+            switch ($temp['predicate']) {
+                case '=':
+                    if ($this->_resource->$temp['field'] === $temp['value']) return true;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
     }
 }
