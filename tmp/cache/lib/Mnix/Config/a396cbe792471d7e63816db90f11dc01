@@ -1,5 +1,5 @@
 <?php
- define('MNIX_ACL_TUNE','1',true);
+ define('MNIX_ACL_TUNE','11',true);
  define('MNIX_CACHE_SIZE','1000',true);
  define('MNIX_DB_BASE_DB0_TYPE','MySql',true);
  define('MNIX_DB_BASE_DB0_LOGIN','testuser',true);

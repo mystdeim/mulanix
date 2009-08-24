@@ -87,7 +87,7 @@ class Mnix_Core
             $xsl = new domDocument('1.0', 'UTF-8');
             $xsl->preserveWhiteSpace = false;
             //Грузим мастер-шаблон
-            $xsl->load(MNIX_THEME . $theme->name.'/master.xsl');
+            $xsl->load(MNIX_PATH_THEME . $theme->name.'/master.xsl');
             $xslNodeRoot = $xsl->getElementsByTagNameNS('http://www.w3.org/1999/XSL/Transform', 'stylesheet');
 
             //Создаём файл с контентом
@@ -133,7 +133,7 @@ class Mnix_Core
                     $xmlNoderegion->appendChild($xmlNodeTemplate);
 
                     //Создаём домдокумент из шаблона
-                    $file = MNIX_LIB.str_replace('_','/',$component->name).'/template/'.$template->name.'.xsl';
+                    $file = MNIX_PATH_LIB.str_replace('_','/',$component->name).'/template/'.$template->name.'.xsl';
                     $xslTemplate = new domDocument('1.0', 'UTF-8');
                     $xslTemplate->preserveWhiteSpace = false;
                     $xslTemplate->load($file);
@@ -250,7 +250,7 @@ class Mnix_Core
     protected static function _getTime()
     {
 		$t = microtime(true);
-		return date('Y.m.d / H.i', $t).' | '.number_format($t - MNIX_STARTTIME, 5);
+		return date('Y.m.d / H.i', $t).' | '.number_format($t - MNIX_CORE_STARTTIME, 5);
 	}
     /**
      * Нормальное завершение
@@ -294,6 +294,6 @@ class Mnix_Core
      */
     protected static function _getPath($class)
     {
-        return MNIX_LIB . str_replace('_', '/', $class).'.php';
+        return MNIX_PATH_LIB . str_replace('_', '/', $class).'.php';
     }
 }

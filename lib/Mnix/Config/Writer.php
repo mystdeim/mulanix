@@ -16,7 +16,7 @@ class Mnix_Config_Writer
 {
     public function  __construct($cache)
     {
-        $config = simplexml_load_file(MNIX_CONFIG);
+        $config = simplexml_load_file(MNIX_PATH_CONFIG);
         $arr = $this->SimpleXmlToArray($config);
         $arrDefine = $this->ArrayToDefine($arr, $parent, $deep);
         $content = '<?php';
