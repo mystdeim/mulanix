@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Docs For Class Mnix_Db_Criterion</title>
+	<link rel="stylesheet" type="text/css" href="../media/style.css">
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+	<td class="header-top-left"><img src="../media/logo.png" border="0" alt="phpDocumentor " /></td>
+    <td class="header-top-right">Mnix_Db<br /><div class="header-top-right-subpackage"></div></td>
+  </tr>
+  <tr><td colspan="2" class="header-line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td colspan="2" class="header-menu">
+      
+                                                                                                                                                      
+                                                                                                          		[ <a href="../classtrees_Mnix_Db.html" class="menu">class tree: Mnix_Db</a> ]
+		[ <a href="../elementindex_Mnix_Db.html" class="menu">index: Mnix_Db</a> ]
+            [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td colspan="2" class="header-line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="195" class="menu">
+		<div class="package-title">Mnix_Db</div>
+      <b>Packages:</b><br />
+  <div class="package">
+              <a href="../li_Mnix_Acl.html">Mnix_Acl</a><br />
+              <a href="../li_Mnix_Acl_Right.html">Mnix_Acl_Right</a><br />
+              <a href="../li_Mnix_Auth.html">Mnix_Auth</a><br />
+              <a href="../li_Mnix_Auth_Group.html">Mnix_Auth_Group</a><br />
+              <a href="../li_Mnix_Auth_User.html">Mnix_Auth_User</a><br />
+              <a href="../li_Mnix_Cache.html">Mnix_Cache</a><br />
+              <a href="../li_Mnix_Config.html">Mnix_Config</a><br />
+              <a href="../li_Mnix_Core.html">Mnix_Core</a><br />
+              <a href="../li_Mnix_Core_Controller.html">Mnix_Core_Controller</a><br />
+              <a href="../li_Mnix_Db.html">Mnix_Db</a><br />
+              <a href="../li_Mnix_Engine.html">Mnix_Engine</a><br />
+              <a href="../li_Mnix_Engine_Controller.html">Mnix_Engine_Controller</a><br />
+              <a href="../li_Mnix_Engine_Page.html">Mnix_Engine_Page</a><br />
+              <a href="../li_Mnix_Engine_Template.html">Mnix_Engine_Template</a><br />
+              <a href="../li_Mnix_ORM.html">Mnix_ORM</a><br />
+              <a href="../li_Mnix_Uri.html">Mnix_Uri</a><br />
+      	</div>
+      <br />
+                        <b>Files:</b><br />
+        <div class="package">
+				<span style="padding-left: 1em;"><a href="../Mnix_Db/_Db---Criterion.php.html">Criterion.php</a></span><br />
+			<span style="padding-left: 1em;"><a href="../Mnix_Db/_Db.php.html">Db.php</a></span><br />
+			<span style="padding-left: 1em;"><a href="../Mnix_Db/_Db---Select---Exception.php.html">Exception.php</a></span><br />
+	  </div>
+  <div class="package">
+	<strong>Driver</strong><br />			<span style="padding-left: 1em;"><a href="../Mnix_Db/Driver/_Db---Driver---MySql.php.html">MySql.php</a></span><br />
+	  </div>
+  <div class="package">
+	<strong>Select</strong><br />			<span style="padding-left: 1em;"><a href="../Mnix_Db/Select/_Db---Select.php.html">Select.php</a></span><br />
+	  </div>
+            <br />
+                  <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../Mnix_Db/Mnix_Db.html">Mnix_Db</a>    	 <br />
+	    		<a href="../Mnix_Db/Mnix_Db_Criterion.html">Mnix_Db_Criterion</a>    	 <br />
+	    		<a href="../Mnix_Db/Mnix_Db_Select_Exception.html">Mnix_Db_Select_Exception</a>    	 <br />
+	  </div>
+  <div class="package">
+	Driver<br />	    <span style="padding-left: 1em;">		<a href="../Mnix_Db/Driver/Mnix_Db_Driver_MySql.html">Mnix_Db_Driver_MySql</a>    </span>	 <br />
+	  </div>
+  <div class="package">
+	Select<br />	    <span style="padding-left: 1em;">		<a href="../Mnix_Db/Select/Mnix_Db_Select.html">Mnix_Db_Select</a>    </span>	 <br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: Mnix_Db_Criterion</h1>
+Source Location: /Db/Criterion.php<br /><br />
+
+<h2 class="class-name">Class Mnix_Db_Criterion</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Class Overview</div>
+	<div class="nav-bar">
+					<span class="disabled">Class Overview</span>
+							| <a href="#sec-descendants">Descendants</a>
+				
+											| <a href="#sec-var-summary">Property Summary</a> | <a href="#sec-vars">Properties Detail</a>
+														| <a href="#sec-method-summary">Method Summary</a> | <a href="#sec-methods">Methods Detail</a>
+								</div>
+	<div class="info-box-body">
+		<table width="100%" border="0">
+		<tr><td valign="top" width="60%" class="class-overview">
+
+        		<p align="center" class="short-description"><strong>Формирование SQL-запроса
+</strong></p>
+<span class="description"><p>Абстракный класс, содержащий некоторые повторяющиеся методы: where(), limit() и тп.</p></span>
+		<p class="notes">
+			Located in <a class="field" href="_Db---Criterion.php.html">/Db/Criterion.php</a> [<span class="field">line 18</span>]
+		</p>
+
+		
+		<pre></pre>
+
+		
+				<strong>Author(s):</strong>
+		<ul>
+		  			 		  		</ul>
+		
+		<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Abstract:</strong>&nbsp;&nbsp;</td><td></td>
+  </tr>
+</table>
+<br />
+
+		</td>
+
+				<td valign="top" width="20%" class="class-overview">
+		<p align="center" class="short-description"><strong><a href="#sec_vars">Properties</a></strong></p>
+		<ul>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#var$_db">$_db</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#var$_limit">$_limit</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#var$_table">$_table</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#var$_where">$_where</a></li>
+		  		</ul>
+		</td>
+		
+				<td valign="top" width="20%" class="class-overview">
+		<p align="center" class="short-description"><strong><a href="#sec_methods">Methods</a></strong></p>
+		<ul>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#method__construct">__construct</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodlimit">limit</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodorder">order</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodquery">query</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodtable">table</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodwhere">where</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#method_build">_build</a></li>
+		  		  <li><a href="../Mnix_Db/Mnix_Db_Criterion.html#method_helpBuild">_helpBuild</a></li>
+		  		</ul>
+		</td>
+		
+		</tr></table>
+		<div class="top">[ <a href="#top">Top</a> ]</div>
+	</div>
+</div>
+
+	<a name="sec-descendants"></a>
+	<div class="info-box">
+		<div class="info-box-title">Descendants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Class Overview</a>
+							| <span class="disabled">Descendants</span>
+															| <a href="#sec-var-summary">Property Summary</a> | <a href="#sec-vars">Properties Detail</a>
+														| <a href="#sec-method-summary">Method Summary</a> | <a href="#sec-methods">Methods Detail</a>
+									</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Child Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../Mnix_Db/Select/Mnix_Db_Select.html">Mnix_Db_Select</a></td>
+					<td>
+											Представляет объектно-ориентированный интерфейс создания SQl-запросов
+										</td>
+				</tr>
+							</table>
+			<br /><div class="top">[ <a href="#top">Top</a> ]</div>
+		</div>
+	</div>
+
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Property Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Class Overview</a>
+							| <a href="#sec-descendants">Descendants</a>
+									| <span class="disabled">Property Summary</span> | <a href="#sec-vars">Properties Detail</a>
+												| <a href="#sec-method-summary">Method Summary</a> | <a href="#sec-methods">Methods Detail</a>
+							    				</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+			<table border="0" cellspacing="0" cellpadding="0" class="var-summary">
+																																					<div class="var-title">
+					<tr><td class="var-title"><span class="var-type-summary">object(Mnix_Db)</span>&nbsp;&nbsp;</td>
+					<td class="var-title"><a href="#$_db" title="details" class="var-name-summary">$_db</a>&nbsp;&nbsp;</td>
+					<td class="var-summary-description">Объект Mnix-Db</td></tr>
+				</div>
+													<div class="var-title">
+					<tr><td class="var-title"><span class="var-type-summary">string</span>&nbsp;&nbsp;</td>
+					<td class="var-title"><a href="#$_limit" title="details" class="var-name-summary">$_limit</a>&nbsp;&nbsp;</td>
+					<td class="var-summary-description">Строка с уловием лимита(строка вместо массива, для быстроты)</td></tr>
+				</div>
+													<div class="var-title">
+					<tr><td class="var-title"><span class="var-type-summary">array</span>&nbsp;&nbsp;</td>
+					<td class="var-title"><a href="#$_table" title="details" class="var-name-summary">$_table</a>&nbsp;&nbsp;</td>
+					<td class="var-summary-description">Массив таблиц</td></tr>
+				</div>
+													<div class="var-title">
+					<tr><td class="var-title"><span class="var-type-summary">array()</span>&nbsp;&nbsp;</td>
+					<td class="var-title"><a href="#$_where" title="details" class="var-name-summary">$_where</a>&nbsp;&nbsp;</td>
+					<td class="var-summary-description">Массив условий where</td></tr>
+				</div>
+										</table>
+			</div>
+			<br /><div class="top">[ <a href="#top">Top</a> ]</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Class Overview</a>
+							| <a href="#sec-descendants">Descendants</a>
+																		| <a href="#sec-var-summary">Property Summary</a> | <a href="#sec-vars">Properties Detail</a>
+							    					| <span class="disabled">Method Summary</span> | <a href="#sec-methods">Methods Detail</a>
+		</div>
+		<div class="info-box-body">
+			<div class="method-summary">
+				<table border="0" cellspacing="0" cellpadding="0" class="method-summary">
+																																																																																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">Mnix_Db_Criterion</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#__construct" title="details" class="method-name">__construct</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Конструктор</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">object(Mnix_Db_Criterion)</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#limit" title="details" class="method-name">limit</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Лимит выборки</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">object(Mnix_Db_Criterion)</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#order" title="details" class="method-name">order</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Сортировки</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">array()</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#query" title="details" class="method-name">query</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Выполнение запроса через объект Mnix_Db</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">object(Mnix_Db_Criterion)</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#table" title="details" class="method-name">table</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Указываем таблицу</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">object(Mnix_Db_Criterion)</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#where" title="details" class="method-name">where</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Добавление предложения WHERE</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">array</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#_build" title="details" class="method-name">_build</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Собиратель SQL</td></tr>
+				</div>
+																<div class="method-definition">
+											<tr><td class="method-definition"><span class="method-result">array</span>&nbsp;&nbsp;</td>
+										<td class="method-definition"><a href="#_helpBuild" title="details" class="method-name">_helpBuild</a>()&nbsp;&nbsp;</td>
+					<td class="method-definition">Хелпер к Собирателю SQL</td></tr>
+				</div>
+												</table>
+			</div>
+			<br /><div class="top">[ <a href="#top">Top</a> ]</div>
+		</div>
+	</div>
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Properties</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Class Overview</a>
+							| <a href="#sec-descendants">Descendants</a>
+													| <a href="#sec-var-summary">Property Summary</a> | <span class="disabled">Properties Detail</span>
+															| <a href="#sec-method-summary">Method Summary</a> | <a href="#sec-methods">Methods Detail</a>
+												</div>
+		<div class="info-box-body">
+			<a name="var$_db" id="$_db"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">object(Mnix_Db)</span>&nbsp;&nbsp;
+			<span class="var-name">$_db</span>
+						<span class="smalllinenumber">[line 24]</span>
+		</span>
+	</div>
+
+	<p align="center" class="short-description"><strong>Объект Mnix-Db
+</strong></p>
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+	
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="var$_limit" id="$_limit"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>&nbsp;&nbsp;
+			<span class="var-name">$_limit</span>
+			 = <span class="var-default"> null</span>			<span class="smalllinenumber">[line 36]</span>
+		</span>
+	</div>
+
+	<p align="center" class="short-description"><strong>Строка с уловием лимита(строка вместо массива, для быстроты)
+</strong></p>
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+	
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="var$_table" id="$_table"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">array</span>&nbsp;&nbsp;
+			<span class="var-name">$_table</span>
+			 = <span class="var-default">array()</span>			<span class="smalllinenumber">[line 53]</span>
+		</span>
+	</div>
+
+	<p align="center" class="short-description"><strong>Массив таблиц
+</strong></p>
+<span class="description"><p>Стуктура массива:  <ol><li><div class="src-line">&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'data'&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-str">'data'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'sql'&nbsp;</span>=&gt;&nbsp;<span class="src-str">'sql'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">)</span></div></li>
+</ol></p></span>	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+	
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="var$_where" id="$_where"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">array()</span>&nbsp;&nbsp;
+			<span class="var-name">$_where</span>
+			 = <span class="var-default">array()</span>			<span class="smalllinenumber">[line 30]</span>
+		</span>
+	</div>
+
+	<p align="center" class="short-description"><strong>Массив условий where
+</strong></p>
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+	
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+		</div>
+	</div>
+
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Class Overview</a>
+							| <a href="#sec-descendants">Descendants</a>
+																		| <a href="#sec-var-summary">Property Summary</a> | <a href="#sec-vars">Properties Detail</a>
+																	| <a href="#sec-method-summary">Method Summary</a> | <span class="disabled">Methods Detail</span>
+					</div>
+		<div class="info-box-body">
+			<a name='method_detail'></a>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+
+<div class="method-header">
+	<span class="method-title">Constructor __construct</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 59]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>Mnix_Db_Criterion __construct(
+object(Mnix_Db)
+$obj&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Конструктор
+</strong></p>
+
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">object(Mnix_Db)</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$obj:&nbsp;</span></td>
+				<td>
+							</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="methodlimit" id="limit"><!-- --></a>
+<div class="evenrow">
+
+<div class="method-header">
+	<span class="method-title">limit</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 160]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>object(Mnix_Db_Criterion) limit(
+mixed
+$first, [mixed
+$last = null]&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Лимит выборки
+</strong></p>
+<span class="description"><p>Примеры: <ol><li>SELECT table.* FROM table WHERE LIMIT 5
+ <ol><li><div class="src-line">&nbsp;<span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">select</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><span class="src-id">from</span><span class="src-sym">(</span><span class="src-str">'table'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*'</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodlimit">limit</a><span class="src-sym">(</span><span class="src-num">5</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodquery">query</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></li><li>SELECT table.* FROM table WHERE LIMIT 5, 10
+ <ol><li><div class="src-line">&nbsp;<span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">select</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><span class="src-id">from</span><span class="src-sym">(</span><span class="src-str">'table'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*'</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodlimit">limit</a><span class="src-sym">(</span><span class="src-num">5</span><span class="src-sym">,&nbsp;</span><span class="src-num">10</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodquery">query</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></li></ol></p></span>
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$first:&nbsp;</span></td>
+				<td>
+							</td></tr>
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$last:&nbsp;</span></td>
+				<td>
+							</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="methodorder" id="order"><!-- --></a>
+<div class="oddrow">
+
+<div class="method-header">
+	<span class="method-title">order</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 81]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>object(Mnix_Db_Criterion) order(
+mixed
+$condition, [mixed
+$desc = FALSE]&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Сортировки
+</strong></p>
+
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$condition:&nbsp;</span></td>
+				<td>
+							</td></tr>
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$desc:&nbsp;</span></td>
+				<td>
+							</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="methodquery" id="query"><!-- --></a>
+<div class="evenrow">
+
+<div class="method-header">
+	<span class="method-title">query</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 171]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>array() query(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Выполнение запроса через объект Mnix_Db
+</strong></p>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="methodtable" id="table"><!-- --></a>
+<div class="oddrow">
+
+<div class="method-header">
+	<span class="method-title">table</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 69]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>object(Mnix_Db_Criterion) table(
+mixed
+$table&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Указываем таблицу
+</strong></p>
+
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$table:&nbsp;</span></td>
+				<td>
+							</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="methodwhere" id="where"><!-- --></a>
+<div class="evenrow">
+
+<div class="method-header">
+	<span class="method-title">where</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 119]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>object(Mnix_Db_Criterion) where(
+mixed
+$condition, [mixed
+$data = null]&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Добавление предложения WHERE
+</strong></p>
+<span class="description"><p>Примеры: <ol><li>SELECT table.* FROM table WHERE field = 5
+ <ol><li><div class="src-line">&nbsp;<span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">select</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><span class="src-id">from</span><span class="src-sym">(</span><span class="src-str">'table'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*'</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodwhere">where</a><span class="src-sym">(</span><span class="src-str">'?t&nbsp;=&nbsp;?i'</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'field'</span><span class="src-sym">,&nbsp;</span><span class="src-num">5</span><span class="src-sym">))</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodquery">query</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></li><li>SELECT table.* FROM table WHERE field &gt; 5 AND field2 = 'ыыыыы'
+ <ol><li><div class="src-line">&nbsp;<span class="src-var">$db</span><span class="src-sym">-&gt;</span><span class="src-id">select</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><span class="src-id">from</span><span class="src-sym">(</span><span class="src-str">'table'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*'</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodwhere">where</a><span class="src-sym">(</span><span class="src-str">'?t&nbsp;&gt;&nbsp;?i'</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'field'</span><span class="src-sym">,&nbsp;</span><span class="src-num">5</span><span class="src-sym">))</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodwhere">where</a><span class="src-sym">(</span><span class="src-str">'?t&nbsp;=&nbsp;?s'</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">'field2'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'ыыыыы'</span><span class="src-sym">))</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">-&gt;</span><a href="../Mnix_Db/Mnix_Db_Criterion.html#methodquery">query</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></li></ol></p></span>
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$condition:&nbsp;</span></td>
+				<td>
+				<span class="var-description"> текстовое условие</span>			</td></tr>
+					<tr><td class="indent">
+				<span class="var-type">mixed</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$data:&nbsp;</span></td>
+				<td>
+				<span class="var-description"> данные</span>			</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="method_build" id="_build"><!-- --></a>
+<div class="oddrow">
+
+<div class="method-header">
+	<span class="method-title">_build</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 197]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>array _build(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Собиратель SQL
+</strong></p>
+<span class="description"><p>Стуктура возвращаемого массива:  <ol><li><div class="src-line">&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'data'&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-str">'data'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'sql'&nbsp;</span>=&gt;&nbsp;<span class="src-str">'sql'</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">1&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'data'&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-str">'data'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'sql'&nbsp;</span>=&gt;&nbsp;<span class="src-str">'sql'</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">)</span></div></li>
+</ol></p></span>
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Abstract:</strong>&nbsp;&nbsp;</td><td></td>
+  </tr>
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+		
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../Mnix_Db/Select/Mnix_Db_Select.html#method_build">Mnix_Db_Select::_build()</a>
+							</li>
+				</ul>
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+<a name="method_helpBuild" id="_helpBuild"><!-- --></a>
+<div class="evenrow">
+
+<div class="method-header">
+	<span class="method-title">_helpBuild</span>&nbsp;&nbsp;<span class="smalllinenumber">[line 221]</span>
+</div>
+<br />
+
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code-border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">&nbsp;
+		<code>array _helpBuild(
+array
+$arr&nbsp;
+)</code>
+    </td></tr></table>
+    </td></tr></table><br /></div>
+
+	<p align="center" class="short-description"><strong>Хелпер к Собирателю SQL
+</strong></p>
+<span class="description"><p>На вход:  <ol><li><div class="src-line">&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'data'&nbsp;</span>=&gt;&nbsp;<span class="src-str">'table'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'sql'&nbsp;&nbsp;</span>=&gt;&nbsp;<span class="src-str">'?t'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-id">Стуктура&nbsp;возвращаемого&nbsp;массива</span>:</div></li>
+<li><div class="src-line">&nbsp;&lt;<span class="src-id">code</span>&gt;</div></li>
+<li><div class="src-line">&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'data'&nbsp;</span>=&gt;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0&nbsp;&nbsp;</span>=&gt;&nbsp;<span class="src-str">'table'</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'sql'&nbsp;&nbsp;</span>=&gt;&nbsp;<span class="src-str">'?t'</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">)</span></div></li>
+</ol></p></span>
+			<strong>Parameters:</strong><br />
+			<table border="0" cellspacing="0" cellpadding="0">
+					<tr><td class="indent">
+				<span class="var-type">array</span>&nbsp;&nbsp;</td>
+				<td>
+				<span class="var-name">$arr:&nbsp;</span></td>
+				<td>
+							</td></tr>
+				</table>
+
+	<br />
+	<strong>API Tags:</strong><br />
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="indent"><strong>Access:</strong>&nbsp;&nbsp;</td><td>protected</td>
+  </tr>
+</table>
+<br />
+
+
+		
+		<br />
+	<div class="top">[ <a href="#top">Top</a> ]</div>
+</div>
+		</div>
+	</div>
+
+
+        <div class="credit">
+		    <hr class="separator" />
+		    Documentation generated on Sun, 26 Jul 2009 12:12:33 +0400 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
