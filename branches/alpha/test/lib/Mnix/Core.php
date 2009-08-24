@@ -85,7 +85,7 @@ class Test_Mnix_Core extends Mnix_Core
         if ($key !== false) $names[$key] = 'lib/Mnix';
         $key = array_search('Test', $names);
         if ($key !== false) $names[$key] = 'test';
-        $path = MNIX_DIR . implode('/', $names).'.php';
+        $path = MNIX_PATH_DIR . implode('/', $names).'.php';
         //var_dump($path);
         return $path;
     }

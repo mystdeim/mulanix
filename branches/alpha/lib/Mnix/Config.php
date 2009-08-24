@@ -1,12 +1,15 @@
 <?php
-/**
+ /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Config
- * @author deim
- * @copyright 2009
+ * @version $Id$
  */
 /**
+ * Конфиг
+ *
+ * @category Mulanix
  * @package Mnix_Config
  */
 class Mnix_Config
@@ -14,7 +17,7 @@ class Mnix_Config
     public static function load()
     {
         $cache = new Mnix_Cache(__FILE__);
-        $cache->file(MNIX_CONFIG)
+        $cache->file(MNIX_PATH_CONFIG)
                 ->hash('f')
                 ->load();
         if (!$cache->get()) {

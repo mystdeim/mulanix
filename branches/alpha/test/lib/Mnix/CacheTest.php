@@ -22,13 +22,13 @@ class Test_Mnix_CacheTest extends PHPUnit_Framework_TestCase
         $cache1->name($name)
                 ->put($content)
                 ->save();
-        $this->assertEquals(true, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/testname'));
+        $this->assertEquals(true, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/testname'));
         $cache2 = new Mnix_Cache(__FILE__);
         $cache2->name($name)
                 ->load();
         $this->assertEquals($content, $cache2->get());
         $cache2->remove();
-        $this->assertEquals(false, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/testname'));
+        $this->assertEquals(false, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/testname'));
     }
     /**
      * Вариант кэширование 2
@@ -46,14 +46,14 @@ class Test_Mnix_CacheTest extends PHPUnit_Framework_TestCase
                 ->hash('n')
                 ->put($content)
                 ->save();
-        $this->assertEquals(true, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/'.md5('testname')));
+        $this->assertEquals(true, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/'.md5('testname')));
         $cache2 = new Mnix_Cache(__FILE__);
         $cache2->name($name)
                 ->hash('n')
                 ->load();
         $this->assertEquals($content, $cache2->get());
         $cache2->remove();
-        $this->assertEquals(false, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/'.md5('testname')));
+        $this->assertEquals(false, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/'.md5('testname')));
     }
     /**
      * Вариант кэширование 3
@@ -67,17 +67,17 @@ class Test_Mnix_CacheTest extends PHPUnit_Framework_TestCase
         $content = 'TESTCONTENT2';
         $name = 'testname2';
         $cache1 = new Mnix_Cache(__FILE__);
-        $cache1->file(MNIX_BOOT . 'config.xml')
+        $cache1->file(MNIX_PATH_BOOT . 'config.xml')
                 ->put($content)
                 ->hash('f')
                 ->save();
-        $this->assertEquals(true, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/'.md5_file(MNIX_BOOT . 'config.xml')));
+        $this->assertEquals(true, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/'.md5_file(MNIX_PATH_BOOT . 'config.xml')));
         $cache2 = new Mnix_Cache(__FILE__);
-        $cache2->file(MNIX_BOOT . 'config.xml')
+        $cache2->file(MNIX_PATH_BOOT . 'config.xml')
                 ->hash('f')
                 ->load();
         $this->assertEquals($content, $cache2->get());
         $cache2->remove();
-        $this->assertEquals(false, file_exists(MNIX_CACHE.'test/lib/Mnix/CacheTest/'.md5_file(MNIX_BOOT . 'config.xml')));
+        $this->assertEquals(false, file_exists(MNIX_PATH_CACHE.'test/lib/Mnix/CacheTest/'.md5_file(MNIX_PATH_BOOT . 'config.xml')));
     }
 }
