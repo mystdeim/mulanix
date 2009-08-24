@@ -1,12 +1,15 @@
 <?php
-/**
+ /**
  * Mulanix Framework
- * 
+ *
+ * @category Mulanix
  * @package Mnix_Config
- * @author deim
- * @copyright 2009
+ * @version $Id$
  */
 /**
+ * Преобразование xml в константы
+ *
+ * @category Mulanix
  * @package Mnix_Config
  */
 class Mnix_Config_Writer
@@ -17,7 +20,7 @@ class Mnix_Config_Writer
         $arr = $this->SimpleXmlToArray($config);
         $arrDefine = $this->ArrayToDefine($arr, $parent, $deep);
         $content = '<?php';
-		foreach ($arrDefine as $key => $value) $content .= "\n define('MNIX_".$key."','".$value."',true);";
+        foreach ($arrDefine as $key => $value) $content .= "\n define('".$key."','".$value."',true);";
         $cache->clear();
         $cache->file(MNIX_CONFIG)
                 ->hash('f')
