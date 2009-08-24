@@ -1,12 +1,15 @@
 <?php
-/**
+ /**
  * Mulanix Framework
  *
+ * @category Mulanix
  * @package Mnix_Cache
- * @author deim
- * @copyright 2009
+ * @version $Id$
  */
 /**
+ * Кэширование
+ *
+ * @category Mulanix
  * @package Mnix_Cache
  */
 class Mnix_Cache
@@ -90,7 +93,7 @@ class Mnix_Cache
         } else {
             if ($this->_hash === 'f') $name = md5_file($this->_file);
         }
-        $path = MNIX_CACHE . str_replace(array(MNIX_DIR, '.php'), null, $this->_path) . '/' . $name;
+        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/' . $name;
         $path = str_replace('//', '/', $path);
         Mnix_Core::putMessage(__CLASS__, 'sys', 'Request cache from ' . $path);
         Mnix_Core::putCount('cache_r');
@@ -173,14 +176,14 @@ class Mnix_Cache
      */
     public function remove()
     {
-        $path = MNIX_CACHE . str_replace(array(MNIX_DIR, '.php'), null, $this->_path) . '/' . $this->_name;
+        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/' . $this->_name;
         unlink($path);
         Mnix_Core::putMessage(__CLASS__, 'sys', 'Remove cache ' . $path);
         Mnix_Core::putCount('cache_d');
     }
     public function clear()
     {
-        $path = MNIX_CACHE . str_replace(array(MNIX_DIR, '.php'), null, $this->_path) . '/*';
+        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/*';
         $path = str_replace('//', '/', $path);
         self::_delete($path);
     }
@@ -199,10 +202,10 @@ class Mnix_Cache
      */
     protected function _mkdir()
     {
-        $diff = explode('/', str_replace(array(MNIX_DIR, '.php'), null, $this->_path));
-        $path = MNIX_CACHE . implode($diff, '/') . '/';
+        $diff = explode('/', str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path));
+        $path = MNIX_PATH_CACHE . implode($diff, '/') . '/';
         if (!is_dir($path)) {
-			$local = MNIX_CACHE;
+			$local = MNIX_PATH_CACHE;
 			foreach ($diff as $temp) {
 				$local .= $temp.'/';
 				if (!is_dir($local)) mkdir($local);
