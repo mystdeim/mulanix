@@ -4,8 +4,7 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @since 2008-10-01
- * @version 2009-05-08
+ * @version $Id$
  */
 /**
  * Абстракция базы данных
@@ -68,15 +67,15 @@ class Mnix_Db
      * @param array|string|null
      * @return object(Mnix_Db)
      */
-    public static function connect($param = MNIX_DEFAULT_DB)
+    public static function connect($param = MNIX_DB_DEFAULT_BASE)
     {
         if (!is_array($param)) {
-            if (defined('MNIX_DB_' . $param .'_TYPE')) {
-                $paramObj['type'] = constant('MNIX_DB_' . $param .'_TYPE');
-                $paramObj['login'] = constant('MNIX_DB_' . $param .'_LOGIN');
-                $paramObj['pass'] = constant('MNIX_DB_' . $param .'_PASS');
-                $paramObj['host'] = constant('MNIX_DB_' . $param .'_HOST');
-                $paramObj['base'] = constant('MNIX_DB_' . $param .'_BASE');
+            if (defined('MNIX_DB_BASE_' . $param .'_TYPE')) {
+                $paramObj['type'] = constant('MNIX_DB_BASE_' . $param .'_TYPE');
+                $paramObj['login'] = constant('MNIX_DB_BASE_' . $param .'_LOGIN');
+                $paramObj['pass'] = constant('MNIX_DB_BASE_' . $param .'_PASS');
+                $paramObj['host'] = constant('MNIX_DB_BASE_' . $param .'_HOST');
+                $paramObj['base'] = constant('MNIX_DB_BASE_' . $param .'_BASE');
             } else throw new Exception('Not exist "' . $param . '" database');
         } else {
             $paramObj = $param;
