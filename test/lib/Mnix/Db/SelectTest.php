@@ -1,4 +1,20 @@
 <?php
+/**
+ * Mulanix Framework
+ *
+ * @category Mulanix
+ * @package Mnix_Db
+ * @subpackage Test
+ * @version 2009-07-25
+ * @since 2008-10-01
+ */
+/**
+ * Представляет объектно-ориентированный интерфейс создания SELECT-запросов
+ *
+ * @category Mulanix
+ * @package Mnix_Db
+ * @subpackage Test
+ */
 class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
 {
     public function __construct($name = NULL, array $data = array(), $dataName = '')
@@ -7,6 +23,7 @@ class Test_Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
     }
     /**
      * Проверяем From
+     * 
      * @dataProvider providerFrom
      */
     public function testFrom($table, $field, $result)
