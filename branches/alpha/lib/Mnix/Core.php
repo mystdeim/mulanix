@@ -5,6 +5,7 @@
  * @category Mulanix
  * @package Mnix_Core
  * @version $Id$
+ * @author mystdeim <mysteim@gmail.com>
  */
 /**
  * Ядро системы
@@ -48,7 +49,6 @@ class Mnix_Core
 		$this->_crash = true;
         self::$_time['db']['time'] = 0;
         self::$_count['db_q'] = 0;
-        spl_autoload_register('Mnix_Core::_autoload');
 	}
     /**
      * Деструктор
@@ -63,6 +63,7 @@ class Mnix_Core
      */
     public function run()
     {
+        spl_autoload_register('Mnix_Core::_autoload');
         //try {
             //Грузим конфиг
             Mnix_Config::load();  
@@ -283,11 +284,11 @@ class Mnix_Core
             require_once self::_getPath($class);
             Mnix_Core::putMessage(__CLASS__, 'sys', 'Load class: ' . $class);
         } else {
-            Mnix_Core::putMessage(__CLASS__, 'err', 'Not found class: ' . $class);
+            //TODO кидать исключение
         }
     }
     /**
-     * Определяем путь до класса
+     * Составление абсолютного пути для подгрузки класса
      *
      * @param string $class
      * @return string

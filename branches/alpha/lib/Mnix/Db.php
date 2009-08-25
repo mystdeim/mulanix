@@ -12,8 +12,6 @@
  *
  * Пока поддерживается только MySql, больше пока и не требуется.
  * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
- *
- * @example ../../doc/example/Mnix/Db.php Пример работы с классом
  * 
  * @category Mulanix
  * @package Mnix_Db
@@ -46,6 +44,17 @@ class Mnix_Db
     static protected $_instance = null;
     /**
      * Установка соединения с базой данных
+     *
+     * Примеры:
+     * 1. Использую дефолтную БД("DB0")
+     * <code>
+     * $db = Mnix_Db::connect();
+     * </code>
+     *
+     * 2. Явно передавая имя базы данных
+     * <code>
+     * $db = Mnix_Db::connect('DB0');
+     * </code>
      *
      * @param array|string|null
      * @return object(Mnix_Db)
