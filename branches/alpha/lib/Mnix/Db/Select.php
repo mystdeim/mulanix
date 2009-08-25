@@ -4,7 +4,6 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Select
  * @version 2009-07-25
  * @since 2008-10-01
  */
@@ -13,7 +12,6 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Select
  */
 class Mnix_Db_Select extends Mnix_Db_Criterion
 {

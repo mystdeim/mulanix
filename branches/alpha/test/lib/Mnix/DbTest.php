@@ -6,16 +6,14 @@
  * @package Mnix_Db
  * @subpackage Test
  * @version $Id: Db.php 74 2009-08-24 10:26:46Z mystdeim $
+ * @author mystdeim <mysteim@gmail.com>
  */
 /**
- * Абстракция базы данных
- *
- * Пока поддерживается только MySql, больше пока и не требуется.
- * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ * Тестирование абстракции базы данных
  *
  * @category Mulanix
- * @subpackage Test
  * @package Mnix_Db
+ * @subpackage Test
  */
 class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
 {
