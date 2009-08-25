@@ -5,6 +5,7 @@
  * @category Mulanix
  * @package Mnix_Db
  * @version $Id$
+ * @author mystdeim <mysteim@gmail.com>
  */
 /**
  * Абстракция базы данных
@@ -63,6 +64,7 @@ class Mnix_Db
      *     'base'  => 'database')
      * $db = Mnix_Db::connect($param);
      * </code>
+     * @example Uri.php
      *
      * @param array|string|null
      * @return object(Mnix_Db)

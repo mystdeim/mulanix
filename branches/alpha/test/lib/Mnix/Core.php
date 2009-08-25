@@ -8,15 +8,12 @@
 class Test_Mnix_Core extends Mnix_Core
 {
     protected $_suite;
-    //protected $_reporter;
     public function run()
     {
-        //Создаём Test Suite
         require_once 'PHPUnit/Framework/TestCase.php';
         require_once 'PHPUnit/Framework/TestSuite.php';
         require_once 'PHPUnit/TextUI/TestRunner.php';
         $this->_suite = new PHPUnit_Framework_TestSuite('Test Suite');
-
         $this->_test();
         $this->_crash =false;
     }
@@ -66,7 +63,6 @@ class Test_Mnix_Core extends Mnix_Core
         echo 'Testing: ' . $class;
         $this->_suite->addTestSuite($class);
     }
-
     protected static function _autoload($class)
     {
         if (file_exists(self::_getPath($class))) {

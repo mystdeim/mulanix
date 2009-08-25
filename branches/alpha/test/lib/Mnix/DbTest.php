@@ -1,4 +1,22 @@
 <?php
+/**
+ * Mulanix Framework
+ *
+ * @category Mulanix
+ * @package Mnix_Db
+ * @subpackage Test
+ * @version $Id: Db.php 74 2009-08-24 10:26:46Z mystdeim $
+ */
+/**
+ * Абстракция базы данных
+ *
+ * Пока поддерживается только MySql, больше пока и не требуется.
+ * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ *
+ * @category Mulanix
+ * @subpackage Test
+ * @package Mnix_Db
+ */
 class Test_Mnix_DbTest extends PHPUnit_Framework_TestCase
 {
     public function __construct($name = NULL, array $data = array(), $dataName = '')
