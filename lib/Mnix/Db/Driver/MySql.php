@@ -4,15 +4,14 @@
  *
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Driver
- * @version 2009-05-07
+ * @version $Id$
+ * @author mystdeim <mysteim@gmail.com>
  */
 /**
  * Драйвер доступа к MySql
  * 
  * @category Mulanix
  * @package Mnix_Db
- * @subpackage Driver
  */
 class Mnix_Db_Driver_MySql
 {
