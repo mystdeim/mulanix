@@ -9,32 +9,20 @@
         </cache>
         <db>
             <base>
-                <db0>
-                    <type>MySql</type>
-                    <login>testuser</login>
-                    <pass>12345</pass>
-                    <host>localhost</host>
-                    <base>cmf1</base>
-                </db0>
-                <db2>
-                    <type>MySql</type>
-                    <login>studlab_chaos</login>
-                    <pass>cw9Daiph</pass>
-                    <host>localhost</host>
-                    <base>cms2</base>
-                </db2>
-                <db1>
-                    <type>MySql</type>
-                    <login>studlab_chaos</login>
-                    <pass>cw9Dai</pass>
-                    <host>localhost</host>
-                    <base>studlab_main</base>
-                </db1>
+                <type>MySql</type>
+                <login>testuser</login>
+                <pass>12345</pass>
+                <host>localhost</host>
+                <base>cmf1</base>
             </base>
-            <default>
-                <base>db0</base>
-            </default>
         </db>
+        <core>
+            <logging>
+                <status>1</status>
+                <view>1</view>
+                <write>0</write>
+            </logging>
+        </core>
         <polyglot>
             <default>
                 <lang>ru</lang>
