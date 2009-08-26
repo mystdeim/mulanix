@@ -8,8 +8,9 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-require_once 'CoreTest.php';
-require_once 'DbTest.php';
+
+require_once 'Helper.php';
+
 /**
  * @category Mulanix
  * @package Mnix
@@ -21,6 +22,7 @@ class AllTest
     {
         $suite = new PHPUnit_Framework_TestSuite('Mnix');
 
+        $suite->addTestSuite('Mnix_HelperTest');
         $suite->addTestSuite('Mnix_CoreTest');
         $suite->addTestSuite('Mnix_DbTest');
 
