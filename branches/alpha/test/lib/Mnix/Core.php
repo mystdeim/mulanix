@@ -66,6 +66,10 @@ class Test_Mnix_Core extends Mnix_Core
             $this->_suite->addTestSuite('Test_Mnix_ORM_CollectionTest');
             $this->_suite->addTestSuite('Test_Mnix_UriTest');
             $this->_suite->addTestSuite('Test_Mnix_AclTest');
+
+            require_once MNIX_PATH_TEST . 'lib/Mnix/CoreTest.php';
+            $this->_suite->addTestSuite('Mnix_CoreTest');
+
         } else $this->_selectTest();
     }
     /**

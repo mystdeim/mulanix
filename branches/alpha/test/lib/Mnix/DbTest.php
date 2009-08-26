@@ -2,7 +2,7 @@
 /**
  * Mulanix Framework
  *
- * @category Mulanix
+ * @category Testing
  * @package Mnix_Db
  * @subpackage Test
  * @version $Id: Db.php 74 2009-08-24 10:26:46Z mystdeim $
