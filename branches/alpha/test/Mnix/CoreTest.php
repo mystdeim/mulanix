@@ -8,7 +8,9 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-require_once 'SubCore.php';
+
+require_once dirname(__FILE__) . '/Helper.php';
+
 /**
  * @category Mulanix
  * @package Mnix_Core
@@ -20,7 +22,7 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fixture = new Mnix_SubCore;
+        $this->_fixture = new Mnix_CoreSub;
     }
 
     protected function tearDown()
@@ -34,13 +36,13 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provider_getPath
+     * @dataProvider providerGetPath
      */
-    public function test_getPath($class, $result)
+    public function testGetPath($class, $result)
     {
         $this->assertEquals($this->_fixture->getPath($class), $result);
     }
-    public function provider_getPath()
+    public function providerGetPath()
     {
         return array(
             array('Mnix', MNIX_PATH_LIB . 'Mnix.php'),
