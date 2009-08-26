@@ -55,8 +55,10 @@ class Mnix_Core
      */
 	public function __destruct()
     {
-        $this->_end();
-        echo self::$_hot_log;
+        if (defined('MNIX_CORE_LOGGING_STATUS') && MNIX_CORE_LOGGING_STATUS) {
+            $this->_end();
+            if (defined('MNIX_CORE_LOGGING_VIEW') && MNIX_CORE_LOGGING_VIEW) echo self::$_hot_log;
+        }
 	}
     /**
      * Менеджер

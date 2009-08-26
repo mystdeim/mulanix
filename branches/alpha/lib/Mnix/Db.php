@@ -11,7 +11,7 @@
  * Абстракция базы данных
  *
  * Пока поддерживается только MySql, больше пока и не требуется.
- * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ * Архитектура - Sington pattern, в $_instance лежат объекты, соотвествующие базам данных
  * 
  * @category Mulanix
  * @package Mnix_Db
@@ -27,17 +27,17 @@ class Mnix_Db
     /**
      * Указатель coединения c cерверoм
      *
-     * @var object(mysqli)
+     * @var object mysqli
      */
     protected $_con;
     /**
      * Объект драйвера базы данных
      *
-     * @var object(driver_db)
+     * @var object Mnix_Db_Driver_MySql
      */
-    protected $_db;
+    protected $_db = null;
     /**
-     * Массив, содержащий параметры подключенний
+     * Массив, содержащий ресурс подключения
      *
      * @var array
      */
@@ -59,27 +59,17 @@ class Mnix_Db
      * @param array|string|null
      * @return object(Mnix_Db)
      */
-    public static function connect($param = MNIX_DB_DEFAULT_BASE)
+    public static function connect($param = null)
     {
-        if (!is_array($param)) {
-            if (defined('MNIX_DB_BASE_' . $param .'_TYPE')) {
-                $paramObj['type'] = constant('MNIX_DB_BASE_' . $param .'_TYPE');
-                $paramObj['login'] = constant('MNIX_DB_BASE_' . $param .'_LOGIN');
-                $paramObj['pass'] = constant('MNIX_DB_BASE_' . $param .'_PASS');
-                $paramObj['host'] = constant('MNIX_DB_BASE_' . $param .'_HOST');
-                $paramObj['base'] = constant('MNIX_DB_BASE_' . $param .'_BASE');
-            } else throw new Exception('Not exist "' . $param . '" database');
-        } else {
-            $paramObj = $param;
+        if (!isset($param)) {
+            $paramObj['type'] = constant('MNIX_DB_BASE_TYPE');
+            $paramObj['login'] = constant('MNIX_DB_BASE_LOGIN');
+            $paramObj['pass'] = constant('MNIX_DB_BASE_PASS');
+            $paramObj['host'] = constant('MNIX_DB_BASE_HOST');
+            $paramObj['base'] = constant('MNIX_DB_BASE_BASE');
         }
-        if (isset(self::$_instance[$paramObj['type']])) {
-            foreach (self::$_instance[$paramObj['type']] as $temp) {
-                if ($temp->getParam() === $paramObj) return $temp;
-            }
-        }
-        self::$_instance[$paramObj['type']][] = new Mnix_Db($paramObj);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
-        return end(self::$_instance[$paramObj['type']]);
+        if (!isset(self::$_instance)) self::$_instance = new Mnix_Db($paramObj);
+        return self::$_instance;
 
     }
     /**
@@ -165,10 +155,7 @@ class Mnix_Db
      */
     protected function _setDb()
     {
-        if (empty($this->_db)) {
-            $name = 'Mnix_Db_Driver_'.$this->_param['type'];
-            $this->_db = new $name($this);
-        }
+        if (!isset($this->_db)) $this->_db = new Mnix_Db_Driver_MySql($this);
     }
     /**
      * Плэйсхолдер
