@@ -8,8 +8,10 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+ 
+require_once dirname(dirname(__FILE__)) . '/Helper.php';
 
-require_once dirname(__FILE__) . '/Helper.php';
+require_once 'CoreSub.php';
 
 /**
  * @category Mulanix
@@ -28,11 +30,6 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_fixture);
-    }
-
-    public function testTTT()
-    {
-        $this->assertEquals(1, 1);
     }
 
     /**

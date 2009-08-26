@@ -1,0 +1,12 @@
+<?php
+ define('MNIX_ACL_TUNE','11',true);
+ define('MNIX_CACHE_SIZE','1000',true);
+ define('MNIX_DB_BASE_TYPE','MySql',true);
+ define('MNIX_DB_BASE_LOGIN','testuser',true);
+ define('MNIX_DB_BASE_PASS','12345',true);
+ define('MNIX_DB_BASE_HOST','localhost',true);
+ define('MNIX_DB_BASE_BASE','cmf1',true);
+ define('MNIX_CORE_LOGGING_STATUS','1',true);
+ define('MNIX_CORE_LOGGING_VIEW','1',true);
+ define('MNIX_CORE_LOGGING_WRITE','0',true);
+ define('MNIX_POLYGLOT_DEFAULT_LANG','ru',true);

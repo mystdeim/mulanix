@@ -11,8 +11,8 @@
  * Абстракция базы данных
  *
  * Пока поддерживается только MySql, больше пока и не требуется.
- * Архитектура - Sington pattern, в $_instance лежат объекты, соотвествующие базам данных
- * 
+ * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ *
  * @category Mulanix
  * @package Mnix_Db
  */
@@ -27,17 +27,17 @@ class Mnix_Db
     /**
      * Указатель coединения c cерверoм
      *
-     * @var object mysqli
+     * @var object(mysqli)
      */
     protected $_con;
     /**
      * Объект драйвера базы данных
      *
-     * @var object Mnix_Db_Driver_MySql
+     * @var object(driver_db)
      */
-    protected $_db = null;
+    protected $_db;
     /**
-     * Массив, содержащий ресурс подключения
+     * Массив, содержащий параметры подключенний
      *
      * @var array
      */
@@ -46,31 +46,45 @@ class Mnix_Db
      * Установка соединения с базой данных
      *
      * Примеры:
-     * 1. Использую дефолтную БД("DB0")
+     * 1. Использую БД из конфига
      * <code>
      * $db = Mnix_Db::connect();
      * </code>
      *
-     * 2. Явно передавая имя базы данных
+     * 2. Передавая параметры вручную
      * <code>
-     * $db = Mnix_Db::connect('DB0');
+     * $param = array(
+     *     'type'  => 'MySql',
+     *     'login' => 'user',
+     *     'pass'  => 'pass',
+     *     'host'  => 'localhost',
+     *     'base'  => 'database')
+     * $db = Mnix_Db::connect($param);
      * </code>
      *
      * @param array|string|null
-     * @return object(Mnix_Db)
+     * @return object Mnix_Db
      */
     public static function connect($param = null)
     {
         if (!isset($param)) {
-            $paramObj['type'] = constant('MNIX_DB_BASE_TYPE');
-            $paramObj['login'] = constant('MNIX_DB_BASE_LOGIN');
-            $paramObj['pass'] = constant('MNIX_DB_BASE_PASS');
-            $paramObj['host'] = constant('MNIX_DB_BASE_HOST');
-            $paramObj['base'] = constant('MNIX_DB_BASE_BASE');
+                $paramObj['type'] = constant('MNIX_DB_BASE_TYPE');
+                $paramObj['login'] = constant('MNIX_DB_BASE_LOGIN');
+                $paramObj['pass'] = constant('MNIX_DB_BASE_PASS');
+                $paramObj['host'] = constant('MNIX_DB_BASE_HOST');
+                $paramObj['base'] = constant('MNIX_DB_BASE_BASE');
+        } else {
+            $paramObj = $param;
         }
-        if (!isset(self::$_instance)) self::$_instance = new Mnix_Db($paramObj);
-        return self::$_instance;
 
+        if (isset(self::$_instance[$paramObj['type']])) {
+            foreach (self::$_instance[$paramObj['type']] as $temp) {
+                if ($temp->getParam() === $paramObj) return $temp;
+            }
+        }
+        self::$_instance[$paramObj['type']][] = new Mnix_Db($paramObj);
+        Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
+        return end(self::$_instance[$paramObj['type']]);
     }
     /**
      * Защищенный конструктор
@@ -165,7 +179,8 @@ class Mnix_Db
      * $string = 'SELECT * FROM ?t WHERE ?t = ?i;
      * $data = array('table','field', '5');
      * $result = $this->_placeHolder($string, $data);
-     * echo $result; //SELECT * FROM `table` WHERE `field` = 5
+     * echo $result;
+     * //SELECT * FROM `table` WHERE `field` = 5
      * </code>
      *
      * @param string $condition
@@ -198,7 +213,8 @@ class Mnix_Db
      *     'n' => 'text',
      *     's' => "'".mysqli_escape_string('text')."'")
      * $string = 'table';
-     * echo $this->_shielding($string, 't'); //`table`
+     * echo $this->_shielding($string, 't');
+     * //`table`
      * </code>
      * 
      * @param string $value
