@@ -34,14 +34,14 @@ PHPDOC_STYLE='HTML:frames:DOM/earthli'
 #phpunit $PHPUNIT_TESTS
 
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
-rm -r $PHPDOC_TARGET
-mkdir $PHPDOC_TARGET
+#rm -r $PHPDOC_TARGET
+#mkdir $PHPDOC_TARGET
 #Запуск документирования
-PHPDOC_TARGET='-t '$PHPDOC_TARGET
-PHPDOC_DIRS='-d '$PHPDOC_DIRS
-PHPDOC_FILES='-f '$PHPDOC_FILES
-PHPDOC_STYLE='-o '$PHPDOC_STYLE
-phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
+#PHPDOC_TARGET='-t '$PHPDOC_TARGET
+#PHPDOC_DIRS='-d '$PHPDOC_DIRS
+#PHPDOC_FILES='-f '$PHPDOC_FILES
+#PHPDOC_STYLE='-o '$PHPDOC_STYLE
+#phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
 
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
 rm -r $PHPUNIT_COVERAGE
