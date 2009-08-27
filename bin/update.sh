@@ -9,6 +9,11 @@ PROJECT_DIR=$(dirname $(pwd))'/'
 #Директория, где лежат тесты
 PHPUNIT_TESTS=$PROJECT_DIR'test/Mnix'
 
+#------------------------------------------------------------------------------
+#----------------------------Анализ-покрытия-----------------------------------
+#------------------------------------------------------------------------------
+#Директория для отчета
+PHPUNIT_COVERAGE=$PROJECT_DIR'doc/coverage'
 
 #------------------------------------------------------------------------------
 #----------------------------Документирование----------------------------------
@@ -27,12 +32,19 @@ PHPDOC_STYLE='HTML:frames:DOM/earthli'
 #------------------------------------------------------------------------------
 #Запуск phpunit-тестирования
 #phpunit $PHPUNIT_TESTS
+
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
-#rm -r $PHPDOC_TARGET
-#mkdir $PHPDOC_TARGET
+rm -r $PHPDOC_TARGET
+mkdir $PHPDOC_TARGET
 #Запуск документирования
 PHPDOC_TARGET='-t '$PHPDOC_TARGET
 PHPDOC_DIRS='-d '$PHPDOC_DIRS
 PHPDOC_FILES='-f '$PHPDOC_FILES
 PHPDOC_STYLE='-o '$PHPDOC_STYLE
 phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
+
+#Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
+rm -r $PHPUNIT_COVERAGE
+mkdir $PHPUNIT_COVERAGE
+#Запуск сoverage
+phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS
