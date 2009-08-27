@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #Директория проекта
-PROJECT_DIR=$(dirname $(pwd))'/'
+PROJECT_DIR='/home/deim/workspace/php/mulanix/'
+echo 'PROJECT_DIR: '$PROJECT_DIR
 
 #------------------------------------------------------------------------------
 #----------------------------Тестирование--------------------------------------
@@ -13,13 +14,13 @@ PHPUNIT_TESTS=$PROJECT_DIR'test/Mnix'
 #----------------------------Анализ-покрытия-----------------------------------
 #------------------------------------------------------------------------------
 #Директория для отчета
-PHPUNIT_COVERAGE=$PROJECT_DIR'doc/coverage'
+PHPUNIT_COVERAGE=$PROJECT_DIR'tmp/doc/coverage'
 
 #------------------------------------------------------------------------------
 #----------------------------Документирование----------------------------------
 #------------------------------------------------------------------------------
 #Директория, куда будет записана документация
-PHPDOC_TARGET=$PROJECT_DIR'doc/api'
+PHPDOC_TARGET=$PROJECT_DIR'tmp/doc/api'
 #Директории, для сканирования, разделяются запятыми: dir1,dir2,...
 PHPDOC_DIRS=$PROJECT_DIR'lib/Mnix/Db'
 #Файлы, для сканирования, разделяются запятыми: file1,file2,...
@@ -34,17 +35,17 @@ PHPDOC_STYLE='HTML:frames:DOM/earthli'
 #phpunit $PHPUNIT_TESTS
 
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
-#rm -r $PHPDOC_TARGET
-#mkdir $PHPDOC_TARGET
+rm -r $PHPDOC_TARGET
+mkdir $PHPDOC_TARGET
 #Запуск документирования
-#PHPDOC_TARGET='-t '$PHPDOC_TARGET
-#PHPDOC_DIRS='-d '$PHPDOC_DIRS
-#PHPDOC_FILES='-f '$PHPDOC_FILES
-#PHPDOC_STYLE='-o '$PHPDOC_STYLE
-#phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
+PHPDOC_TARGET='-t '$PHPDOC_TARGET
+PHPDOC_DIRS='-d '$PHPDOC_DIRS
+PHPDOC_FILES='-f '$PHPDOC_FILES
+PHPDOC_STYLE='-o '$PHPDOC_STYLE
+phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
 
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
-#rm -r $PHPUNIT_COVERAGE
-#mkdir $PHPUNIT_COVERAGE
+rm -r $PHPUNIT_COVERAGE
+mkdir $PHPUNIT_COVERAGE
 #Запуск сoverage
 phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS
