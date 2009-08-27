@@ -44,7 +44,7 @@ PHPDOC_STYLE='HTML:frames:DOM/earthli'
 #phpdoc $PROJECT_DIR $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET
 
 #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
-rm -r $PHPUNIT_COVERAGE
-mkdir $PHPUNIT_COVERAGE
+#rm -r $PHPUNIT_COVERAGE
+#mkdir $PHPUNIT_COVERAGE
 #Запуск сoverage
 phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS
