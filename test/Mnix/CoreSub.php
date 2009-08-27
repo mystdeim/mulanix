@@ -9,8 +9,6 @@
  * @author mystdeim <mysteim@gmail.com>
  */
 
-require_once dirname(dirname(__FILE__)) . '/Helper.php';
-
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Core.php';
 
 /**
