@@ -8,10 +8,14 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-
+/**
+ * @see Mnix_Core
+ */
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Core.php';
+/**
+ * @see Mnix_Db
+ */
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Db.php';
-
 /**
  * @category Mulanix
  * @package Mnix_Db

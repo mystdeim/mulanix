@@ -14,6 +14,7 @@
  *
  * @category Mulanix
  * @package Mnix_Core
+ * @tutorial Mnix_Core/Core.cls
  */
 class Mnix_Core
 {
@@ -36,11 +37,11 @@ class Mnix_Core
      */
     protected static $_hot_log;
     /**
-     * Различные счетчики
+     * Различные счетчики итераций
      *
      * @var array
      */
-    protected static $_count = array('cache_l'=>0,'cache_r'=>0,'class'=>0,'cache_s'=>0,'cache_d'=>0);
+    protected static $_count = array('cache_l'=>0,'cache_r'=>0,'core_cls'=>0,'cache_s'=>0,'cache_d'=>0);
     /**
      * Конструктор
      */
@@ -203,7 +204,7 @@ class Mnix_Core
      * @param string $note
      * @param array $traces
      */
-    public static function putMessage($class_name, $mode, $note, $traces = null)
+    public static function message($class_name, $mode, $note, $traces = null)
     {
 		$class_name = '<font color="blue">'.$class_name.'</font>';
         if (isset($traces)) {
@@ -227,7 +228,7 @@ class Mnix_Core
      * @param boolean $end
      * @return string
      */
-    public static function putTime($thing, $end = false)
+    public static function time($thing, $end = false)
     {
 		if ($end) {
 			$time = microtime() - self::$_time[$thing]['start'];
@@ -241,7 +242,7 @@ class Mnix_Core
      * @param string $thing
      * @param int $number
      */
-    public static function putCount($thing, $number = 1)
+    public static function count($thing, $number = 1)
     {
         self::$_count[$thing] += $number;
     }
