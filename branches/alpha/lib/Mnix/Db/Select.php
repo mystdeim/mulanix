@@ -91,7 +91,7 @@ class Mnix_Db_Select extends Mnix_Db_Criterion
         return $this;
     }
     /**
-     * @see Mnix_Db_Criterion::_build()
+     * @see Mnix_Db_Criterion
      */
     protected function _build()
     {

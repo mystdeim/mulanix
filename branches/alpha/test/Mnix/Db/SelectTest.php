@@ -8,11 +8,14 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-
+ /**
+ * @see Helper
+ */
 require_once dirname(dirname(dirname(__FILE__))) . '/Helper.php';
-
+ /**
+ * @see Mnix_SelectSub
+ */
 require_once 'SelectSub.php';
-
 /**
  * @category Mulanix
  * @package Mnix_Db
