@@ -1,46 +1,40 @@
 <?php
 
-class MathException extends Exception {};
+class E_E extends Exception {}
+class E_E_E extends E_E {}
 
-function f($a1, $a2)
+require '../test/Helper.php';
+require '../lib/Mnix/Exception.php';
+require '../test/Mnix/Core/_files/CoreSub.php';
+
+class T1
 {
-    //echo '!!!!!<br />';
-    $a = func_get_arg();
-    //var_dump($a);
-    //if (func_num_args() !== 2) throw new Exception();
+    public function __construct($arg)
+    {
+        //$a++;
+        $core = new Mnix_CoreSub();
+        Mnix_CoreSub::log('s', 'test note');
+        Mnix_CoreSub::log('s', 'test not with trace', true);
+        Mnix_CoreSub::log('w', 'test warning');
+        //throw new Mnix_Exception('test error');
+    }
 }
-function f2($a1)
+
+class T2
 {
-    throw new MathException();
+    public function __construct()
+    {
+        $t1 = new T1('a');
+    }
 }
-function errorHandler($errno, $errstr, $errfile, $errline) {
-	throw new Exception($errstr, $errno);
-}
-set_error_handler('errorHandler');
 
+$t2 = new T2();
 
-try {
-    //f('a', 'b', 'c');
-    f('a');
-} catch(Exception $e) {
+/*try {
+    $t2 = new T2();
+} catch(Mnix_Exception $e) {
+    //var_dump(debug_backtrace(false));
     var_dump($e);
-}
-
-try {
-    f2('$a1');
 } catch(Exception $e) {
-    var_dump($e);
-}
-
-function foo()
-{
-     $numargs = func_num_args();
-     var_dump(func_get_arg());
-     echo "Number of arguments: $numargs<br />\n";
-     if ($numargs >= 2) {
-         echo "Second argument is: " . func_get_arg(1) . "<br />\n";
-     }
-}
-
-foo (1, 2, 3);
-
+    echo 'Exception';
+}*/

@@ -17,11 +17,12 @@
             </base>
         </db>
         <core>
-            <logging>
-                <status>1</status>
-                <view>1</view>
-                <write>0</write>
-            </logging>
+            <log>
+                <system>1</system>
+                <warning>1</warning>
+                <error>1</error>
+                <debug>1</debug>
+            </log>
         </core>
         <polyglot>
             <default>

@@ -14,6 +14,11 @@
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/lib/Mnix/Core.php';
 
+define('MNIX_CORE_LOG_SYSTEM', true);
+define('MNIX_CORE_LOG_WARNING', true);
+define('MNIX_CORE_LOG_ERROR', true);
+define('MNIX_CORE_LOG_DEBUG', true);
+
 /**
  * @category Mulanix
  * @package Mnix_Core

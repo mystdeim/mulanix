@@ -1,27 +1,33 @@
 <?php
 
-$orgdoc = new DOMDocument;
-$orgdoc->loadXML("<root><element><child>text in child</child></element></root>");
+ini_set('log_errors', true);
+ini_set('error_reporting', E_ALL  & ~E_NOTICE);
+//ini_set('display_errors', false);
+ini_set('error_log', '/home/deim/Desktable/my-error.log');
+echo $a;
+//error_log("You messed up!", 3, "/home/deim/Desktable/my-error.log");
 
-// The node we want to import to a new document
-$node = $orgdoc->getElementsByTagName("element")->item(0);
+function errorHandler($errno, $errstr, $errfile, $errline) {
+	throw new Exception($errstr, $errno);
+}
+set_error_handler('errorHandler');
 
+function f($a)
+{
+    echo 'fff';
+    var_dump(debug_backtrace());
+    throw new Exception('fff');
+}
 
-// Create a new document
-$newdoc = new DOMDocument;
+//f();
 
-$newdoc->formatOutput = true;
+try {
+    //throw new Exception('fff', 1);
+    //f('f');
+    f();
+    //echo 10 / 0;
+} catch (Exception $e) {
+    var_dump($e);
+}
 
-// Add some markup
-$newdoc->loadXML("<root><someelement>text in some element</someelement></root>");
-
-echo "The 'new document' before copying nodes into it:\n";
-var_dump($newdoc->saveXML());
-
-// Import the node, and all its children, to the document
-$node = $newdoc->importNode($node, true);
-// And then append it to the "<root>" node
-$newdoc->documentElement->appendChild($node);
-
-echo "\nThe 'new document' after copying the nodes into it:\n";
-var_dump($newdoc->saveXML());
+f();
