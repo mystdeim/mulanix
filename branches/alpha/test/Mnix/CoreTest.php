@@ -53,7 +53,7 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     /**
      * Тестируем счетчик
      */
-    public function testCount()
+    /*public function testLogCount()
     {
         $count = $this->_fixture->getCount();
 
@@ -87,8 +87,6 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(2, $e->getCode());
         }
         
-        //Не
-
         //Неправильный второй параметр
         try {
             $this->_fixture->count('core_cls', 's');
@@ -96,7 +94,7 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(1, $e->getCode());
         }
 
-    }
+    }*/
     
     /**
      * Тестируем получение пути для автоподгрузки
@@ -107,7 +105,6 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->_fixture->getPath($class), $result);
     }
-
     /**
      * Провайдер для testGetPath
      *
@@ -121,4 +118,29 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
             array('Mnix_Core_Controller', MNIX_PATH_LIB . 'Mnix/Core/Controller.php')
         );
     }
+
+    /**
+     * Тестируем запись сообщений в лог
+     *
+     * @dataProvider providerLog
+     */
+    public function testLog($status, $class, $note, $trace, $result)
+    {
+        var_dump(debug_backtrace());
+        Mnix_Core::log($status, $class, $note, $trace);
+    }
+    /**
+     * Провайдер для testLog
+     *
+     * @return array
+     */
+    public function providerLog()
+    {
+        return array(
+            array('s', Mnix_Class, 'Test message', false,
+                array(1 => 's', 2 => 'Mnix_Class', 4 => 'Test message', 5 => null)
+            )
+        );
+    }
+
 }
