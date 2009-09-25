@@ -51,7 +51,7 @@ PHPDOC_CATEGORY='Mulanix'
 #----------------------------Запуск скриптов-----------------------------------
 #------------------------------------------------------------------------------
 if [[ $1 = '-unit' || $1 = '' ]]
-then 
+then
     #Запуск phpunit-тестирования
     phpunit $PHPUNIT_TESTS
 fi
@@ -76,7 +76,7 @@ then
     phpdoc $PHPDOC_DIRS $PHPDOC_FILES $PHPDOC_STYLE $PHPDOC_TARGET $PHPDOC_IGNORE $PHPDOC_IGNORE_TAG $PHPDOC_TITLE $PHPDOC_SOURCE $PHPDOC_UE $PHPDOC_PACKAGE $PHPDOC_CATEGORY
 fi
 
-if [[ $1 = '-сov' || $1 = '' ]]
+if [[ $1 = '-cov' || $1 = '' ]]
 then
     #Запуск сoverage
     #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
@@ -85,7 +85,7 @@ then
     phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS
 fi
 
-if [[ $1 != '-unit' && $1 != '' && $1 != '-doc' && $1 != '-сov' ]]
+if [[ $1 != '-unit' && $1 != '' && $1 != '-doc' && $1 != '-cov' ]]
 then 
     echo 'Ошибка в параметре!'
 fi
