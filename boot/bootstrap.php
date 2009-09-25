@@ -13,7 +13,8 @@
  * Время начала работы
  */
 define('MNIX_CORE_STARTTIME', microtime(true));
-define('MNIX_PATH_DIR', realpath('../').'/');
+//TODO: при переходе на 5.3 можно покорече записать через __DIR__
+define('MNIX_PATH_DIR', dirname(dirname(__FILE__)).'/');
 define('MNIX_PATH_LIB', MNIX_PATH_DIR . 'lib/');
 define('MNIX_PATH_TEST', MNIX_PATH_DIR . 'test/');
 define('MNIX_PATH_BOOT', MNIX_PATH_DIR . 'boot/');
