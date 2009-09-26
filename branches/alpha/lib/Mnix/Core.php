@@ -81,7 +81,7 @@ class Mnix_Core
      * </code>
      * Чтобы избавиться от переопределения в наследуемых классах.
      *
-     * @return Mnix_Core
+     * @return object Mnix_Core
      */
     public static function instance()
     {
@@ -89,7 +89,7 @@ class Mnix_Core
         return self::$_instance;
     }
     /**
-     * Конструктор
+     * Защищенный конструктор
      */
     protected function __construct()
     {
@@ -106,12 +106,17 @@ class Mnix_Core
     }
     /**
      * Менеджер
+     *
+     * @return object Mnix_Core
      */
     public function run()
     {
-        //$this->putLog('s', 'Run ')
+        $this->putLog('s', 'Run core');
         return $this;
     }
+    /**
+     * Завершение работы ядра
+     */
     public function finish()
     {
         $this->_crash = false;
@@ -119,14 +124,25 @@ class Mnix_Core
     /**
      * Записывает сообщение в лог
      *
-     * @param string $status
-     * @param string $message
-     * @param bool $trace
+     * Вызов Mnix_Core::putLog() без создания объекта
+     * 
+     * @see Mnix_Core::putLog()
+     * @param string $status статус ошибки
+     * @param string $message текстовое сообщение
+     * @param bool $trace_flag нужно ли писать трассировку
      */
     public static function log($status, $message, $trace_flag = false)
     {
         self::instance()->putLog($status, $message, $trace_flag);
     }
+    /**
+     * Записывает сообщение в лог
+     *
+     * @param string $status статус ошибки
+     * @param string $message текстовое сообщение
+     * @param bool $trace_flag нужно ли писать трассировку
+     * @return object Mnix_Core
+     */
     public function putLog($status, $message, $trace_flag = false)
     {
         if ($note = $this->_createNote($status, $message, $trace_flag)) {
@@ -149,6 +165,14 @@ class Mnix_Core
         }
         return $this;
     }
+    /**
+     * Создание записи в логах
+     *
+     * @param string $status статус ошибки
+     * @param string $message текстовое сообщение
+     * @param bool $trace_flag нужно ли писать трассировку
+     * @return string|false
+     */
     protected function _createNote($status, $message, $trace_flag)
     {
         if (in_array($status, array('s', 'w', 'e', 'f'))) {
@@ -163,7 +187,7 @@ class Mnix_Core
             }
             reset($traces);
             $trace = current($traces);
-            $note = $status . '~' . self::_getTime() .
+            $note = $status . '~' . $this->_getTime() .
                 '~' . $trace['class'] . $trace['type'] . $trace['function'] .
                 '~' . $message . "\n";
             if ($trace_flag) {
@@ -181,36 +205,53 @@ class Mnix_Core
     /**
      * Засекаем время
      *
-     * @param string $thing
-     * @param boolean $end
-     * @return string
+     * Вызов Mnix_Core::putTime() без создания объекта
+     * 
+     * @param string $thing таймер, который нужно запустить
+     * @param boolean $end нужно ли закончить отчет времени
      */
     public static function time($thing, $end = false)
     {
         self::instance()->putTime($thing, $end);
     }
+    /**
+     * Засекаем время
+     *
+     * @param string $thing таймер, который нужно запустить
+     * @param boolean $end нужно ли закончить отчет времени
+     * @return object Mnix_Core
+     */
     public function putTime($thing, $end = false)
     {
         if ($end) {
             if (isset($this->_time[$thing]['start'])) {
-                $this->_time[$thing]['time'] += microtime() - $this->_time[$thing]['start'];
-                return $this->_time[$thing]['time'];
+                $time = microtime(true) - $this->_time[$thing]['start'];
+                $this->_time[$thing]['time'] += $time;
             } else {
                 $this->putLog('w', 'Wrong second parametr, must be false', true);
             }
-        } else $this->_time[$thing]['start'] = microtime();
+        } else $this->_time[$thing]['start'] = microtime(true);
         return $this;
     }
     /**
      * Обновляем счетчик
      *
-     * @param string $thing
-     * @param int $number
+     * Вызов Mnix_Core::logCount() без создания объекта
+     *
+     * @param string $thing счетчик, который нужно увеличить
+     * @param int $number насколько увеличть счетчик
      */
     public static function logCount($thing, $number = 1)
     {
         self::instance()->putLogCount($thing, $number);
     }
+    /**
+     * Обновляем счетчик
+     *
+     * @param string $thing счетчик, который нужно увеличить
+     * @param int $number насколько увеличть счетчик
+     * @return object Mnix_Core
+     */
     public function putLogCount($thing, $number = 1)
     {
         if (!is_int($number)) {
@@ -225,33 +266,33 @@ class Mnix_Core
      *
      * @return string
      */
-    protected static function _getTime()
+    protected function _getTime()
     {
         $t = microtime(true);
-        return date('Y.m.d/H:i', $t) . '|' . number_format($t - MNIX_CORE_STARTTIME, 5);
+        return date('Y.m.d/H:i u', $t) . '|' . number_format($t - MNIX_CORE_STARTTIME, 5);
     }
     /**
-     * Нормальное завершение
+     * Запись отладочных сообщений при завершении работы
      */
     protected function _debugFinish()
     {
         $this->putLog('s', 'Finishing...')
-            ->putLog('s', 'Request to db: '. $this->_count['db_q'])
-            ->putLog('s', 'Time of working db: '. number_format($this->_time['db']['time'], 5))
-            ->putLog('s', 'Request to cache: '. $this->_count['cache_r'])
-            ->putLog('s', 'Load from cache: '. $this->_count['cache_l'])
-            ->putLog('s', 'Save to cache: '. $this->_count['cache_s'])
-            ->putLog('s', 'Remove cache: '. $this->_count['cache_d'])
-            ->putLog('s', 'Classes loaded: '. $this->_count['core_cls'])
-            ->putLog('s', 'Max allocated memory: '. number_format(memory_get_peak_usage() / 1024, 3) .' Kb')
-            ->putLog('s', 'Allocated memory: '. number_format(memory_get_usage() / 1024, 3) .' Kb');
+             ->putLog('s', 'Request to db: '. $this->_count['db_q'])
+             ->putLog('s', 'Time of working db: '. number_format($this->_time['db']['time'], 5))
+             ->putLog('s', 'Request to cache: '. $this->_count['cache_r'])
+             ->putLog('s', 'Load from cache: '. $this->_count['cache_l'])
+             ->putLog('s', 'Save to cache: '. $this->_count['cache_s'])
+             ->putLog('s', 'Remove cache: '. $this->_count['cache_d'])
+             ->putLog('s', 'Classes loaded: '. $this->_count['core_cls'])
+             ->putLog('s', 'Max allocated memory: '. number_format(memory_get_peak_usage() / 1024, 3) .' Kb')
+             ->putLog('s', 'Allocated memory: '. number_format(memory_get_usage() / 1024, 3) .' Kb');
         if (!$this->_crash) $this->putLog('s', 'Normal finishing');
-        else $this->putLog('e', 'Accident finishing');
+        else $this->putLog('w', 'Accident finishing', false);
     }
     /**
      * Автозагрузка классов
      *
-     * @param string $class
+     * @param string $class имя подключаемого класса
      */
     protected static function _autoload($class)
     {
@@ -266,8 +307,8 @@ class Mnix_Core
     /**
      * Составление абсолютного пути для подгрузки класса
      *
-     * @param string $class
-     * @return string
+     * @param string $class имя подключаемого класс
+     * @return string полный путь
      */
     protected static function _getPath($class)
     {

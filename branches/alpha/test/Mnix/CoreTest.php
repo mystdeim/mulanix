@@ -242,6 +242,9 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         $fixture->finish();
         $this->assertEquals($fixture->_crash, false);
     }
+    /**
+     * Тестируем автозагрузку
+     */
     public function testAutoload()
     {
         $obj = Mnix_CoreSub::instance();
