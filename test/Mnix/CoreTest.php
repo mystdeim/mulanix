@@ -34,15 +34,6 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         Mnix_CoreSub::clearInstance();
     }
     /**
-     * Проверяем инстанс у обоих классов
-     */
-    public function testInstance()
-    {
-        $this->assertType('Mnix_CoreSub', Mnix_CoreSub::instance());
-        Mnix_CoreSub::clearInstance();
-        $this->assertType('Mnix_Core', Mnix_Core::instance());
-    }
-    /**
      * Set & Get
      */
     public function testGetSet()
@@ -51,6 +42,66 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         Mnix_CoreSub::instance()->_log = 'test';
         $this->assertEquals(Mnix_CoreSub::instance()->_log, 'test');
         Mnix_CoreSub::instance()->_log = null;
+    }
+    /**
+     * Тестируем автозагрузку
+     */
+    public function testAutoload()
+    {
+        $obj = Mnix_CoreSub::instance();
+        $obj->autoload('Mnix_Core');
+        try {
+            $obj->autoload('Class');
+        } catch (Mnix_Exception_Fatal $e) {
+            $this->assertType('Mnix_Exception_Fatal', $e);
+        }
+    }
+    /**
+     * Тестируем запись сообщений в лог
+     *
+     * @dataProvider providerCreateNote
+     */
+    public function testCreateNote($status, $note, $trace, $start, $end)
+    {
+        $this->assertRegExp("/^$start.*$end\n$/s", Mnix_CoreSub::instance()->createNote($status, $note, $trace));
+    }
+    /**
+     * Провайдер для testCreateNote
+     *
+     * @return array
+     */
+    public function providerCreateNote()
+    {
+        return array(
+            array('s', 'Test message', false, 's', 'Mnix_CoreTest->testCreateNote~Test message'),
+            array('w', 'Warning message', false, 'w', 'Mnix_CoreTest->testCreateNote~Warning message'),
+            array('e', 'Error message', false, 'e', 'Mnix_CoreTest->testCreateNote~Error message'),
+            array('f', 'Fatal error', false, 'f', 'Mnix_CoreTest->testCreateNote~Fatal error')
+        );
+    }
+    /**
+     * Тестируем запись сообщений в лог
+     *
+     * Другие ситуации
+     */
+    public function testCreateNoteOther()
+    {
+        $this->assertFalse(Mnix_CoreSub::instance()->createNote('a', 'dfdf', false));
+        $this->assertRegExp("/^s~.*PHPUnit_Framework.*/s", Mnix_CoreSub::instance()->createNote('s', 'Test message', true));
+    }
+    /**
+     * Тестируем запись сообщений при завершении работы
+     */
+    public function testDebugFinish()
+    {
+        $obj = Mnix_CoreSub::instance();
+        $obj->debugFinish();
+        $this->assertStringEndsWith("Accident finishing\n", $obj->_log);
+        Mnix_CoreSub::clearInstance();
+        $obj = Mnix_CoreSub::instance();
+        $obj->_crash = false;
+        $obj->debugFinish();
+        $this->assertStringEndsWith("Normal finishing\n", $obj->_log);
     }
     /**
      * Тестируем получение пути для автоподгрузки
@@ -75,69 +126,57 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         );
     }
     /**
-     * Тестируем запись сообщений в лог
-     *
-     * @dataProvider providerCreateNote
+     * Тестируем строку со временем
      */
-    public function testCreateNote($status, $note, $trace, $result)
+    public function testGetTime()
     {
-        $temp = Mnix_CoreSub::instance()->createNote($status, $note, $trace);
-        if (is_string($temp)) {
-            $data = explode('~', $temp);
-            $note = array($data[0], $data[2], $data[3]);
-            if (isset($data[4])) $note[] = array();
-            else $note[] = null;
-        } else {
-            $note = $temp;
-        }
-        $this->assertEquals($note, $result);
+        $this->assertRegExp("/^\d.*\d$/", Mnix_CoreSub::instance()->getTime());
     }
     /**
-     * Провайдер для testCreateNote
-     *
-     * @return array
+     * Тестируем финиш
      */
-    public function providerCreateNote()
+    public function testFinish()
     {
-        return array(
-            array('s', 'Test message', false,
-                array('s', 'Mnix_CoreTest->testCreateNote', "Test message\n", null)
-            ),
-            array('w', 'Warning message', false,
-                array('w', 'Mnix_CoreTest->testCreateNote', "Warning message\n", null)
-            ),
-            array('e', 'Error message', false,
-                array('e', 'Mnix_CoreTest->testCreateNote', "Error message\n", null)
-            ),
-            array('f', 'Fatal error', false,
-                array('f', 'Mnix_CoreTest->testCreateNote', "Fatal error\n", null)
-            ),
-            array('f', 'Fatal error', true,
-                array('f', 'Mnix_CoreTest->testCreateNote', "Fatal error\n", array())
-            ),
-            array('a', 'Wrong status', false,
-                false
-            )
-        );
+        $fixture = Mnix_CoreSub::instance();
+        $this->assertEquals($fixture->_crash, true);
+        $fixture->finish();
+        $this->assertEquals($fixture->_crash, false);
+    }
+    /**
+    * Проверяем инстанс у обоих классов
+    */
+    public function testInstance()
+    {
+        $this->assertType('Mnix_CoreSub', Mnix_CoreSub::instance());
+        Mnix_CoreSub::clearInstance();
+        $this->assertType('Mnix_Core', Mnix_Core::instance());
     }
     /**
      * Тестируем запись лога
      */
-    public function testLPutLog()
+    public function testPutLog()
     {
         $obj = Mnix_CoreSub::instance();
         $this->assertEquals($obj->_log, null);
         $obj->putLog('s', 'Test message');
         $this->assertStringStartsWith('s~', $obj->_log);
+
         Mnix_CoreSub::clearInstance();
         $obj = Mnix_CoreSub::instance();
         $this->assertEquals($obj->_log, null);
-        $obj->putLog('s', 'Test message', false);
-        $this->assertStringStartsWith('s~', $obj->_log);
+        $obj->putLog('w', 'Test message');
+        $this->assertStringStartsWith('w~', $obj->_log);
+
         Mnix_CoreSub::clearInstance();
         $obj = Mnix_CoreSub::instance();
         $this->assertEquals($obj->_log, null);
-        $obj->putLog('a', 'Test message', false);
+        $obj->putLog('e', 'Test message');
+        $this->assertStringStartsWith('e~', $obj->_log);
+
+        Mnix_CoreSub::clearInstance();
+        $obj = Mnix_CoreSub::instance();
+        $this->assertEquals($obj->_log, null);
+        $obj->putLog('a', 'Test message', true);
         $this->assertStringStartsWith('w~', $obj->_log);
     }
     /**
@@ -150,45 +189,37 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         $this->assertStringStartsWith('s~', Mnix_CoreSub::instance()->_log);
     }
     /**
-     * Тестируем запись времени
+     * Тестируем счетчик
      */
-    public function testPutTime()
+    public function testPutLogCount()
     {
         $obj = Mnix_CoreSub::instance();
-        $this->assertEquals($obj->_time, null);
-        $obj->putTime('test');
+        //Счетчик может содержать только целые значения
+        $this->assertContainsOnly('int', $obj->_count);
 
-        $this->assertArrayHasKey('start', $obj->_time['test']);
-        $this->assertType('string', $obj->_time['test']['start']);
-        //$this->assertLessThanOrEqual((float)$obj->_time['test']['start'], microtime());
-        $this->assertEquals($obj->_log, null);
+        //Проверяем начальные значения
+        foreach ($obj->_count as $temp) {
+            $this->assertEquals(0, $temp);
+        }
 
-        $obj->putTime('test', true);
-        $this->assertArrayHasKey('start', $obj->_time['test']);
-        $this->assertType('string', $obj->_time['test']['start']);
-        $this->assertEquals($obj->_log, null);
+        //Инкремент
+        $obj->putLogCount('core_cls');
+        $this->assertEquals(1, $obj->_count['core_cls']);
 
-        $obj->putTime('test2');
-        $this->assertType('float', $obj->putTime('test2', true));
+        //Увеличение на определенное число
+        $obj->putLogCount('core_cls', 9);
+        $this->assertEquals(10, $obj->_count['core_cls']);
 
-        //Запуск с неправильным параметром
-        $obj->putTime('test3', true);
-        $this->assertStringStartsWith('w~', $obj->_log);
-    }
-    /**
-     * Тестируем запись времени
-     */
-    public function testTime()
-    {
-        $obj = Mnix_CoreSub::instance();
-        Mnix_CoreSub::time('test');
-        $this->assertArrayHasKey('start', Mnix_CoreSub::instance()->_time['test']);
-        $this->assertType('string', Mnix_CoreSub::instance()->_time['test']['start']);
-        $this->assertEquals(Mnix_CoreSub::instance()->_log, null);
-        Mnix_CoreSub::time('test', true);
-        $this->assertArrayHasKey('start', Mnix_CoreSub::instance()->_time['test']);
-        $this->assertType('string', Mnix_CoreSub::instance()->_time['test']['start']);
-        $this->assertEquals(Mnix_CoreSub::instance()->_log, null);
+        //Запуск без параметра
+        try {
+            $obj->putLogCount();
+        } catch (Exception $e) {
+            $this->assertEquals(2, $e->getCode());
+        }
+
+        //Неправильный второй параметр
+        $obj->putLogCount('core_cls', 's');
+        $this->assertEquals(10, $obj->_count['core_cls']);
     }
     /**
      * Тестируем счетчик
@@ -224,6 +255,52 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, Mnix_CoreSub::instance()->_count['core_cls']);
     }
     /**
+     * Тестируем запись времени
+     */
+    public function testPutTime()
+    {
+        $obj = Mnix_CoreSub::instance();
+        $obj->putTime('test');
+        $this->assertArrayHasKey('start', $obj->_time['test']);
+        $this->assertType('float', $obj->_time['test']['start']);
+        $this->assertType('float', $obj->_time['test']['time']);
+        $this->assertEquals(0, $obj->_time['test']['time']);
+        $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
+        $this->assertNull($obj->_log);
+        $obj->putTime('test', true);
+        $this->assertArrayHasKey('start', $obj->_time['test']);
+        $this->assertType('float', $obj->_time['test']['start']);
+        $this->assertType('float', $obj->_time['test']['time']);
+        $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
+        $this->assertNull($obj->_log);
+
+        $obj->putTime('test');
+        $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
+        $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
+        $this->assertNull($obj->_log);
+        sleep(1.0);
+        $obj->putTime('test', true);
+        $this->assertGreaterThan(1.0, $obj->_time['test']['time']);
+        $this->assertLessThanOrEqual(2.0, $obj->_time['test']['time']);
+        $this->assertNull($obj->_log);
+
+        $obj->putTime('test1', true);
+        $this->assertNotNull($obj->_log);
+    }
+    /**
+     * Тестируем запись времени
+     */
+    public function testTime()
+    {
+        $obj = Mnix_CoreSub::instance();
+        Mnix_CoreSub::time('test');
+        $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
+        $this->assertNull($obj->_log);
+        Mnix_CoreSub::time('test', true);
+        $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
+        $this->assertNull($obj->_log);
+    }
+    /**
      * Тестируем ран
      */
     public function testRun()
@@ -232,27 +309,5 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
         $fixture->run();
         $this->assertEquals(get_class(Mnix_Core::instance()), 'Mnix_Core');
     }
-    /**
-     * Тестируем финиш
-     */
-    public function testFinish()
-    {
-        $fixture = Mnix_CoreSub::instance();
-        $this->assertEquals($fixture->_crash, true);
-        $fixture->finish();
-        $this->assertEquals($fixture->_crash, false);
-    }
-    /**
-     * Тестируем автозагрузку
-     */
-    public function testAutoload()
-    {
-        $obj = Mnix_CoreSub::instance();
-        $obj->autoload('Mnix_Core');
-        try {
-            $obj->autoload('Class');
-        } catch (Mnix_Exception_Fatal $e) {
-            $this->assertType('Mnix_Exception_Fatal', $e);
-        }
-    }
+
 }

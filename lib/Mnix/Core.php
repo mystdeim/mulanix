@@ -225,12 +225,14 @@ class Mnix_Core
     {
         if ($end) {
             if (isset($this->_time[$thing]['start'])) {
-                $time = microtime(true) - $this->_time[$thing]['start'];
-                $this->_time[$thing]['time'] += $time;
+                $this->_time[$thing]['time'] += microtime(true) - $this->_time[$thing]['start'];
             } else {
-                $this->putLog('w', 'Wrong second parametr, must be false', true);
+                $this->putLog('w', 'At first this counter must be started, error in second argument', true);
             }
-        } else $this->_time[$thing]['start'] = microtime(true);
+        } else {
+            $this->_time[$thing]['start'] = microtime(true);
+            $this->_time[$thing]['time']  = 0.0;
+        }
         return $this;
     }
     /**
@@ -269,7 +271,7 @@ class Mnix_Core
     protected function _getTime()
     {
         $t = microtime(true);
-        return date('Y.m.d/H:i u', $t) . '|' . number_format($t - MNIX_CORE_STARTTIME, 5);
+        return date('Y.m.d/H:i', $t) . '|' . number_format($t - MNIX_CORE_STARTTIME, 5);
     }
     /**
      * Запись отладочных сообщений при завершении работы
