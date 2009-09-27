@@ -116,4 +116,20 @@ class Mnix_CoreSub extends Mnix_Core
     {
         return self::_autoload($class);
     }
+    /**
+     * Переопределяем метод в публиный
+     */
+    public function debugFinish()
+    {
+        $this->_debugFinish();
+    }
+    /**
+     * Переопределяем метод в публиный
+     *
+     * @return string
+     */
+    public function getTime()
+    {
+       return $this->_getTime();
+    }
 }
