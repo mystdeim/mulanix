@@ -210,9 +210,9 @@ class Mnix_Core
      * @param string $thing таймер, который нужно запустить
      * @param boolean $end нужно ли закончить отчет времени
      */
-    public static function time($thing, $end = false)
+    public static function logTime($thing, $end = false)
     {
-        self::instance()->putTime($thing, $end);
+        self::instance()->putLogTime($thing, $end);
     }
     /**
      * Засекаем время
@@ -221,7 +221,7 @@ class Mnix_Core
      * @param boolean $end нужно ли закончить отчет времени
      * @return object Mnix_Core
      */
-    public function putTime($thing, $end = false)
+    public function putLogTime($thing, $end = false)
     {
         if ($end) {
             if (isset($this->_time[$thing]['start'])) {
