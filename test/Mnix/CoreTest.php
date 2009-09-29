@@ -260,31 +260,31 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     public function testPutTime()
     {
         $obj = Mnix_CoreSub::instance();
-        $obj->putTime('test');
+        $obj->putLogTime('test');
         $this->assertArrayHasKey('start', $obj->_time['test']);
         $this->assertType('float', $obj->_time['test']['start']);
         $this->assertType('float', $obj->_time['test']['time']);
         $this->assertEquals(0, $obj->_time['test']['time']);
         $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
         $this->assertNull($obj->_log);
-        $obj->putTime('test', true);
+        $obj->putLogTime('test', true);
         $this->assertArrayHasKey('start', $obj->_time['test']);
         $this->assertType('float', $obj->_time['test']['start']);
         $this->assertType('float', $obj->_time['test']['time']);
         $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
         $this->assertNull($obj->_log);
 
-        $obj->putTime('test');
+        $obj->putLogTime('test');
         $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
         $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
         $this->assertNull($obj->_log);
         sleep(1.0);
-        $obj->putTime('test', true);
+        $obj->putLogTime('test', true);
         $this->assertGreaterThan(1.0, $obj->_time['test']['time']);
         $this->assertLessThanOrEqual(2.0, $obj->_time['test']['time']);
         $this->assertNull($obj->_log);
 
-        $obj->putTime('test1', true);
+        $obj->putLogTime('test1', true);
         $this->assertNotNull($obj->_log);
     }
     /**
@@ -293,10 +293,10 @@ class Mnix_CoreTest extends PHPUnit_Framework_TestCase
     public function testTime()
     {
         $obj = Mnix_CoreSub::instance();
-        Mnix_CoreSub::time('test');
+        Mnix_CoreSub::LogTime('test');
         $this->assertLessThanOrEqual(microtime(true), $obj->_time['test']['start']);
         $this->assertNull($obj->_log);
-        Mnix_CoreSub::time('test', true);
+        Mnix_CoreSub::LogTime('test', true);
         $this->assertLessThanOrEqual(1.0, $obj->_time['test']['time']);
         $this->assertNull($obj->_log);
     }
