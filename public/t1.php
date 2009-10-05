@@ -1,25 +1,26 @@
 <?php
 
-var_dump(microtime());
-var_dump((float)microtime());
-var_dump(microtime(true));
+require_once '../test/Mnix/CacheSub.php';
 
-function microtime_float()
+
+class T1
 {
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
+    public function f1()
+    {
+        $obj = new T2();
+        $obj->f2();
+    }
+}
+class T2
+{
+    public function f2()
+    {
+        $obj = new Mnix_CacheSub();
+        var_dump(debug_backtrace());
+    }
 }
 
-$time_start = microtime_float();
+$obj = new T1();
+$obj->f1();
 
-// Sleep for a while
-usleep(100);
-
-$time_end = microtime_float();
-$time = $time_end - $time_start;
-
-echo "Did nothing in $time seconds\n";
-
-require_once '../boot/bootstrap.php';
-require_once '../test/Mnix/CoreSub.php';
-Mnix_Core::instance()->run()->finish();
+//$obj = new Mnix_CacheSub();

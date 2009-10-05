@@ -5,6 +5,7 @@
  * @category Mulanix
  * @package Mnix_Cache
  * @version $Id$
+ * @author mystdeim <mysteim@gmail.com>
  */
 /**
  * Кэширование
@@ -15,46 +16,62 @@
 class Mnix_Cache
 {
     /**
-     * Путь до класса, вызывающего кэш
+     * Путь кэша
+     *
      * @var string
      */
     protected $_path;
     /**
-     * Путь кэша
-     * @var string
-     */
-    protected $_pathCache;
-    /**
      * Имя для кэшируемых данных
+     *
      * @var string
      */
     protected $_name = null;
     /**
      * Путь до файла, который будет кэшироваться
+     *
      * @var string
      */
     protected $_file = null;
     /**
      * Флаг упаковки
+     * 
      * @var boolean
      */
     protected $_serialize = false;
     protected $_tag = null;
     /**
      * Хэш
+     * 
      * @var string
      */
     protected $_hash = null;
     /**
      * Содержимое кэша
+     *
      * @var string
      */
     protected $_content = false;
     protected $_mode;
-    public function  __construct($path)
+    /**
+     * Конструктор
+     * 
+     * @return object(Mnix_Cache)
+     */
+    public function  __construct()
     {
-        $this->_path = $path;
+        $traces = debug_backtrace(false);
+        $this->_path = MNIX_PATH_CACHE . str_replace('_', '/', $traces[1]['class']);
         return $this;
+    }
+    /**
+     * Проверяем существует ли кеш
+     * 
+     * @return boolean флаг существования кеша
+     */
+    public function check()
+    {
+        return false;
     }
     /**
      * Сохраняем кэш
@@ -83,6 +100,7 @@ class Mnix_Cache
     }
     /**
      * Загружаем кэш
+     *
      * @return object(Mnix_Cache)
      */
     public function load()
@@ -110,6 +128,7 @@ class Mnix_Cache
     }
     /**
      * Достаём данные из кэша
+     *
      * @return mixed
      */
     public function get()
@@ -118,6 +137,7 @@ class Mnix_Cache
     }
     /**
      * Суём данные, которые будем кэшировать
+     *
      * @return object(Mnix_Cache)
      */
     public function put($content)
@@ -198,10 +218,12 @@ class Mnix_Cache
     }
     /**
      * Создаём путь до кэша
+     *
      * @return string
      */
     protected function _mkdir()
     {
+        /*
         $diff = explode('/', str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path));
         $path = MNIX_PATH_CACHE . implode($diff, '/') . '/';
         if (!is_dir($path)) {
@@ -212,20 +234,19 @@ class Mnix_Cache
 			}
 		}
         return $path;
+         */
     }
     /**
-     * Рекурсивное удаление кэша
+     * Рекурсивное удаление каталогов
      */
-	static protected function _delete($path)
+    protected function _removeDir($dir)
     {
-		foreach (glob($path.'*') as $temp) {
-			if (is_dir($temp)) {
-				self::_delete($temp.'/');
-				rmdir($temp);
-			}
-			else {
-                unlink($temp);
-            }
-		}
-	}
+        //GLOB_MARK - добавляет слеш к каталогам
+        $files = glob($dir . '*', GLOB_MARK);
+        foreach($files as $file) {
+            if(substr($file, -1) === '/') $this->_removeDir($file);
+            else unlink($file);
+        }
+        if (is_dir($dir)) rmdir($dir);
+    }
 }
