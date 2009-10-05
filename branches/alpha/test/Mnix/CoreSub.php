@@ -13,12 +13,30 @@
  * @see Mnix_Core
  */
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Core.php';
+/**
+ * @see Mnix_Exception
+ */
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception.php';
+/**
+ * @see Mnix_Exception_Fatal
+ */
 require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception/Fatal.php';
 
+/**
+ * Запись системных сообщений в лог-файл
+ */
 define('MNIX_CORE_LOG_SYSTEM', true);
+/**
+ * Запись предупреждений в лог-файл
+ */
 define('MNIX_CORE_LOG_WARNING', true);
+/**
+ * Запись ошибок сообщений в лог-файл
+ */
 define('MNIX_CORE_LOG_ERROR', true);
+/**
+ * Вывод отладочной информации после завершении работы приложения
+ */
 define('MNIX_CORE_LOG_DEBUG', true);
 
 /**

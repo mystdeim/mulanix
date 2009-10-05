@@ -24,14 +24,15 @@ PHPDOC_TARGET=$PROJECT_DIR'tmp/doc/api'
 
 #Директории, для сканирования, разделяются запятыми: dir1,dir2,...
 #PHPDOC_DIRS=$PROJECT_DIR'lib/Mnix,'$PROJECT_DIR'test/Mnix'
-PHPDOC_DIRS=$PROJECT_DIR'lib/Mnix/Core,'$PROJECT_DIR'test/Mnix/Core,'$PROJECT_DIR'tmp/doc/tutorials'
+PHPDOC_DIRS=$PROJECT_DIR'lib/Mnix/Core,'$PROJECT_DIR'test/Mnix/Core'
 
 #Файлы, для сканирования, разделяются запятыми: file1,file2,...
 #PHPDOC_FILES=$PROJECT_DIR'test/Helper.php'
-PHPDOC_FILES=$PROJECT_DIR'lib/Mnix/Core.php,'$PROJECT_DIR'test/Helper.php,'$PROJECT_DIR'test/Mnix/CoreTest.php,'$PROJECT_DIR'test/Mnix/CoreSub.php'
+PHPDOC_FILES=$PROJECT_DIR'lib/Mnix/Core.php,'$PROJECT_DIR'test/Helper.php,'$PROJECT_DIR'test/Mnix/CoreTest.php,'$PROJECT_DIR'test/Mnix/CoreSub.php,'$PROJECT_DIR'lib/Mnix/Cache.php,'$PROJECT_DIR'test/Mnix/CacheSub.php,'$PROJECT_DIR'test/Mnix/CacheTest.php'
 
 #Стиль
-PHPDOC_STYLE='HTML:frames:DOM/earthli'
+#PHPDOC_STYLE='HTML:frames:DOM/earthli'
+PHPDOC_STYLE='HTML:Smarty:HandS'
 #Файлы, которые будут игнорироваться
 PHPDOC_IGNORE='*.xsl'
 #Теги, которые будут игнорироваться

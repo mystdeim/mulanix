@@ -14,7 +14,6 @@
  *
  * @category Mulanix
  * @package Mnix_Core
- * @tutorial Mnix_Core/Core.cls
  */
 class Mnix_Core
 {
