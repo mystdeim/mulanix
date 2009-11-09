@@ -3,29 +3,20 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Cache
- * @subpackage Test
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
 
-require_once dirname(dirname(dirname(__FILE__))) . '/boot/bootstrap.php';
-/**
- * @see Mnix_Cache
- */
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Core.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception.php';
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception/Fatal.php';
-
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Cache.php';
-
+require_once dirname(dirname(__DIR__)) . '/boot/bootstrap.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception.php';
+//require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception/Fatal.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Cache.php';
 
 /**
  * @category Mulanix
- * @package Mnix_Cache
- * @subpackage Test
  */
-class Mnix_CacheSub extends Mnix_Cache
+class CacheSub extends Cache
 {
     /**
      * __get

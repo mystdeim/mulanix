@@ -12,14 +12,16 @@
 /**
  * Время начала работы
  */
-define('MNIX_CORE_STARTTIME', microtime(true));
-//TODO: при переходе на 5.3 можно покорече записать через __DIR__
-define('MNIX_PATH_DIR', dirname(dirname(__FILE__)).'/');
-define('MNIX_PATH_LIB', MNIX_PATH_DIR . 'lib/');
-define('MNIX_PATH_TEST', MNIX_PATH_DIR . 'test/');
-define('MNIX_PATH_BOOT', MNIX_PATH_DIR . 'boot/');
-define('MNIX_PATH_TMP', MNIX_PATH_DIR . 'tmp/');
-define('MNIX_PATH_CACHE', MNIX_PATH_DIR . 'tmp/cache/');
-define('MNIX_PATH_PUBLIC', MNIX_PATH_DIR . 'public/');
-define('MNIX_PATH_THEME', MNIX_PATH_PUBLIC . 'theme/');
-define('MNIX_PATH_CONFIG', MNIX_PATH_BOOT . 'config.xml');
+define('Mnix\Core\STARTTIME', microtime(true), false);
+/**
+ * Пути
+ */
+define('Mnix\Path\DIR', dirname(__DIR__) . '/', false);
+define('Mnix\Path\LIB', \Mnix\Path\DIR . 'lib/', false);
+define('Mnix\Path\TEST', \Mnix\Path\DIR . 'test/', false);
+define('Mnix\Path\BOOT', \Mnix\Path\DIR . 'boot/', false);
+define('Mnix\Path\TMP', \Mnix\Path\DIR . 'tmp/', false);
+define('Mnix\Path\CACHE', \Mnix\Path\DIR . 'tmp/cache/', false);
+define('Mnix\Path\PUBLIC', \Mnix\Path\DIR . 'public/', false);
+define('Mnix\Path\THEME', \Mnix\Path\DIR . 'theme/', false);
+define('Mnix\Path\CONFIG', \Mnix\Path\BOOT . 'config.xml', false);
