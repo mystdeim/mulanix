@@ -3,24 +3,23 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Cache
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
 /**
  * Кэширование
  *
  * @category Mulanix
- * @package Mnix_Cache
  */
-class Mnix_Cache
+class Cache
 {
     /**
-     * Путь кэша
+     * Директория для кэшируемых данных
      *
      * @var string
      */
-    protected $_path;
+    protected $_dir;
     /**
      * Имя для кэшируемых данных
      *
@@ -28,50 +27,53 @@ class Mnix_Cache
      */
     protected $_name = null;
     /**
-     * Путь до файла, который будет кэшироваться
-     *
-     * @var string
-     */
-    protected $_file = null;
-    /**
-     * Флаг упаковки
-     * 
-     * @var boolean
-     */
-    protected $_serialize = false;
-    protected $_tag = null;
-    /**
      * Хэш
      * 
      * @var string
      */
-    protected $_hash = null;
+    protected $_hash = false;
     /**
      * Содержимое кэша
      *
      * @var string
      */
-    protected $_content = false;
-    protected $_mode;
+    protected $_data = null;
     /**
      * Конструктор
-     * 
+     *
+     * @param string $dir
      * @return object(Mnix_Cache)
      */
-    public function  __construct()
+    public function  __construct($dir = null)
     {
         $traces = debug_backtrace(false);
-        $this->_path = MNIX_PATH_CACHE . str_replace('_', '/', $traces[1]['class']);
-        return $this;
+        $this->_dir = Path\CACHE . str_replace(array('_', '\\'), '/', $traces[1]['class']);
+        if (isset($dir)) $this->_dir($dir);
     }
     /**
-     * Проверяем существует ли кеш
-     * 
-     * @return boolean флаг существования кеша
+     * Задаёт директорию
+     *
+     * @param string $dir
+     * @return string|object(Mnix_Cache)
      */
-    public function check()
+    public function dir($dir = null)
     {
-        return false;
+        if (isset($dir)) {
+            $this->_dir($dir);
+            return $this;
+        } else return \str_replace(Path\CACHE, null, $this->_dir);
+    }
+    /**
+     * Задаёт директорию
+     *
+     * @param string $dir
+     */
+    protected function _dir($dir)
+    {
+        if (is_string($dir)) {
+            if ($dir[0] !== '/') $this->_dir .= '/' . $dir;
+            else $this->_dir = Path\CACHE . substr($dir, 1);
+        } else throw new Exception('Wrong type in parametr. Must be string!');
     }
     /**
      * Сохраняем кэш
@@ -111,7 +113,7 @@ class Mnix_Cache
         } else {
             if ($this->_hash === 'f') $name = md5_file($this->_file);
         }
-        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/' . $name;
+        $path = MNIX_dir_CACHE . str_replace(array(MNIX_dir_DIR, '.php'), null, $this->_dir) . '/' . $name;
         $path = str_replace('//', '/', $path);
         Mnix_Core::putMessage(__CLASS__, 'sys', 'Request cache from ' . $path);
         Mnix_Core::putCount('cache_r');
@@ -123,7 +125,7 @@ class Mnix_Cache
             Mnix_Core::putCount('cache_l');
         }
         $this->_name = $name;
-        $this->_pathCache = $path;
+        $this->_dirCache = $path;
         return $this;
     }
     /**
@@ -138,115 +140,85 @@ class Mnix_Cache
     /**
      * Суём данные, которые будем кэшировать
      *
-     * @return object(Mnix_Cache)
+     * @param mixed $content
+     * @return mixed|object(\Mnix\Cache)
      */
-    public function put($content)
+    public function data($data = null)
     {
-        $this->_content = $content;
-        return $this;
-    }
-    public function mode()
-    {
-        
+        if (isset($data)) {
+            $this->_data = serialize($data);
+            return $this;
+        } else return unserialize($this->_data);
     }
     /**
      * Имя для кэшируемых данных
+     *
+     * @param string $name
+     * @return string|object(\Mnix\Cache)
      */
     public function name($name = null)
     {
-        if ($name) {
-            $this->_name = $name;
-            return $this;
+        if (isset($name)) {
+            if (is_string($name)) {
+                $this->_name = $name;
+                return $this;
+            } else throw new Exception('Wrong type in parametr. Must be string!');
         } else return $this->_name;
     }
     /**
-     * Указываем, откуда брать данные для кэширования
+     * Указываем нужно ли брать хэш
      *
-     * $flag:
-     *  true - из файла
+     * @param bool $flag
+     * @return bool|object(\Mnix\Cache)
      */
-    public function file($file)
+    public function hash($flag = null)
     {
-        $this->_file = $file;
-        return $this;
-    }
-    /**
-     * Указываем от чего брать хэш
-     *
-     * $flag:
-     *  'f' - file
-     *  'n' - name
-     *
-     */
-    public function hash($flag)
-    {
-        $this->_hash = $flag;
-        return $this;
-    }
-    public function tag()
-    {
-
-    }
-    public function size()
-    {
-
-    }
-    /**
-     * Удаление файла с кэшом
-     */
-    public function remove()
-    {
-        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/' . $this->_name;
-        unlink($path);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Remove cache ' . $path);
-        Mnix_Core::putCount('cache_d');
+        if (isset($flag)) {
+            if (is_bool($flag)) {
+                $this->_hash = $flag;
+                return $this;
+            } else throw new Exception('Wrong type in parametr. Must be bool!');
+        } else return $this->_hash;
     }
     public function clear()
     {
-        $path = MNIX_PATH_CACHE . str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path) . '/*';
-        $path = str_replace('//', '/', $path);
-        self::_delete($path);
-    }
-    public function path()
-    {
-        return $this->_pathCache;
-    }
-    public function serialize($flag = false)
-    {
-        $this->_serialize = $flag;
+        //var_dump($this->_dir);
+        $this->_rmdir($this->_dir);
+        //$this->_rmdir(Path\CACHE);
         return $this;
     }
     /**
      * Создаём путь до кэша
      *
-     * @return string
      */
     protected function _mkdir()
     {
-        /*
-        $diff = explode('/', str_replace(array(MNIX_PATH_DIR, '.php'), null, $this->_path));
-        $path = MNIX_PATH_CACHE . implode($diff, '/') . '/';
-        if (!is_dir($path)) {
-			$local = MNIX_PATH_CACHE;
-			foreach ($diff as $temp) {
-				$local .= $temp.'/';
-				if (!is_dir($local)) mkdir($local);
-			}
-		}
-        return $path;
-         */
+        if (!is_dir($this->_dir)) {
+            $local = Path\CACHE;
+            if (!is_dir($local)) mkdir($local);
+            foreach (explode('/', $this->dir()) as $temp) {
+                $local .= $temp.'/';
+                if (!is_dir($local)) mkdir($local);
+            }
+        }
     }
     /**
      * Рекурсивное удаление каталогов
      */
-    protected function _removeDir($dir)
+    protected function _rmdir($dir)
     {
         //GLOB_MARK - добавляет слеш к каталогам
-        $files = glob($dir . '*', GLOB_MARK);
+        $files = glob($dir . '/' . '*', GLOB_MARK);
         foreach($files as $file) {
-            if(substr($file, -1) === '/') $this->_removeDir($file);
-            else unlink($file);
+            if(substr($file, -1) === '/') $this->_rmdir($file);
+            else {
+                var_dump($file);
+                //unlink($file);
+            }
         }
-        if (is_dir($dir)) rmdir($dir);
+        if (is_dir($dir)) {
+            var_dump($dir);
+            //rmdir($dir);
+        }
     }
 }

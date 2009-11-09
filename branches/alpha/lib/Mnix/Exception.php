@@ -3,19 +3,19 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Exception
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
 /**
  * Исключение
  *
  * @category Mulanix
- * @package Mnix_Exception
  */
-class Mnix_Exception extends Exception
+class Exception extends \Exception
 {
     /**
+     * Конструктор
      *
      * @param string $message
      * @param int $code 
@@ -23,5 +23,6 @@ class Mnix_Exception extends Exception
     public function __construct($message = false, $code = false)
     {
         parent::__construct($message, $code);
+        //TODO: сюда надо дописать логирование ошибки
     }
 }

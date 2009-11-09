@@ -83,7 +83,7 @@ then
     #Предварительно очищаем директорию, куда будут записаны тесты, и создаём новую
     rm -r $PHPUNIT_COVERAGE
     mkdir $PHPUNIT_COVERAGE
-    phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS
+    phpunit --coverage-html $PHPUNIT_COVERAGE $PHPUNIT_TESTS'/CacheTest.php'
 fi
 
 if [[ $1 != '-unit' && $1 != '' && $1 != '-doc' && $1 != '-cov' ]]
