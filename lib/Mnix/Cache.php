@@ -8,7 +8,7 @@
  */
 namespace Mnix;
 /**
- * Кэширование
+ * Кэширование на файлах
  *
  * @category Mulanix
  */
@@ -47,7 +47,7 @@ class Cache
     public function  __construct($dir = null)
     {
         $traces = debug_backtrace(false);
-        $this->_dir = Path\CACHE . str_replace(array('_', '\\'), '/', $traces[1]['class']);
+        $this->_dir = Path\CACHE . '/' . str_replace(array('_', '\\'), '/', $traces[1]['class']);
         if (isset($dir)) $this->_dir($dir);
     }
     /**
@@ -67,75 +67,50 @@ class Cache
      * Задаёт директорию
      *
      * @param string $dir
+     * @return null
      */
     protected function _dir($dir)
     {
         if (is_string($dir)) {
             if ($dir[0] !== '/') $this->_dir .= '/' . $dir;
-            else $this->_dir = Path\CACHE . substr($dir, 1);
+            else $this->_dir = Path\CACHE . '/' . substr($dir, 1);
         } else throw new Exception('Wrong type in parametr. Must be string!');
     }
     /**
      * Сохраняем кэш
      *
-     * @return object(Mnix_Cache)
+     * @return object(\Mnix\Cache)
      */
     public function save()
     {
-        //Создаём дерево каталогов
         if (isset($this->_name)) {
-            if ($this->_hash === 'n') $name = md5($this->_name);
-            else $name = $this->_name;
-        } else {
-            if ($this->_hash === 'f') $name = md5_file($this->_file);
-        }
-        $path = $this->_mkdir() . $name;
-        //Пишем в файл
-        $handle = fopen($path, 'w');
-        if ($this->_serialize) $content = serialize($this->_content);
-        else $content = $this->_content;
-        fputs($handle, $content);
-		fclose($handle);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Save cache to ' . $path);
-        Mnix_Core::putCount('cache_s');
+            if (isset($this->_data)) {
+                //Создаём структуру для кэша
+                $this->_mkdir();
+                //Работа с файлом
+                //var_dump($this->_mkdir . '/' . $this->_name);
+                $handle = fopen($this->_dir . '/' . $this->_name, 'w');
+                fputs($handle, $this->_data);
+                fclose($handle);
+            } else $a = 0; //TODO: Тут нужно написать ворнинг, так как сохранять пустоту в кэш тупо!
+        } else throw new Exception('At first, must be create name of cache! Use method name(string $name)');
         return $this;
     }
     /**
      * Загружаем кэш
      *
-     * @return object(Mnix_Cache)
+     * @return bool
      */
     public function load()
     {
         if (isset($this->_name)) {
-            if ($this->_hash === 'n') $name = md5($this->_name);
-            else $name = $this->_name;
-        } else {
-            if ($this->_hash === 'f') $name = md5_file($this->_file);
-        }
-        $path = MNIX_dir_CACHE . str_replace(array(MNIX_dir_DIR, '.php'), null, $this->_dir) . '/' . $name;
-        $path = str_replace('//', '/', $path);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Request cache from ' . $path);
-        Mnix_Core::putCount('cache_r');
-        if (file_exists($path)) {
-            $content = fgets(fopen($path, 'r'));
-            if ($this->_serialize) $this->_content = unserialize($content);
-            else $this->_content = $content;
-            Mnix_Core::putMessage(__CLASS__, 'sys', 'Load cache from ' . $path);
-            Mnix_Core::putCount('cache_l');
-        }
-        $this->_name = $name;
-        $this->_dirCache = $path;
-        return $this;
-    }
-    /**
-     * Достаём данные из кэша
-     *
-     * @return mixed
-     */
-    public function get()
-    {
-        return $this->_content;
+            if (file_exists($this->_dir . '/' . $this->_name)) {
+                $handle = fopen($this->_dir . '/' . $this->_name, 'r');
+                $this->_data = fgets($handle);
+                fclose($handle);
+                return true;
+            } else return false;
+        } else throw new Exception('At first, must be create name of cache! Use method name(string $name)');
     }
     /**
      * Суём данные, которые будем кэшировать
@@ -182,14 +157,13 @@ class Cache
     }
     public function clear()
     {
-        //var_dump($this->_dir);
         $this->_rmdir($this->_dir);
-        //$this->_rmdir(Path\CACHE);
         return $this;
     }
     /**
-     * Создаём путь до кэша
+     * Создаём структуру для кэша
      *
+     * @return null
      */
     protected function _mkdir()
     {
@@ -203,22 +177,18 @@ class Cache
         }
     }
     /**
-     * Рекурсивное удаление каталогов
+     * Рекурсивное удаление структуры кэша
+     *
+     * @return null
      */
     protected function _rmdir($dir)
     {
         //GLOB_MARK - добавляет слеш к каталогам
-        $files = glob($dir . '/' . '*', GLOB_MARK);
+        $files = glob($dir . '/*', GLOB_MARK);
         foreach($files as $file) {
             if(substr($file, -1) === '/') $this->_rmdir($file);
-            else {
-                var_dump($file);
-                //unlink($file);
-            }
+            else unlink($file);
         }
-        if (is_dir($dir)) {
-            var_dump($dir);
-            //rmdir($dir);
-        }
+        if (is_dir($dir)) rmdir($dir);
     }
 }
