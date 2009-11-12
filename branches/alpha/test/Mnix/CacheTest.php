@@ -20,39 +20,31 @@ require_once 'CacheSub.php';
  */
 class Mnix_CacheTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Удаляем каждый раз кэш
-     */
-    protected function tearDown()
-    {
-        /*$obj = new Mnix_CacheSub();
-        $obj->removeDir(MNIX_PATH_CACHE);*/
-    }
     public function testConstructor()
     {
         $obj = new Mnix\CacheSub();
-        $this->assertEquals(get_class($obj), 'Mnix\CacheSub');
-        $this->assertEquals(\Mnix\Path\CACHE . 'Mnix/CacheTest', $obj->_dir);
+        $this->assertEquals('Mnix\CacheSub', get_class($obj));
+        $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest', $obj->_dir);
         unset($obj);
         $obj = new Mnix\CacheSub('/test');
-        $this->assertEquals(\Mnix\Path\CACHE . 'test', $obj->_dir);
+        $this->assertEquals(\Mnix\Path\CACHE . '/test', $obj->_dir);
         unset($obj);
         $obj = new Mnix\CacheSub('test');
-        $this->assertEquals(\Mnix\Path\CACHE . 'Mnix/CacheTest/test', $obj->_dir);
+        $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest/test', $obj->_dir);
     }
     public function testDir()
     {
         $obj = new Mnix\CacheSub();
-        $this->assertEquals(\Mnix\Path\CACHE . 'Mnix/CacheTest', $obj->_dir);
+        $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest', $obj->_dir);
         unset($obj);
         $obj = new Mnix\CacheSub();
         $obj->dir('/test');
-        $this->assertEquals('test', $obj->dir());
+        $this->assertEquals('/test', $obj->dir());
         unset($obj);
         $obj = new Mnix\CacheSub();
         $obj->dir('test');
-        $this->assertEquals('Mnix/CacheTest/test', $obj->dir());
-        $this->assertEquals(get_class($obj->dir('/dsd')), 'Mnix\CacheSub');
+        $this->assertEquals('/Mnix/CacheTest/test', $obj->dir());
+        $this->assertEquals('Mnix\CacheSub', get_class($obj->dir('/dsd')));
         try {
             $obj->dir(1);
         } catch(\Mnix\Exception $e) {
@@ -61,7 +53,7 @@ class Mnix_CacheTest extends PHPUnit_Framework_TestCase
         unset($obj);
         $obj = new Mnix\CacheSub();
         $obj->dir('/');
-        $this->assertEquals(\Mnix\Path\CACHE, $obj->_dir);
+        $this->assertEquals(\Mnix\Path\CACHE . '/', $obj->_dir);
     }
     public function testName()
     {
@@ -104,12 +96,69 @@ class Mnix_CacheTest extends PHPUnit_Framework_TestCase
         $obj = new \Mnix\CacheSub();
         $obj->mkdir();
         $this->assertFileExists(\Mnix\Path\CACHE);
-        $this->assertFileExists(\Mnix\Path\CACHE . 'Mnix/CacheTest');
+        $this->assertFileExists(\Mnix\Path\CACHE . '/Mnix/CacheTest');
     }
     public function testClear()
     {
         $obj = new \Mnix\CacheSub();
         $obj->mkdir();
+        $this->assertFileExists(\Mnix\Path\CACHE . '/Mnix/CacheTest');
+        $this->assertEquals('Mnix\CacheSub', get_class($obj->clear()));
+        $this->assertFileExists(\Mnix\Path\CACHE . '/Mnix');
+        $this->assertFileNotExists(\Mnix\Path\CACHE . '/Mnix/CacheTest');
+        $obj->dir('/');
         $obj->clear();
+        $this->assertFileNotExists(\Mnix\Path\CACHE);
+    }
+    public function testSave()
+    {
+        $obj = new \Mnix\CacheSub();
+        $obj->name('name1')
+            ->data('data');
+        $this->assertEquals('Mnix\CacheSub', get_class($obj->save()));
+        $this->assertFileExists(\Mnix\Path\CACHE . '/Mnix/CacheTest/name1');
+
+        $obj->dir('sub')
+            ->name('name2')
+            ->data(true);
+        $this->assertEquals('Mnix\CacheSub', get_class($obj->save()));
+        $this->assertFileExists(\Mnix\Path\CACHE . '/Mnix/CacheTest/sub/name2');
+
+        try {
+            unset($obj);
+            $obj = new \Mnix\CacheSub();
+            $obj->save();
+        } catch(\Mnix\Exception $e) {
+            $this->assertEquals('Mnix\Exception', get_class($e));
+        }
+    }
+    public function testLoad()
+    {
+        $obj = new \Mnix\CacheSub();
+        $obj->name('name');
+        $this->assertEquals(false, $obj->load());
+
+        $obj->name('name1');
+        $this->assertEquals(true, $obj->load());
+        $this->assertEquals('data', $obj->data());
+
+        $obj->name('sub/name2');
+        $this->assertEquals(true, $obj->load());
+        $this->assertEquals(true, $obj->data());
+
+        $obj->dir('/Mnix/CacheTest')
+            ->clear();
+        $this->assertFileNotExists(\Mnix\Path\CACHE . '/Mnix/CacheTest');
+        $obj->dir('/')
+            ->clear();
+        $this->assertFileNotExists(\Mnix\Path\CACHE);
+
+        try {
+            unset($obj);
+            $obj = new \Mnix\CacheSub();
+            $obj->load();
+        } catch(\Mnix\Exception $e) {
+            $this->assertEquals('Mnix\Exception', get_class($e));
+        }
     }
 }
