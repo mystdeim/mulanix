@@ -85,10 +85,7 @@ class Cache
     {
         if (isset($this->_name)) {
             if (isset($this->_data)) {
-                //Создаём структуру для кэша
                 $this->_mkdir();
-                //Работа с файлом
-                //var_dump($this->_mkdir . '/' . $this->_name);
                 $handle = fopen($this->_dir . '/' . $this->_name, 'w');
                 fputs($handle, $this->_data);
                 fclose($handle);
