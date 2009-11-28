@@ -29,28 +29,11 @@ class CacheSub extends Cache
         return $this->$name;
     }
     /**
-     * __set
-     *
-     * @param string $name
-     * @param mixed $value
-     */
-    public function  __set($name,  $value)
-    {
-        $this->$name = $value;
-    }
-    /**
      * Переопределяем метод
      */
     public function mkdir()
     {
         return $this->_mkdir();
-    }
-    /**
-     * Переопределяем метод
-     */
-    public function removeDir($dir)
-    {
-        $this->_removeDir($dir);
     }
 
 }
