@@ -3,10 +3,12 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Db
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+
+namespace Mnix;
+
 /**
  * Абстракция базы данных
  *
@@ -14,9 +16,8 @@
  * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
  *
  * @category Mulanix
- * @package Mnix_Db
  */
-class Mnix_Db
+class Db
 {
     /**
      * Параметры соеденения с базой
@@ -45,34 +46,17 @@ class Mnix_Db
     /**
      * Установка соединения с базой данных
      *
-     * Примеры:
-     * 1. Использую БД из конфига
-     * <code>
-     * $db = Mnix_Db::connect();
-     * </code>
-     *
-     * 2. Передавая параметры вручную
-     * <code>
-     * $param = array(
-     *     'type'  => 'MySql',
-     *     'login' => 'user',
-     *     'pass'  => 'pass',
-     *     'host'  => 'localhost',
-     *     'base'  => 'database')
-     * $db = Mnix_Db::connect($param);
-     * </code>
-     *
      * @param array|string|null
-     * @return object Mnix_Db
+     * @return object(Mnix\Db)
      */
     public static function connect($param = null)
     {
         if (!isset($param)) {
-                $paramObj['type'] = constant('MNIX_DB_BASE_TYPE');
-                $paramObj['login'] = constant('MNIX_DB_BASE_LOGIN');
-                $paramObj['pass'] = constant('MNIX_DB_BASE_PASS');
-                $paramObj['host'] = constant('MNIX_DB_BASE_HOST');
-                $paramObj['base'] = constant('MNIX_DB_BASE_BASE');
+                $paramObj['type' ] = constant('Mnix\Db\Base\TYPE' );
+                $paramObj['login'] = constant('Mnix\Db\Base\LOGIN');
+                $paramObj['pass' ] = constant('Mnix\Db\Base\PASS' );
+                $paramObj['host' ] = constant('Mnix\Db\Base\HOST' );
+                $paramObj['base' ] = constant('Mnix\Db\Base\BASE' );
         } else {
             $paramObj = $param;
         }
@@ -82,14 +66,15 @@ class Mnix_Db
                 if ($temp->getParam() === $paramObj) return $temp;
             }
         }
-        self::$_instance[$paramObj['type']][] = new Mnix_Db($paramObj);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
+        self::$_instance[$paramObj['type']][] = new Db($paramObj);
+        //Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
         return end(self::$_instance[$paramObj['type']]);
     }
     /**
      * Защищенный конструктор
      *
      * @param array $param
+     * @test ok
      */
     protected function __construct($param)
     {

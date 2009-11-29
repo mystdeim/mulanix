@@ -6,7 +6,9 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+
 namespace Mnix;
+
 /**
  * Кэширование на файлах
  *
@@ -42,7 +44,7 @@ class Cache
      * Конструктор
      *
      * @param string $dir
-     * @return object(Mnix_Cache)
+     * @return object(\Mnix\Cache)
      */
     public function  __construct($dir = null)
     {
@@ -54,7 +56,7 @@ class Cache
      * Задаёт директорию
      *
      * @param string $dir
-     * @return string|object(Mnix_Cache)
+     * @return string|object(\Mnix\Cache)
      */
     public function dir($dir = null)
     {

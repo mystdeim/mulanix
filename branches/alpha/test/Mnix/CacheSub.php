@@ -6,6 +6,7 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+
 namespace Mnix;
 
 require_once dirname(dirname(__DIR__)) . '/boot/bootstrap.php';

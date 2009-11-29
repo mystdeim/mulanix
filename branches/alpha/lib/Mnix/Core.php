@@ -3,19 +3,18 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Core
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
 /**
  * Ядро системы
  *
  * Управляет очередностью загрузки, ведёт лог
  *
  * @category Mulanix
- * @package Mnix_Core
  */
-class Mnix_Core
+class Core
 {
     /**
      * Содержит экземпляр ядра
