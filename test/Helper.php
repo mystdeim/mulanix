@@ -10,9 +10,9 @@
  */
 require_once dirname(__DIR__) . '/boot/bootstrap.php';
 /**
+ * Вспомогательный класс, нужный для тестирования
+ *
  * @category Mulanix
- * @package Mnix
- * @subpackage Test
  */
 class Helper
 {

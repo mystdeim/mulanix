@@ -3,48 +3,38 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Core
- * @subpackage Test
  * @version $Id: CoreSub.php 98 2009-09-16 18:33:07Z mystdeim $
  * @author mystdeim <mysteim@gmail.com>
  */
 
-/**
- * @see Mnix_Core
- */
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Core.php';
-/**
- * @see Mnix_Exception
- */
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception.php';
-/**
- * @see Mnix_Exception_Fatal
- */
-require_once dirname(dirname(dirname(__FILE__))) . '/lib/Mnix/Exception/Fatal.php';
+namespace Mnix;
+
+require_once dirname(dirname(__DIR__)) . '/boot/bootstrap.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception/Fatal.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Core.php';
 
 /**
  * Запись системных сообщений в лог-файл
  */
-define('MNIX_CORE_LOG_SYSTEM', true);
+define('Mnix\Core\Log\SYSTEM', true);
 /**
  * Запись предупреждений в лог-файл
  */
-define('MNIX_CORE_LOG_WARNING', true);
+define('Mnix\Core\Log\WARNING', true);
 /**
  * Запись ошибок сообщений в лог-файл
  */
-define('MNIX_CORE_LOG_ERROR', true);
+define('Mnix\Core\Log\ERROR', true);
 /**
  * Вывод отладочной информации после завершении работы приложения
  */
-define('MNIX_CORE_LOG_DEBUG', true);
+define('Mnix\Core\Log\DEBUG', true);
 
 /**
  * @category Mulanix
- * @package Mnix_Core
- * @subpackage Test
  */
-class Mnix_CoreSub extends Mnix_Core
+class CoreSub extends Core
 {
     /**
      * Возвращает экземпляр класса Mnix_CoreSub
@@ -53,7 +43,7 @@ class Mnix_CoreSub extends Mnix_Core
      */
     public static function instance()
     {
-        if (!isset(parent::$_instance)) parent::$_instance = new Mnix_CoreSub;
+        if (!isset(parent::$_instance)) parent::$_instance = new CoreSub;
         return parent::$_instance;
     }
     /**

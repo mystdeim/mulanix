@@ -3,20 +3,14 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Cache
- * @subpackage Test
  * @version $Id: CoreTest.php 102 2009-09-29 12:56:35Z mystdeim $
  * @author mystdeim <mysteim@gmail.com>
  */
-/**
- * @see Mnix_CacheSub
- */
+
 require_once 'CacheSub.php';
 
 /**
  * @category Mulanix
- * @package Mnix_Cache
- * @subpackage Test
  */
 class Mnix_CacheTest extends PHPUnit_Framework_TestCase
 {

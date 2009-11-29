@@ -3,25 +3,13 @@
  * Mulanix Framework
  *
  * @category Mulanix
- * @package Mnix_Exception
- * @version $Id$
+ * @version $Id: Exception.php 104 2009-11-09 20:08:43Z mystdeim $
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix\Exception;
 /**
- * Фатальное Исключение
+ * Фатальное исключение
  *
  * @category Mulanix
- * @package Mnix_Exception
  */
-class Mnix_Exception_Fatal extends Mnix_Exception
-{
-    /**
-     *
-     * @param string $message
-     * @param int $code
-     */
-    public function __construct($message = false, $code = false)
-    {
-        parent::__construct($message, $code);
-    }
-}
+class Fatal extends \Mnix\Exception {}
