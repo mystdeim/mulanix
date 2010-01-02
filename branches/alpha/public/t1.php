@@ -29,3 +29,5 @@ $core = \Mnix\CoreSub::instance();
 //echo '<pre>'.$core->_log.'</pre>';
 
 $a = Mnix\Core::instance();
+
+//$b = new Mnix\Cache();
