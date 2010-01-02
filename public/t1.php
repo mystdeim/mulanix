@@ -1,26 +1,31 @@
 <?php
 
+
+require_once '../test/Mnix/CoreSub.php';
 require_once '../test/Mnix/CacheSub.php';
 
+class B
+{
+    public function b1()
+    {
 
-class T1
-{
-    public function f1()
-    {
-        $obj = new T2();
-        $obj->f2();
-    }
-}
-class T2
-{
-    public function f2()
-    {
-        $obj = new Mnix_CacheSub();
-        var_dump(debug_backtrace());
+        $b = new Mnix\Cache();
+
     }
 }
 
-$obj = new T1();
-$obj->f1();
+class A
+{
+    public function __construct()
+    {
+        $b = new B();
+        $b->b1();
+    }
+}
 
-//$obj = new Mnix_CacheSub();
+
+$a = new A();
+$core = \Mnix\CoreSub::instance();
+//echo '<pre>'.$core->_log.'</pre>';
+
+$a = Mnix\Core::instance();

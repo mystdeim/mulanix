@@ -2,7 +2,6 @@
  /**
  * Mulanix Framework
  *
- * @category Mulanix
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
@@ -10,9 +9,7 @@ namespace Mnix;
 /**
  * Ядро системы
  *
- * Управляет очередностью загрузки, ведёт лог
- *
- * @category Mulanix
+ * Управляет всей системой в целом(подгрузка классов, логирование событий и тд)
  */
 class Core
 {
@@ -51,14 +48,14 @@ class Core
      *
      * @var array
      */
-    protected $_count = array(
+    protected $_count/* = array(
         'cache_r'  => 0,
         'cache_l'  => 0,
         'cache_s'  => 0,
         'cache_d'  => 0,
         'core_cls' => 0,
         'db_q'     => 0
-    );
+    )*/;
     /**
      * Функции, которые нужно игнорировать при записи логов
      *
@@ -70,37 +67,32 @@ class Core
         '_createNote'
     );
     /**
-     * Возвращает экземпляр класса Mnix_Core
+     * Получение экземпляра класса Mnix\Core
      *
-     * TODO: в php >= 5.3, можно переписать функцию:
-     * <code>
-     * if (!isset(self::$_instance)) self::$_instance = new get_called_class();
-     * return self::$_instance;
-     * </code>
-     * Чтобы избавиться от переопределения в наследуемых классах.
+     * Экземпляр этого класса может быть только один в системе, это единственный способ его создать
      *
-     * @return object Mnix_Core
+     * @return object(\Mnix\Core)
      */
     public static function instance()
     {
-        if (!isset(self::$_instance)) self::$_instance = new self();
-        return self::$_instance;
+        if (!isset(self::$_instance)) static::$_instance = new static();
+        return static::$_instance;
     }
     /**
      * Защищенный конструктор
      */
     protected function __construct()
     {
-        spl_autoload_register('Mnix_Core::_autoload');
+        spl_autoload_register('\Mnix\Core::autoloadRegister');
     }
     /**
      * Деструктор
      */
     public function __destruct() {
-        if (MNIX_CORE_LOG_DEBUG) {
+        /*if (MNIX_CORE_LOG_DEBUG) {
             $this->_debugFinish();
             echo '<pre>' . $this->_debugLog . '</pre>';
-        }
+        }*/
     }
     /**
      * Менеджер
@@ -145,17 +137,17 @@ class Core
     {
         if ($note = $this->_createNote($status, $message, $trace_flag)) {
             //Записываем лог отладки
-            if (MNIX_CORE_LOG_DEBUG) $this->_debugLog .= $note;
+            if (Core\Log\DEBUG) $this->_debugLog .= $note;
             //Записываем лог
             switch ($status) {
                 case 's':
-                    if (MNIX_CORE_LOG_SYSTEM) $this->_log .= $note;
+                    if (Core\Log\SYSTEM) $this->_log .= $note;
                     break;
                 case 'w':
-                    if (MNIX_CORE_LOG_WARNING) $this->_log .= $note;
+                    if (Core\Log\WARNING) $this->_log .= $note;
                     break;
                 default:
-                    if (MNIX_CORE_LOG_ERROR) $this->_log .= $note;
+                    if (Core\Log\ERROR) $this->_log .= $note;
                     break;
             }
         } else {
@@ -169,11 +161,11 @@ class Core
      * @param string $status статус ошибки
      * @param string $message текстовое сообщение
      * @param bool $trace_flag нужно ли писать трассировку
-     * @return string|false
+     * @return bool
      */
     protected function _createNote($status, $message, $trace_flag)
     {
-        if (in_array($status, array('s', 'w', 'e', 'f'))) {
+        if (in_array($status, array('s', 'w', 'e'))) {
             $traces = debug_backtrace(false);
             //Удаляем из трассировки лишнии вызовы
             foreach ($traces as $key => $val) {
@@ -190,9 +182,13 @@ class Core
                 '~' . $message . "\n";
             if ($trace_flag) {
                 $i = 0;
+                //var_dump($traces);
                 foreach($traces as $val) {
                     $note .= '~' . $i++ . '~' . $val['class'] . $val['type'] .  $val['function'] .
-                        '~' . $val['file'] . ':' . $val['line'] . "\n";
+                    //Тут странный баг, при тестировании пропадает файл в 5.2 такого не было, появилось начиная с 5.3
+                    //Поэтому поставил подавление ворнингов
+                    //Баг ни на что не влияет!
+                    '~' . @$val['file'] . ':' . @$val['line'] . "\n";
                 }
             }
             return $note;
@@ -257,8 +253,10 @@ class Core
         if (!is_int($number)) {
             $this->putLog('w', 'Wrong second parametr, must be int', true);
             $number = 0;
+        } else {
+            if (isset($this->_count[$thing])) $this->_count[$thing] += $number;
+            else $this->_count[$thing] = $number;
         }
-        $this->_count[$thing] += $number;
         return $this;
     }
     /**
@@ -269,7 +267,7 @@ class Core
     protected function _getTime()
     {
         $t = microtime(true);
-        return date('Y.m.d/H:i', $t) . '|' . number_format($t - MNIX_CORE_STARTTIME, 5);
+        return date('Y.m.d/H:i', $t) . '|' . number_format($t - Core\STARTTIME, 5);
     }
     /**
      * Запись отладочных сообщений при завершении работы
@@ -289,19 +287,24 @@ class Core
         if (!$this->_crash) $this->putLog('s', 'Normal finishing');
         else $this->putLog('w', 'Accident finishing', false);
     }
+    protected static function autoloadRegister($class)
+    {
+        self::instance()->_autoload($class);
+    }
     /**
      * Автозагрузка классов
      *
      * @param string $class имя подключаемого класса
      */
-    protected static function _autoload($class)
+    protected function _autoload($class)
     {
-        if (file_exists(self::_getPath($class))) {
-            self::logCount('core_cls');
-            require_once self::_getPath($class);
-            self::log('s', 'Load class: ' . $class);
+        var_dump($this->_getPath($class));
+        if (file_exists($this->_getPath($class))) {
+            $this->logCount('core_cls');
+            require_once $this->_getPath($class);
+            $this->log('s', 'Load class: ' . $class);
         } else {
-            throw new Mnix_Exception_Fatal("Class '$class' isn`t exists", 1);
+            throw new Exception("Class '$class' isn`t exists", 1);
         }
     }
     /**
@@ -310,8 +313,8 @@ class Core
      * @param string $class имя подключаемого класс
      * @return string полный путь
      */
-    protected static function _getPath($class)
+    protected function _getPath($class)
     {
-        return MNIX_PATH_LIB . str_replace('_', '/', $class).'.php';
+        return Path\LIB . '/' . str_replace('\\', '/', $class).'.php';
     }
 }

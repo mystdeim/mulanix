@@ -49,6 +49,7 @@ class Cache
     public function  __construct($dir = null)
     {
         $traces = debug_backtrace(false);
+        var_dump($traces);
         $this->_dir = Path\CACHE . '/' . str_replace(array('_', '\\'), '/', $traces[1]['class']);
         if (isset($dir)) $this->_dir($dir);
     }
