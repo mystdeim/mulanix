@@ -2,14 +2,17 @@
 
 
 require_once '../test/Mnix/CoreSub.php';
-require_once '../test/Mnix/CacheSub.php';
+//require_once '../test/Mnix/CacheSub.php';
+
+$core = \Mnix\Core::instance();
 
 class B
 {
     public function b1()
     {
-
-        $b = new Mnix\Cache();
+        //\Mnix\Core::instance()->log('s', 'AAAAA');
+        $b = new \Mnix\Cache();
+        var_dump($b->dir());
 
     }
 }
@@ -25,9 +28,5 @@ class A
 
 
 $a = new A();
-$core = \Mnix\CoreSub::instance();
+var_dump(Mnix\Core::instance());
 //echo '<pre>'.$core->_log.'</pre>';
-
-$a = Mnix\Core::instance();
-
-//$b = new Mnix\Cache();
