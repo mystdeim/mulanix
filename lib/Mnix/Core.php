@@ -18,19 +18,19 @@ class Core
      *
      * @var Mnix_Core
      */
-    protected static $_instance = null;
+    protected static $_instance;
     /**
      * Указывает, было ли завершение аварийным
      * 
      * @var boolean
      */
-    protected $_crash = true;
+    protected $_crash;
     /**
      * Счетчики времени
      *
      * @var array
      */
-    protected $_time;
+    protected $_time = array('db' => 0.0);
     /**
      * Лог, записываемый в файл
      * 
@@ -48,14 +48,14 @@ class Core
      *
      * @var array
      */
-    protected $_count/* = array(
+    protected $_count = array(
         'cache_r'  => 0,
         'cache_l'  => 0,
         'cache_s'  => 0,
         'cache_d'  => 0,
         'core_cls' => 0,
         'db_q'     => 0
-    )*/;
+    );
     /**
      * Функции, которые нужно игнорировать при записи логов
      *
@@ -64,7 +64,9 @@ class Core
     protected $_ignoreFunc = array (
         'log',
         'putLog',
-        '_createNote'
+        '_createNote',
+        '_autoload',
+        'autoloadRegister'
     );
     /**
      * Получение экземпляра класса Mnix\Core
@@ -89,10 +91,10 @@ class Core
      * Деструктор
      */
     public function __destruct() {
-        /*if (MNIX_CORE_LOG_DEBUG) {
+        if (Core\Log\DEBUG) {
             $this->_debugFinish();
             echo '<pre>' . $this->_debugLog . '</pre>';
-        }*/
+        }
     }
     /**
      * Менеджер
@@ -102,6 +104,7 @@ class Core
     public function run()
     {
         $this->putLog('s', 'Run core');
+        $this->_crash = true;
         return $this;
     }
     /**
@@ -170,19 +173,15 @@ class Core
             //Удаляем из трассировки лишнии вызовы
             foreach ($traces as $key => $val) {
                 //Сравнение get_class($this) нужно при тестировании, чтобы не было конфликта с наследником класса
-                if (($val['class'] === get_class($this) || $val['class'] === __CLASS__)
-                    && in_array($val['function'], $this->_ignoreFunc)) {
+                if ($val['function'] === 'spl_autoload_call' || (($val['class'] === get_class($this) || $val['class'] === __CLASS__) && in_array($val['function'], $this->_ignoreFunc))) {
                     unset($traces[$key]);
                 }
             }
             reset($traces);
             $trace = current($traces);
-            $note = $status . '~' . $this->_getTime() .
-                '~' . $trace['class'] . $trace['type'] . $trace['function'] .
-                '~' . $message . "\n";
+            $note = $status.'~'.$this->_getTime().'~'.$trace['class'].$trace['type'].$trace['function'].'~'.$message."\n";
             if ($trace_flag) {
                 $i = 0;
-                //var_dump($traces);
                 foreach($traces as $val) {
                     $note .= '~' . $i++ . '~' . $val['class'] . $val['type'] .  $val['function'] .
                     //Тут странный баг, при тестировании пропадает файл в 5.2 такого не было, появилось начиная с 5.3
@@ -276,7 +275,7 @@ class Core
     {
         $this->putLog('s', 'Finishing...')
              ->putLog('s', 'Request to db: '. $this->_count['db_q'])
-             ->putLog('s', 'Time of working db: '. number_format($this->_time['db']['time'], 5))
+             ->putLog('s', 'Time of working db: '. number_format($this->_time['db'], 5))
              ->putLog('s', 'Request to cache: '. $this->_count['cache_r'])
              ->putLog('s', 'Load from cache: '. $this->_count['cache_l'])
              ->putLog('s', 'Save to cache: '. $this->_count['cache_s'])
@@ -298,7 +297,6 @@ class Core
      */
     protected function _autoload($class)
     {
-        var_dump($this->_getPath($class));
         if (file_exists($this->_getPath($class))) {
             $this->logCount('core_cls');
             require_once $this->_getPath($class);

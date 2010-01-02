@@ -41,9 +41,7 @@ class CoreSub extends Core
      */
     public static function clearInstance()
     {
-        //ob_start();
         parent::$_instance = null;
-        //ob_end_clean();
     }
     /**
      * Переопределяем конструктор
@@ -54,13 +52,6 @@ class CoreSub extends Core
     {
         $this->_ignoreFunc[] = 'createNote';
         parent::__construct();
-    }
-    /**
-     * Переопределяем деструктор
-     */
-    public function __destruct()
-    {
-        
     }
     /**
      * __get
@@ -106,16 +97,6 @@ class CoreSub extends Core
     }
     /**
      * Переопределяем метод в публиный
-     *
-     * @param string $class
-     * @return string
-     */
-    public function autoload($class)
-    {
-        return $this->_autoload($class);
-    }
-    /**
-     * Переопределяем метод в публиный
      */
     public function debugFinish()
     {
@@ -129,5 +110,13 @@ class CoreSub extends Core
     public function getTime()
     {
        return $this->_getTime();
+    }
+    /**
+     * Переопределяем Деструктор
+     */
+    public function __destruct() {
+        ob_start();
+        parent::__destruct();
+        ob_end_clean();
     }
 }
