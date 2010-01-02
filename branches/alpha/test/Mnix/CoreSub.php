@@ -37,23 +37,13 @@ define('Mnix\Core\Log\DEBUG', true);
 class CoreSub extends Core
 {
     /**
-     * Возвращает экземпляр класса Mnix_CoreSub
-     *
-     * @return Mnix_CoreSub
-     */
-    public static function instance()
-    {
-        if (!isset(parent::$_instance)) parent::$_instance = new CoreSub;
-        return parent::$_instance;
-    }
-    /**
      * Удаляем статический объект и не даём ему насрать
      */
     public static function clearInstance()
     {
-        ob_start();
+        //ob_start();
         parent::$_instance = null;
-        ob_end_clean();
+        //ob_end_clean();
     }
     /**
      * Переопределяем конструктор
@@ -100,7 +90,7 @@ class CoreSub extends Core
      */
     public function getPath($class)
     {
-        return self::_getPath($class);
+        return $this->_getPath($class);
     }
     /**
      * Переопределяем метод в публиный
@@ -122,7 +112,7 @@ class CoreSub extends Core
      */
     public function autoload($class)
     {
-        return self::_autoload($class);
+        return $this->_autoload($class);
     }
     /**
      * Переопределяем метод в публиный
