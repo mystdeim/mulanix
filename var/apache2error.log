@@ -251,3 +251,12 @@
 [Sat Jan 02 22:44:09 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
 [Sat Jan 02 22:44:10 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
 [Sat Jan 02 22:45:07 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
+[Sat Jan 02 22:51:46 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
+[Sat Jan 02 22:51:47 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
+[Sat Jan 02 22:51:48 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
+[Sat Jan 02 22:52:33 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
+[Sat Jan 02 22:53:10 2010] [error] [client 127.0.0.1] PHP Notice:  Undefined offset: 1 in /home/deim/workspace/php/mulanix/lib/Mnix/Cache.php on line 53
+[Sat Jan 02 22:53:10 2010] [error] [client 127.0.0.1] PHP Stack trace:
+[Sat Jan 02 22:53:10 2010] [error] [client 127.0.0.1] PHP   1. {main}() /home/deim/workspace/php/mulanix/public/t1.php:0
+[Sat Jan 02 22:53:10 2010] [error] [client 127.0.0.1] PHP   2. Mnix\\Cache->__construct($dir = *uninitialized*) /home/deim/workspace/php/mulanix/public/t1.php:33
+[Sat Jan 02 22:53:11 2010] [error] [client 127.0.0.1] File does not exist: /home/deim/workspace/php/mulanix/public/favicon.ico
