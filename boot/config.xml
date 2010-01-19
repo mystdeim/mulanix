@@ -15,8 +15,13 @@
                 <host>localhost</host>
                 <base>cmf1</base>
             </base>
+            <system>
+                <type>xml</type>
+                <file>system.xml</file>
+            </system>
         </db>
         <core>
+            <base>system</base>
             <log>
                 <system>1</system>
                 <warning>1</warning>
