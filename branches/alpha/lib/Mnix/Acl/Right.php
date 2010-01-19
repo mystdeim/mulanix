@@ -6,13 +6,14 @@
  * @package Mnix_Acl
  * @version $Id$
  */
+namespace Mnix\Acl;
 /**
  * 
  *
  * @category Mulanix
  * @package Mnix_Acl
  */
-class Mnix_Acl_Right extends Mnix_ORM_Prototype
+class Right extends Mnix_ORM_Prototype
 {
     //put your code here
 }
