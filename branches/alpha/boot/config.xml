@@ -9,7 +9,7 @@
         </cache>
         <db>
             <base>
-                <type>MySql</type>
+                <type>mysql</type>
                 <login>testuser</login>
                 <pass>12345</pass>
                 <host>localhost</host>

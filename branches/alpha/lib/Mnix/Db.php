@@ -19,56 +19,51 @@ namespace Mnix;
  */
 class Db
 {
-    /**
-     * Параметры соеденения с базой
-     *
-     * @var array
-     */
-    protected $_param;
-    /**
-     * Указатель coединения c cерверoм
-     *
-     * @var object(mysqli)
-     */
-    protected $_con;
+    protected $_type;
     /**
      * Объект драйвера базы данных
      *
      * @var object(driver_db)
      */
-    protected $_db;
+    protected $_driver;
     /**
-     * Массив, содержащий параметры подключенний
+     * Массив, содержащий подключения
      *
      * @var array
      */
-    static protected $_instance = null;
+    static protected $_instances = null;
     /**
      * Установка соединения с базой данных
      *
      * @param array|string|null
      * @return object(Mnix\Db)
      */
-    public static function connect($param = null)
+    public static function connect($nameOfBase = null)
     {
-        if (!isset($param)) {
-                $paramObj['type' ] = constant('Mnix\Db\Base\TYPE' );
-                $paramObj['login'] = constant('Mnix\Db\Base\LOGIN');
-                $paramObj['pass' ] = constant('Mnix\Db\Base\PASS' );
-                $paramObj['host' ] = constant('Mnix\Db\Base\HOST' );
-                $paramObj['base' ] = constant('Mnix\Db\Base\BASE' );
+        if (!isset($nameOfBase)) $nameOfBase = constant('Mnix\Core\BASE');
+        if (isset(self::$_instances[$nameOfBase])) {
+            return self::$_instances[$nameOfBase];
         } else {
-            $paramObj = $param;
-        }
-
-        if (isset(self::$_instance[$paramObj['type']])) {
-            foreach (self::$_instance[$paramObj['type']] as $temp) {
-                if ($temp->getParam() === $paramObj) return $temp;
+            $typeOfBase = constant('Mnix\Db\\' . $nameOfBase . '\TYPE');
+            switch ($typeOfBase) {
+                case 'mysql':
+                    $paramObj['login'] = constant('Mnix\Db\\' . $nameOfBase . '\LOGIN');
+                    $paramObj['pass' ] = constant('Mnix\Db\\' . $nameOfBase . '\PASS' );
+                    $paramObj['host' ] = constant('Mnix\Db\\' . $nameOfBase . '\HOST' );
+                    $paramObj['base' ] = constant('Mnix\Db\\' . $nameOfBase . '\BASE' );
+                    break;
+                case 'xml':
+                    $paramObj['file'] = constant('Mnix\Db\\' . $nameOfBase . '\FILE');
+                    break;
+                default:
+                    throw new Exception('Не существует такого типа базы данных: ' . $typeOfBase);
+                    break;
             }
+            $paramObj['type' ] = $typeOfBase;
         }
-        self::$_instance[$paramObj['type']][] = new Db($paramObj);
-        //Mnix_Core::putMessage(__CLASS__, 'sys', 'Connect to '.$paramObj['type'].' "'.$paramObj['base'].'"');
-        return end(self::$_instance[$paramObj['type']]);
+        self::$_instances[$nameOfBase] = new static($paramObj);
+        Core::log('s', 'Создано подключение к базе данных: ' . $nameOfBase);
+        return self::$_instances[$nameOfBase];
     }
     /**
      * Защищенный конструктор
@@ -78,34 +73,9 @@ class Db
      */
     protected function __construct($param)
     {
-        $this->_param = $param;
-    }
-    /**
-     * Кладём указатель на соединение бд
-     *
-     * @param object(mysqli) $con
-     */
-    public function putCon($con)
-    {
-        $this->_con = $con;
-    }
-    /**
-     * Возвращаем параметры соединения с бд
-     *
-     * @return array
-     */
-    public function getParam()
-    {
-        return $this->_param;
-    }
-    /**
-     * Возвращаем указатель на соединение бд
-     *
-     * @return object(mysqli)
-     */
-    public function getCon()
-    {
-        return $this->_con;
+        $this->_type = $param['type'];
+        $driver = '\Mnix\Db\Driver\\' . $param['type'];
+        $this->_driver = new $driver($param);
     }
     /**
      * Возвращаем объект Mnix_Db_Select
@@ -114,7 +84,12 @@ class Db
      */
     public function select()
     {
+        $this->_SUID('select');
         return new Mnix_Db_Select($this);
+    }
+    protected function _SUID($what)
+    {
+        $name = '\Mnix\Db\\' . $what;
     }
     public function update()
     {
@@ -139,7 +114,7 @@ class Db
      */
     public function query($sql, $data = null)
     {
-        $this->_setDb();
+        /*$this->_setDb();
         if (isset($data)) $sql = $this->_placeHolder($sql, $data);
         Mnix_Core::putTime('db');
         $value = $this->_db->execute($sql);
@@ -147,14 +122,8 @@ class Db
         Mnix_Core::putCount('db_q');
         $err = $this->_db->getError();
         if (!empty($err)) Mnix_Core::putMessage(__CLASS__, 'err', 'Error ' . $err);
-        return $value;
-    }
-    /**
-     * Установка драйвера БД
-     */
-    protected function _setDb()
-    {
-        if (!isset($this->_db)) $this->_db = new Mnix_Db_Driver_MySql($this);
+        return $value;*/
+        
     }
     /**
      * Плэйсхолдер
@@ -222,7 +191,9 @@ class Db
             case 'n':
                 return $value;
             case 's':
-                return "'".mysqli_escape_string($this->_con, $value)."'";
+                //return "'".mysqli_escape_string($this->_con, $value)."'";
+                //TODO: тут нужно защитить
+                return $value;
         }
     }
 }
