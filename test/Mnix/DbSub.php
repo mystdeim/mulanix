@@ -10,10 +10,24 @@ namespace Mnix;
 
 require_once dirname(dirname(__DIR__)) . '/boot/bootstrap.php';
 require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception.php';
-//require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception/Fatal.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Core.php';
 require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Db.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Db/Driver/Xml.php';
+require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Db/Driver/MySql.php';
 
-define('Mnix\Db\Base\TYPE', 'MySql', false);
+define('Mnix\Core\Log\SYSTEM', true);
+define('Mnix\Core\Log\WARNING', true);
+define('Mnix\Core\Log\ERROR', true);
+define('Mnix\Core\Log\DEBUG', false);
+
+define('Mnix\Core\BASE', 'base0', false);
+define('Mnix\Db\base0\TYPE', 'xml', false);
+define('Mnix\Db\base0\FILE', 'file.xml', false);
+define('Mnix\Db\base1\TYPE', 'mysql', false);
+define('Mnix\Db\base1\LOGIN', 'user', false);
+define('Mnix\Db\base1\PASS', 'password', false);
+define('Mnix\Db\base1\HOST', 'localhost', false);
+define('Mnix\Db\base1\BASE', 'basename', false);
 
 /**
  * @category Mulanix
@@ -25,9 +39,9 @@ class DbSub extends Db
      *
      * @return array
      */
-    public static function instance()
+    public static function instances()
     {
-        return parent::$_instance;
+        return self::$_instances;
     }
     /**
      * Чистим реестр
@@ -35,17 +49,8 @@ class DbSub extends Db
     public static function clearInstance()
     {
         ob_start();
-        parent::$_instance = null;
+        parent::$_instances = null;
         ob_end_clean();
-    }
-    /**
-     * Переопределяем защищенный коструктор
-     *
-     * @param mixed $param 
-     */
-    public function __construct($param)
-    {
-        parent::__construct($param);
     }
     /**
      * __get

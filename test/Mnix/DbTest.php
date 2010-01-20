@@ -14,23 +14,19 @@ require_once 'DbSub.php';
  */
 class Mnix_DbTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
-    {
-        $obj = new \Mnix\DbSub('test');
-        $this->assertEquals('Mnix\DbSub', get_class($obj));
-        $this->assertEquals('test', $obj->_param);
-    }
     public function testConnect()
     {
-        $this->assertNull(Mnix\DbSub::instance());
-        $param = array( 'type'  => 'MySql',
-                        'login' => 'user',
-                        'pass'  => 'pass',
-                        'host'  => 'localhost',
-                        'base'  => 'database');
-        $obj = Mnix\DbSub::connect($param);
+        $this->assertNull(Mnix\DbSub::instances());
+        $obj = Mnix\Db::connect('base1');
         $this->assertEquals('Mnix\Db', get_class($obj));
-        $instance_arr = array('MySql' => array($obj));
-        $this->assertEquals($instance_arr, Mnix\DbSub::instance());
+        $obj = Mnix\DbSub::connect('base0');
+        $this->assertEquals('Mnix\DbSub', get_class($obj));
+        $this->assertEquals('Mnix\Db\Driver\Xml', get_class($obj->_driver));
+        $this->assertEquals(2, count(\Mnix\DbSub::instances()));
+    }
+    public function testXmlQuery()
+    {
+        $obj = Mnix\DbSub::connect('base0');
+
     }
 }
