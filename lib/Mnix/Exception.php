@@ -12,17 +12,4 @@ namespace Mnix;
  *
  * @category Mulanix
  */
-class Exception extends \Exception
-{
-    /**
-     * Конструктор
-     *
-     * @param string $message
-     * @param int $code 
-     */
-    public function __construct($message = false, $code = false)
-    {
-        parent::__construct($message, $code);
-        //TODO: сюда надо дописать логирование ошибки
-    }
-}
+class Exception extends \Exception {}
