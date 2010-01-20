@@ -9,7 +9,7 @@
 
 /**
  *
- * @see Mnix_CoreSub
+ * @see Mnix\CoreSub
  */
 require_once 'CoreSub.php';
 
