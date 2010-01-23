@@ -8,7 +8,7 @@
         <item id="5" attr1="a5" />
     </tag0>
     <table1>
-        <item id="1" attr1="a1" />
-        <item id="2" attr1="a2" />
+        <item id="1" attr1="a1" attr2="b1" />
+        <item id="2" attr1="a2" attr2="b2" />
     </table1>
 </root>
