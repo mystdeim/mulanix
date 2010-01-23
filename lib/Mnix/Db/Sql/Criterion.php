@@ -28,13 +28,13 @@ abstract class Mnix_Db_Criterion {
      *
      * @var array()
      */
-	protected $_where = array();
+    protected $_where = array();
     /**
      * Строка с уловием лимита(строка вместо массива, для быстроты)
      *
      * @var string
      */
-	protected $_limit = null;
+    protected $_limit = null;
     /**
      * Массив таблиц
      *
@@ -51,49 +51,46 @@ abstract class Mnix_Db_Criterion {
      * </code>
      * @var array
      */
-	protected $_table = array();
+    protected $_table = array();
     /**
      * Конструктор
      *
      * @param object(Mnix_Db) $obj
      */
-    public function __construct($obj)
-	{
-		$this->_db = $obj;
-	}
-	/**
+    public function __construct($obj) {
+        $this->_db = $obj;
+    }
+    /**
      * Указываем таблицу
      *
      * @param mixed $table
      * @return object(Mnix_Db_Criterion)
      */
-	public function table($table) 
-	{
-		$this->_table = $this->shielding($table, 't').' ';
-		return $this;
-	}
-	/**
+    public function table($table) {
+        $this->_table = $this->shielding($table, 't').' ';
+        return $this;
+    }
+    /**
      * Сортировки
      *
      * @param mixed $condition
      * @param mixed $desc
      * @return object(Mnix_Db_Criterion)
      */
-	public function order($condition, $desc = FALSE)
-	{
-		if (!is_array($condition)) {
-			$this->_orderHelper($condition, $desc);
-		} else {
-			foreach ($condition as $value) {
-				$mass = explode(' ', $value);
-				if (isset($mass[1])&& $mass[1] === 'DESC') $mass[1] = TRUE;
-				else $mass[1] = FALSE;
-				$this->_orderHelper($mass[0], $mass[1]);
-			}
-		}
-		return $this;
-	}
-	/**
+    public function order($condition, $desc = FALSE) {
+        if (!is_array($condition)) {
+            $this->_orderHelper($condition, $desc);
+        } else {
+            foreach ($condition as $value) {
+                $mass = explode(' ', $value);
+                if (isset($mass[1])&& $mass[1] === 'DESC') $mass[1] = TRUE;
+                else $mass[1] = FALSE;
+                $this->_orderHelper($mass[0], $mass[1]);
+            }
+        }
+        return $this;
+    }
+    /**
      * Добавление предложения WHERE
      *
      * Примеры:
@@ -117,8 +114,7 @@ abstract class Mnix_Db_Criterion {
      * @param mixed $data данные
      * @return object(Mnix_Db_Criterion)
      */
-	public function where($condition, $data = null)
-	{
+    public function where($condition, $data = null) {
         if (!count($this->_where)) {
             $this->_where[]['sql'] = $condition;
             if (isset($data)) {
@@ -133,11 +129,11 @@ abstract class Mnix_Db_Criterion {
                 else $this->_where[count($this->_where)-1]['data'] = array_merge($this->_where[count($this->_where)-1]['data'], $data);
             }
         }
-		return $this;
-	}
-	/**
+        return $this;
+    }
+    /**
      * Лимит выборки
-     * 
+     *
      * Примеры:
      * 1. SELECT table.* FROM table WHERE LIMIT 5
      * <code>
@@ -158,19 +154,17 @@ abstract class Mnix_Db_Criterion {
      * @param mixed $last
      * @return object(Mnix_Db_Criterion)
      */
-	public function limit($first, $last = null)
-	{
-		$this->_limit = ' LIMIT ' . (int)$first;
-		if (isset($last)) $this->_limit .= ', '.(int)$last;
-		return $this;
-	}
+    public function limit($first, $last = null) {
+        $this->_limit = ' LIMIT ' . (int)$first;
+        if (isset($last)) $this->_limit .= ', '.(int)$last;
+        return $this;
+    }
     /**
      * Выполнение запроса через объект Mnix_Db
      *
      * @return array()
      */
-    public function query()
-    {
+    public function query() {
         $arr = $this->_build();
         return $this->_db->query($arr['sql'], $arr['data']);
     }
@@ -192,10 +186,10 @@ abstract class Mnix_Db_Criterion {
      *         'sql' => 'sql')
      * )
      * </code>
-     * 
+     *
      * @return array
      */
-	abstract protected function _build();
+    abstract protected function _build();
     /**
      * Хелпер к Собирателю SQL
      *

@@ -10,7 +10,21 @@ namespace Mnix\Db\Xml;
 /**
  * @category Mulanix
  */
-class Select
+class Select extends \Mnix\Db\Base implements \Mnix\Db\iSelect
 {
-    
+    protected $_query;
+
+    public function table($table, $column = null)
+    {
+        $this->_query = '/root/' . $table . '/item';
+        /*if (isset($column) && $column !== '*') {
+            $this->_query .= '[@'.$column.']';
+        }*/
+        return $this;
+    }
+    public function execute()
+    {
+        $result = $this->_driver->query($this->_query);
+        return $result;
+    }
 }
