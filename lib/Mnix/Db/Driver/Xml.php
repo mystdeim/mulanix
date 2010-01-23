@@ -51,11 +51,11 @@ class Xml
         //var_dump($nodeList->ownerDocument->saveXML($nodeList));
         foreach ($nodeList as $domElement){
             $attributes = $domElement->attributes;
-            var_dump($domElement->ownerDocument->saveXML($domElement));
-            /*foreach ($attributes as $attr) {
+            //var_dump($domElement->ownerDocument->saveXML($domElement));
+            foreach ($attributes as $attr) {
                 $node[$attr->nodeName] = $attr->nodeValue;
             }
-            $result[] = $node;*/
+            $result[] = $node;
         }
         return $result;
     }

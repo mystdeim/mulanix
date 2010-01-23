@@ -19,20 +19,47 @@ class Mnix_Db_Xml_SelectTest extends PHPUnit_Framework_TestCase
         $db = $this->_getXmlDb();
         $this->assertEquals('Mnix\Db\Driver\XmlSub', get_class($db));
     }
-    public function testFrom()
+    /**
+     * Проверяем From
+     * @dataProvider providerFrom
+     */
+    public function testFrom($table, $column, $result)
     {
         $db = $this->_getXmlDb();
         $select = new Mnix\Db\Xml\SelectSub($db);
-        /*$result = $select->table('table1', '*')
+        $data = $select->table($table, $column)
                          ->execute();
-        $this->assertEquals(array(array('id'=>'1', 'attr1'=>'a1'), array('id'=>'2', 'attr1'=>'a2')), $result);*/
-
-       /* $result = $select->table('table1', 'id')
-                         ->execute();
-        $this->assertEquals(array(array('id'=>'1'), array('id'=>'2')), $result);*/
-        //$result = $db->query('/descendant-or-self::*/attribute::attr1');
-        $result = $db->query('/root/table1/item/@[id or attr1]');
-        //var_dump($result);
+        $this->assertEquals($result, $data);
+    }
+    public function providerFrom()
+    {
+        return array(
+            array('table1', '*', array(
+                                    array('id'=>'1', 'attr1'=>'a1', 'attr2'=>'b1'),
+                                    array('id'=>'2', 'attr1'=>'a2', 'attr2'=>'b2')
+                                )
+            ),
+            array('table1', 'id', array(
+                                    array('id'=>'1'),
+                                    array('id'=>'2')
+                                )
+            ),
+            array(array('table1'=>'t1'), 'id', array(
+                                    array('id'=>'1'),
+                                    array('id'=>'2')
+                                )
+            ),
+            array('table1', array('id'=>'i', 'attr1'=>'a'), array(
+                                    array('i'=>'1', 'a'=>'a1'),
+                                    array('i'=>'2', 'a'=>'a2')
+                                )
+            ),
+            array(array('table1'=>'t'), array('id'=>'i', 'attr1'=>'a'), array(
+                                    array('i'=>'1', 'a'=>'a1'),
+                                    array('i'=>'2', 'a'=>'a2')
+                                )
+            )
+        );
     }
     protected function _getXmlDb()
     {
