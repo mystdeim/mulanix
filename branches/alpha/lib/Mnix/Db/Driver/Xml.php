@@ -46,13 +46,16 @@ class Xml
         if (!isset($this->_dom)) $this->_load();
         $xpath = new \DOMXPath($this->_dom);
         $nodeList = $xpath->query($query);
+        //var_dump($nodeList);
         $result = array();
+        //var_dump($nodeList->ownerDocument->saveXML($nodeList));
         foreach ($nodeList as $domElement){
             $attributes = $domElement->attributes;
-            foreach ($attributes as $attr) {
+            var_dump($domElement->ownerDocument->saveXML($domElement));
+            /*foreach ($attributes as $attr) {
                 $node[$attr->nodeName] = $attr->nodeValue;
             }
-            $result[] = $node;
+            $result[] = $node;*/
         }
         return $result;
     }

@@ -3,14 +3,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+namespace Mnix\Db;
 /**
- * Description of SelectSub
+ * Description of ISelect
  *
  * @author deim
  */
-class SelectSub
+interface  iSelect
 {
-    //put your code here
+    public function table($table, $column = null);
 }
-?>
