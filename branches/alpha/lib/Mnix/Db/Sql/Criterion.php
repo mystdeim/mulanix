@@ -7,6 +7,7 @@
  * @version 2009-07-22
  * @since 2008-10-01
  */
+namespace Mnix\Db\Sql;
 /**
  * Формирование SQL-запроса
  *
@@ -16,7 +17,7 @@
  * @category Mulanix
  * @package Mnix_Db
  */
-abstract class Mnix_Db_Criterion {
+abstract class Criterion {
     /**
      * Объект Mnix-Db
      *

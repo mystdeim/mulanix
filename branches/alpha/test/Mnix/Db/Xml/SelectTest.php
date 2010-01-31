@@ -14,21 +14,46 @@ require_once '_files/SelectSub.php';
  */
 class Mnix_Db_Xml_SelectTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstruct()
+    /**
+     * Тестовый xml-файл
+     *
+     * @var string
+     */
+    protected static $_fileXml;
+    /**
+     * Драйвер базы данных
+     *
+     * @var object(Mnix\Db\Driver\XmlSub)
+     */
+    protected $_driver;
+    /**
+     * Прописываем файлы
+     */
+    public static function setUpBeforeClass()
     {
-        $db = $this->_getXmlDb();
-        $this->assertEquals('Mnix\Db\Driver\XmlSub', get_class($db));
+        self::$_fileXml = __DIR__ . '/_files/select.xml';
     }
     /**
-     * Проверяем From
+     * Иницилизируем драйвер базы данных перед каждым тестом
+     */
+    public function  setUp() {
+        $this->_driver = new \Mnix\Db\Driver\XmlSub(array('file'=>'system.xml'));
+        $this->_driver->_file = self::$_fileXml;
+    }
+    public function testConstruct()
+    {
+        $this->assertEquals('Mnix\Db\Driver\XmlSub', get_class($this->_driver));
+    }
+    /**
+     * Проверяем table
+     * 
      * @dataProvider providerFrom
      */
     public function testFrom($table, $column, $result)
     {
-        $db = $this->_getXmlDb();
-        $select = new Mnix\Db\Xml\SelectSub($db);
+        $select = new Mnix\Db\Xml\SelectSub($this->_driver);
         $data = $select->table($table, $column)
-                         ->execute();
+                       ->execute();
         $this->assertEquals($result, $data);
     }
     public function providerFrom()
@@ -44,27 +69,54 @@ class Mnix_Db_Xml_SelectTest extends PHPUnit_Framework_TestCase
                                     array('id'=>'2')
                                 )
             ),
-            array(array('table1'=>'t1'), 'id', array(
-                                    array('id'=>'1'),
-                                    array('id'=>'2')
-                                )
-            ),
             array('table1', array('id'=>'i', 'attr1'=>'a'), array(
-                                    array('i'=>'1', 'a'=>'a1'),
-                                    array('i'=>'2', 'a'=>'a2')
-                                )
-            ),
-            array(array('table1'=>'t'), array('id'=>'i', 'attr1'=>'a'), array(
                                     array('i'=>'1', 'a'=>'a1'),
                                     array('i'=>'2', 'a'=>'a2')
                                 )
             )
         );
     }
-    protected function _getXmlDb()
+    /**
+     *
+     * @dataProvider providerWhere
+     */
+    /*public function testWhere($condition, $data, $result)
     {
-        $db = new \Mnix\Db\Driver\XmlSub(array('file'=>'system.xml'));
-        $db->_file = dirname(__DIR__) . '/Driver/_files/testfile.xml';
-        return $db;
+        $select = new Mnix\Db\Xml\SelectSub($this->_driver);
+        $data = $select->table('table1', '*')
+                       ->where($condition, $data)
+                       ->execute();
+        $this->assertEquals($result, $data);
     }
+    public function providerWhere()
+    {
+        return array(
+            array('?c = ?i', array('id', '1'), array(
+                                    array('id'=>'1', 'attr1'=>'a1', 'attr2'=>'b1')
+                                )
+            )
+        );
+    }*/
+    /**
+     * 
+     */
+    /*public function testJoin()
+    {
+        $select = new Mnix\Db\Xml\SelectSub($this->_driver);
+        $select->table('table1', 'id')
+                       ->join(array('table2'    => 'table1'),
+                              array('table1_id' => 'id'),
+                              array('id' => 'a.id', 'attr22' => 'a.attr22'));
+
+        $result = $select->execute();
+        $expectedResult = array(
+            0 => array(
+                'id'       => 1,
+                'a.id'     => 1,
+                'a.attr22' => 'c1'
+            )
+        );
+
+
+    }*/
 }

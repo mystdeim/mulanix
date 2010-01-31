@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <table0/>
+  <table1>
+    <item id="1" attr1="a1" attr2="b1"/>
+    <item id="2" attr1="a2" attr2="b2"/>
+  </table1>
+  <table2>
+    <item id="1" table1_id="1" attr22="c1"/>
+    <item id="2" table1_id="1" attr22="c2"/>
+    <item id="3" table1_id="2" attr22="c3"/>
+    <item id="4" table1_id="2" attr22="c4"/>
+  </table2>
+  <tableA>
+    <item id="1" attrA1="A1" attrA2="A2"/>
+    <item id="2" attrA1="A2" attrA2="A2"/>
+  </tableA>
+</root>
