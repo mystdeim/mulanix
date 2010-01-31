@@ -1,15 +1,14 @@
 <?php
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Mulanix Framework
  */
 namespace Mnix\Db\Xml;
 /**
- * Description of Delete
+ * Mulanix Framework
  *
- * @author deim
+ * @author mystdeim
  */
-class Delete extends \Mnix\Db\Xml\Base
+class Delete extends \Mnix\Db\Xml\Base implements \Mnix\Db\iDelete
 {
     /**
      * Таблица
@@ -56,14 +55,10 @@ class Delete extends \Mnix\Db\Xml\Base
      */
     public function execute()
     {
-        //var_dump($this->_table);
         $query = '/root/' . $this->_table . '/item';
         if (isset($this->_where)) $query .= '[' . $this->_where . ']';
         $nodeList = $this->_driver->query($query);
-        foreach ($nodeList as $domElement) {
-            //var_dump($domElement->ownerDocument->saveXML($domElement));
-            $domElement->parentNode->removeChild($domElement);
-        }
+        foreach ($nodeList as $domElement) $domElement->parentNode->removeChild($domElement);
         if (count($nodeList)) $this->_driver->save();
         return $this->_NodesToArray($nodeList);
     }

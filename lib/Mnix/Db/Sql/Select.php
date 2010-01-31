@@ -7,13 +7,14 @@
  * @version 2009-07-25
  * @since 2008-10-01
  */
+namespace Mnix\Db\Sql;
 /**
  * Представляет объектно-ориентированный интерфейс создания SELECT-запросов
  *
  * @category Mulanix
  * @package Mnix_Db
  */
-class Mnix_Db_Select extends Mnix_Db_Criterion
+class Select extends \Mnix\Db\Sql\Criterion
 {
 	/**
      * Добавление предложения FROM

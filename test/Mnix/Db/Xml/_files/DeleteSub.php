@@ -10,7 +10,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/E
 require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Core.php';
 require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db.php';
 require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db/Base.php';
-//require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db/iSelect.php';
+require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db/iDelete.php';
 require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db/Xml/Base.php';
 require_once dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/lib/Mnix/Db/Xml/Delete.php';
 require_once dirname(dirname(__DIR__)) . '/Driver/_files/XmlSub.php';

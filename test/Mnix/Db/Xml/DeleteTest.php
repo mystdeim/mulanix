@@ -6,11 +6,9 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-
 require_once '_files/DeleteSub.php';
-
-/**
- * @category Mulanix
+/*
+ * Mulanix Framework
  */
 class Mnix_Db_Xml_DeleteTest extends PHPUnit_Framework_TestCase
 {
