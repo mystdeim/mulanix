@@ -19,6 +19,7 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
      */
     protected $_tables = array();
     protected $_join = null;
+    protected $_many = null;
     /**
      * Указание таблицы
      *
@@ -35,14 +36,17 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
                     foreach ($column as $key => $val) $columns[$val] = null;
                 } else $columns = $column;
             }
+            $this->_tables[$table]['columns'] = $columns;
+        } else {
+           if (!isset($this->_tables[$table])) $this->_tables[$table] = array();
         }
-        $this->_tables[$table]['columns'] = $columns;
         
         return $this;
     }
     public function where($condition, $data = null)
     {
         $this->_where = $this->_placeHolder($condition, $data);
+        //var_dump($this->_where);
         return $this;
     }
     /**
@@ -66,6 +70,29 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
 
         return $this;
     }
+    protected function _sqlParser($str)
+    {
+        $items = explode(' ', $str);
+
+        $flag = true;
+        $i = 2;
+        foreach ($items as $item) {
+            if ((strpos($item, '@') === 0) && (strpos($item, '.') !== false)) {
+                $tableField = explode('.', $item);
+                if ($i) {
+                    if ($flag) {
+                        $table = substr($tableField[0], 1);
+                        $field = $tableField[1];
+                        $flag = false;
+                    } else {
+                        $this->_many[$table][substr($tableField[0], 1)] = array($field => $tableField[1]);
+                        $i--;
+                        $flag = true;
+                    }
+                }
+            }
+        }
+    }
     /**
      * Выполнение запроса
      *
@@ -83,17 +110,14 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
                 if (count($this->_tables) === 1) {
                     $tableValue['query'] = '/root/' . $tableName . '/item[' . $this->_where . ']';
                 } else {
-
+                    $this->_sqlParser($this->_where);
                 }
 
-            //Если нет, берерём все столбцы
-            } else {
-                $tableValue['query'] = '/root/' . $tableName . '/item';
-            }
+            } 
         }
         unset($tableValue);
-
         foreach ($this->_tables as $tableName => $tableValue) {
+            if (!isset($tableValue['query'])) $tableValue['query'] = '/root/' . $tableName . '/item';
             $AllTableResult[$tableName] = $this->_NodesToArray($this->_driver->query($tableValue['query']));
         }
 
@@ -103,6 +127,40 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
                 $result[][key($AllTableResult)] = $value;
             }
         } else {
+
+            if (isset($this->_many)) {
+
+                //Лямда-функция, которая ищет соответсвие в массиве
+                $find = function($arr, $needle) {
+                    foreach($arr as $temp) {
+                        if ($temp[key($needle)] === current($needle)) return $temp;
+                    }
+                    return false;
+                };
+
+
+                foreach ($AllTableResult[ key($this->_many) ] as $item) {
+                    reset($this->_many[key($this->_many)]);
+                    $tableA = key($this->_many[key($this->_many)]);
+                    $fkA = key(current($this->_many[key($this->_many)]));
+                    $idA = current(current($this->_many[key($this->_many)]));
+                    $testA = $find($AllTableResult[$tableA], array($idA => $item[$fkA]));
+                    next($this->_many[key($this->_many)]);
+                    $tableB = key($this->_many[key($this->_many)]);
+                    $fkA = key(current($this->_many[key($this->_many)]));
+                    $idA = current(current($this->_many[key($this->_many)]));
+                    $testB = $find($AllTableResult[$tableB], array($idA => $item[$fkA]));
+
+                    if ($testA && $testB) {
+                        $arr[key($this->_many)] = $item;
+                        $arr[$tableA] = $testA;
+                        $arr[$tableB] = $testB;
+                        $result[] = $arr;
+                    }
+                }
+
+            }
+
             if (isset($this->_join)) {
 
                 //Обходим джойны
@@ -131,6 +189,7 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
             }
         }
 //var_dump($result);
+        $resultFinish =array();
 
         foreach ($result as $resultValue) { 
             $valueItem = array();

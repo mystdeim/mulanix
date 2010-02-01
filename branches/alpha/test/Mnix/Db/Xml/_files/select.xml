@@ -13,7 +13,19 @@
     <item id="4" table1_id="2" attr22="c4"/>
   </table2>
   <tableA>
-    <item id="1" attrA1="A1" attrA2="A2"/>
-    <item id="2" attrA1="A2" attrA2="A2"/>
+    <item id="1" attrA1="A11" attrA2="A12"/>
+    <item id="2" attrA1="A21" attrA2="A22"/>
+    <item id="3" attrA1="A31" attrA2="A32"/>
   </tableA>
+  <tableB>
+    <item id="1" attrA1="B11" attrA2="B12"/>
+    <item id="2" attrA1="B21" attrA2="B22"/>
+    <item id="3" attrA1="B31" attrA2="B32"/>
+  </tableB>
+  <tableA2B>
+    <item id_A="1" id_B="1"/>
+    <item id_A="1" id_B="2"/>
+    <item id_A="1" id_B="3"/>
+    <item id_A="2" id_B="3"/>
+  </tableA2B>
 </root>
