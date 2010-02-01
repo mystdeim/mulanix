@@ -40,6 +40,23 @@ class Mnix_Db_Xml_SelectTest extends PHPUnit_Framework_TestCase
         $this->_driver = new \Mnix\Db\Driver\XmlSub(array('file'=>'system.xml'));
         $this->_driver->_file = self::$_fileXml;
     }
+    public function testSqlParser()
+    {
+        $select = new Mnix\Db\Xml\SelectSub($this->_driver);      
+        $select->_sqlParser('@tableA2B.id_A = @tableA.id and @tableA2B.id_B = @tableB.id');
+        $many = array(
+            'tableA2B' => array(
+                'tableA' => array(
+                    'id_A' => 'id'
+                ),
+                'tableB' => array(
+                    'id_B' => 'id'
+                )
+            )
+        );
+        $this->assertEquals($many, $select->_many);
+
+    }
     public function testConstruct()
     {
         $this->assertEquals('Mnix\Db\Driver\XmlSub', get_class($this->_driver));
@@ -163,6 +180,38 @@ class Mnix_Db_Xml_SelectTest extends PHPUnit_Framework_TestCase
                 'id'       => 4,
                 'attr22'  => 'c4',
                 'a.attr2' => 'b2'
+            )
+        );
+        $this->assertEquals($result, $expectedResult);
+    }
+    public function testMany()
+    {
+        $select = new Mnix\Db\Xml\SelectSub($this->_driver);
+        $result = $select->table('tableA', array('id'=>'A.id'))
+                         ->table('tableA2B')
+                         ->table('tableB', array('id'=>'B.id'))
+                         ->where('?c = ?c and ?c = ?c', array(
+                             'tableA2B.id_A', 'tableA.id',
+                             'tableA2B.id_B', 'tableB.id',
+                         ))
+                         ->execute();
+        //var_dump($result);
+        $expectedResult = array(
+            array(
+                'A.id'      => 1,
+                'B.id'      => 1
+            ),
+            array(
+                'A.id'      => 1,
+                'B.id'      => 2
+            ),
+            array(
+                'A.id'      => 1,
+                'B.id'      => 3
+            ),
+            array(
+                'A.id'      => 2,
+                'B.id'      => 3
             )
         );
         $this->assertEquals($result, $expectedResult);

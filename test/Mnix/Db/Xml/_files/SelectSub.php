@@ -24,24 +24,19 @@ class SelectSub extends Select
     {
         return $this->_load();
     }
-    /**
-     * __get
-     *
-     * @param string $name
-     * @return mixed
-     */
+
     public function  __get($name)
     {
         return $this->$name;
     }
-    /**
-     * __set
-     *
-     * @param string $name
-     * @param mixed $value
-     */
+
     public function  __set($name,  $value)
     {
         $this->$name = $value;
+    }
+
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array(array($this, $name), $arguments);
     }
 }
