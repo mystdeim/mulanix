@@ -45,6 +45,16 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
         $this->_where = $this->_placeHolder($condition, $data);
         return $this;
     }
+    /**
+     * Join
+     *
+     * Работает как LEFT JOIN
+     *
+     * @param <type> $table
+     * @param <type> $condition
+     * @param <type> $column
+     * @return <type>
+     */
     public function join($table, $condition, $column = null)
     {
         $this->_join[key($table)] = array(
@@ -87,50 +97,47 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
             $AllTableResult[$tableName] = $this->_NodesToArray($this->_driver->query($tableValue['query']));
         }
 
+        $result = array();
         if (count($this->_tables) === 1) {
-            //var_dump(current($AllTableResult));
             foreach (current($AllTableResult) as $value) {
                 $result[][key($AllTableResult)] = $value;
             }
         } else {
             if (isset($this->_join)) {
 
-            }
-        }
+                //Обходим джойны
+                foreach ($this->_join as $nameJoinTable => $params) {
 
+                    //Обходим результаты главной таблицы
+                    foreach ($AllTableResult[ $params['table'] ] as $item) {
 
-        /*foreach ($this->_tables as $tableName => $tableValue) {
-            $tableResult = $this->_NodesToArray($this->_driver->query($tableValue['query']));
-            //Если существуют столбцы, то смотрим их
-            if (isset($tableValue['columns'])) {
-                //Если * то пишем всё
-                if (array_key_exists('*', $tableValue['columns'])) $result = array_merge($tableResult);
-                else {
-                    //Обходим каждую строчку результата
-                    foreach($tableResult as $itemName => $itemValue) {
-                        //Обходим каждый столбец
-                        foreach ($itemValue as $attrName => $attrValue) {
-                            // и выбираем нужные столбцы
-                            if (array_key_exists($attrName, $tableValue['columns'])) {
-                                //Учитываем алиасы столбцов
-                                if (!isset($tableValue['columns'][$attrName])) $item[$attrName] = $attrValue;
-                                else $item[$tableValue['columns'][$attrName]] = $attrValue;
+                        //Флаг была ли запись
+                        $flag = true;
+//var_dump($item);
+                        //Обходим результаты присоединяемой таблицы
+                        foreach ($AllTableResult[ $nameJoinTable ] as $joinItem) {
+                            if ($joinItem[ key($params['on']) ] === $item[ current($params['on']) ]) {
+                                $i = count($result);
+                                $result[$i][ $params['table'] ] = $item;
+                                $result[$i][ $nameJoinTable   ] = $joinItem;
+                                $flag = false;
                             }
                         }
-                        $result[] = $item;
+                        //var_dump($item);
+                        if ($flag) $result[][ $params['table'] ] = $item;
                     }
+
                 }
             }
-        }*/
-
-        //var_dump($result);
+        }
+//var_dump($result);
 
         foreach ($result as $resultValue) { 
             $valueItem = array();
 
             //Обходим таблицы
             foreach ($resultValue as $tableName => $tableValue) {
-
+                
                 //Если существуют столбцы, то смотрим их
                 if (isset($this->_tables[$tableName]['columns'])) {
 
@@ -139,6 +146,7 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
                         $valueItem = array_merge($valueItem, $tableValue);
                     }
                     else {
+                        $arr = array();
                         foreach($this->_tables[$tableName]['columns'] as $column => $alias) {
                             if (isset($alias)) $arr[$alias] = $tableValue[$column];
                             else $arr[$column] = $tableValue[$column];
@@ -147,9 +155,8 @@ class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
                     }
                 }
             }
-            $resultFinish[] = $valueItem;
+            if (count($valueItem)) $resultFinish[] = $valueItem;
         }
-
         return $resultFinish;
     }
 }
