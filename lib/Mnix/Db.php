@@ -12,31 +12,24 @@ namespace Mnix;
 /**
  * Абстракция базы данных
  *
- * Пока поддерживается только MySql, больше пока и не требуется.
- * Архитектура - Multiton pattern, в $_instance лежат объекты, соотвествующие базам данных
+ * Архитектура - Registry pattern, в $_instance лежат объекты, соотвествующие базам данных
  *
  * @category Mulanix
  */
 class Db
 {
     /**
-     * Тип базы данных
-     *
-     * @var string
-     */
-    protected $_type;
-    /**
-     * Объект драйвера базы данных
-     *
-     * @var object(driver_db)
-     */
-    protected $_driver;
-    /**
      * Массив, содержащий подключения
      *
      * @var array
      */
     static protected $_instances = null;
+    /**
+     * Драйвер
+     *
+     * @var object(Mnix\Db\Driver)
+     */
+    protected $_driver;
     /**
      * Установка соединения с базой данных
      *
@@ -52,27 +45,24 @@ class Db
         if (isset(self::$_instances[$nameOfBase])) return self::$_instances[$nameOfBase];
         else {
 
-            if (!defined('Mnix\Db\\' . $nameOfBase . '\DBMS')) {
-                throw new Exception('Такой базы данных не существует в config.xml: ' . $nameOfBase);
+            if (!defined('\Mnix\Db\\' . $nameOfBase . '\DBMS')) {
+                throw new Exception('Такой базы данных не существует: ' . $nameOfBase);
             }
 
-            $dbmsOfBase = constant('Mnix\Db\\' . $nameOfBase . '\DBMS');
-            switch ($paramObj['dbms' ] = $dbmsOfBase) {
-                case 'mysql':
-                    $paramObj['login'] = constant('Mnix\Db\\' . $nameOfBase . '\LOGIN');
-                    $paramObj['pass' ] = constant('Mnix\Db\\' . $nameOfBase . '\PASS' );
-                    $paramObj['host' ] = constant('Mnix\Db\\' . $nameOfBase . '\HOST' );
-                    $paramObj['base' ] = constant('Mnix\Db\\' . $nameOfBase . '\BASE' );
-                    break;
-                case 'xml':
-                    $paramObj['file'] = constant('Mnix\Db\\' . $nameOfBase . '\FILE');
-                    break;
-                default:
-                    throw new Exception('Не существует такого типа базы данных: ' . $dbmsOfBase);
-                    break;
+            $dsn = constant('\Mnix\Db\\' . $nameOfBase . '\DBMS') . ':';
+            
+            if (constant('\Mnix\Db\\' . $nameOfBase . '\DBMS') === 'sqlite') {
+                if (constant('\Mnix\Db\\' . $nameOfBase . '\BASE') !== ':memory:') $dsn .= \Mnix\Path\DB . '/';
+                $dsn .= constant('\Mnix\Db\\' . $nameOfBase . '\BASE');
+                $user = null;
+                $pass = null;
+            } else {
+                $dsn .= 'dbname='.constant('\Mnix\Db\\' . $nameOfBase . '\BASE' ).';host='.constant('\Mnix\Db\\'.$nameOfBase.'\HOST' );
+                $user = constant('\Mnix\Db\\' . $nameOfBase . '\USER');
+                $pass = constant('\Mnix\Db\\' . $nameOfBase . '\PASS' );
             }
         }
-        return self::$_instances[$nameOfBase] = new static($paramObj);
+        return self::$_instances[$nameOfBase] = new static($dsn, $user, $pass);
     }
     /**
      * Защищенный конструктор
@@ -80,40 +70,31 @@ class Db
      * @param array $param
      * @test ok
      */
-    protected function __construct($param)
+    protected function __construct($dsn, $user, $pass)
     {
-        if (in_array($param['dbms'], array('mysql')))  $this->_type = 'Sql';
-        else $this->_type = 'Xml';
-
-        $driver = '\Mnix\Db\Driver\\' . $param['dbms'];
-        $this->_driver = new $driver($param);
+        $this->_driver = new Db\Driver($dsn, $user, $pass);
     }
     /**
-     * @return object(Mnix\Db\Sql\Select)|object(Mnix\Db\Xml\Select)
+     * @return object(Mnix\Db\Select)
      */
     public function select()
     {
-        return $this->_queryObject('Select');
+        return new Db\Select($this);
     }
     public function update()
     {
-        return $this->_queryObject('Update');
+        return  new Db\Update($this);
     }
     public function insert()
     {
-        return $this->_queryObject('Insert');
+        return new Db\Insert($this);
     }
     public function delete()
     {
-        return $this->_queryObject('Delete');
+        return new Db\Delete($this);
     }
     public function base()
     {
-        return $this->_queryObject('Base');
-    }
-    protected function _queryObject($what)
-    {
-        $name = '\Mnix\Db\\' . $this->_type . '\\' . $what;
-        return new $name($this->_driver);
+        return new Db\Base($this);
     }
 }
