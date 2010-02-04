@@ -9,18 +9,17 @@ namespace Mnix\Db;
  *
  * @author deim
  */
-abstract class Base
+abstract class Common
 {
     /**
      * Драйвер базы данных
      *
-     * @var Mnix\Db\Driver\Driver
      */
     protected $_driver;
     /**
      * Конструктор
      *
-     * @param <type> $driver
+     * @param $driver Драйвер базы данных
      */
     public function __construct($driver)
     {

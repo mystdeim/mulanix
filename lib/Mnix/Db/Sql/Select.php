@@ -14,7 +14,7 @@ namespace Mnix\Db\Sql;
  * @category Mulanix
  * @package Mnix_Db
  */
-class Select extends \Mnix\Db\Sql\Criterion
+class Select extends \Mnix\Db\Sql\Criteria
 {
 	/**
      * Добавление предложения FROM

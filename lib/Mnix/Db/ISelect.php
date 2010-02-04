@@ -9,7 +9,7 @@ namespace Mnix\Db;
  *
  * @author deim
  */
-interface  iSelect
+interface  ISelect
 {
     public function table($table, $column = null);
 }

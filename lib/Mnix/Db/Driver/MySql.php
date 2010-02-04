@@ -12,34 +12,8 @@ namespace Mnix\Db\Driver;
  *
  * @category Mulanix
  */
-class MySql {
-    /**
-     * Указатель coединения c cерверoм
-     *
-     * @var object(mysqli)
-     */
-    protected $_con;
-    /**
-     * Коструктор
-     *
-     * В параметре передаёться объект Mnix_Db
-     *
-     * @param oblect(Mnix_Db) $obj
-     */
-    public function __construct($obj) {
-        /*$param = $obj->getParam();
-        if (!is_resource($obj->getCon())) {
-            $this->_con = mysqli_connect($param['host'], $param['login'], $param['pass'], $param['base']);
-
-            //Кодировка поумолчанию utf8
-            mysqli_query($this->_con, "SET NAMES 'utf8'");
-
-            //Время по гринвичу
-            mysqli_query($this->_con, "SET time_zone = '+00:00'");
-
-            $obj->putCon($this->_con);
-        } else $this->_con = $obj->getCon();*/
-    }
+class MySql extends Sql
+{
     /**
      * Выполнение запросса к БД
      *
@@ -47,6 +21,7 @@ class MySql {
      * @return array
      */
     public function execute($sql) {
+        if (!isset($this->_con)) $this->_setCon();
         $result = mysqli_query($this->_con, $sql);
         if ($result && $result !== TRUE) {
             for($data=array(); $row = mysqli_fetch_assoc($result); $data[] = $row);
@@ -59,7 +34,58 @@ class MySql {
      *
      * @return string
      */
-    public function getError() {
+    /*public function getError() {
         return mysqli_error($this->_con);
+    }*/
+    /**
+     * Экранирование
+     *
+     * Пример:
+     * <code>
+     * array(
+     *     't' => '`table`',
+     *     'c' => '`column`',
+     *     'i' => (int)5,
+     *     'f' => (float)45.98,
+     *     'n' => 'text',
+     *     's' => "'".mysqli_escape_string('text')."'"
+     * );
+     * echo $this->_shielding('table', 't'); //`table`
+     * </code>
+     *
+     * @param string $value
+     * @param string $mode
+     * @return mixed
+     */
+    protected function _shielding($value, $mode)
+    {
+        switch ($mode) {
+            //Экранирование таблицы, возможно составное имя
+            case 't':
+                $dot = strpos($value, '.');
+                if ($dot) return '`' . mysqli_escape_string($this->_con, substr($value, 0, $dot)) .
+                    '`.`' . mysqli_escape_string($this->_con, substr($value, ++$dot)) . '`';
+                else return '`'.mysqli_escape_string($this->_con, $value).'`';
+            case 'i':
+                return (int)$value;
+            case 'f':
+                return (float)$value;
+            case 'n':
+                return $value;
+            case 's':
+                //return "'".mysqli_escape_string($this->_con, $value)."'";
+                //TODO: тут нужно защитить
+                return $value;
+        }
+    }
+    /**
+     * Установка соединения с базой
+     */
+    protected function _setCon()
+    {
+        $this->_con = mysqli_connect($this->_param['host'],
+                                     $this->_param['login'],
+                                     $this->_param['pass'],
+                                     $this->_param['base']);
     }
 }

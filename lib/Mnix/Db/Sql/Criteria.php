@@ -17,7 +17,7 @@ namespace Mnix\Db\Sql;
  * @category Mulanix
  * @package Mnix_Db
  */
-abstract class Criterion {
+abstract class Criteria {
     /**
      * Объект Mnix-Db
      *

@@ -9,14 +9,14 @@
         </cache>
         <db>
             <base>
-                <type>mysql</type>
+                <dbms>mysql</dbms>
                 <login>testuser</login>
                 <pass>12345</pass>
                 <host>localhost</host>
                 <base>cmf1</base>
             </base>
             <system>
-                <type>xml</type>
+                <dbms>xml</dbms>
                 <file>system.xml</file>
             </system>
         </db>
