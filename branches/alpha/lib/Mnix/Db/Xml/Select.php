@@ -10,7 +10,7 @@ namespace Mnix\Db\Xml;
 /**
  * @category Mulanix
  */
-class Select extends \Mnix\Db\Xml\Base implements \Mnix\Db\iSelect
+class Select extends \Mnix\Db\Xml\Common implements \Mnix\Db\ISelect
 {
     /**
      * Таблицы

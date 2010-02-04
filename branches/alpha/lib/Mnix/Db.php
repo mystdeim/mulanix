@@ -40,17 +40,24 @@ class Db
     /**
      * Установка соединения с базой данных
      *
-     * @param array|string|null
+     * @param string|null
      * @return object(Mnix\Db)
      */
     public static function connect($nameOfBase = null)
     {
+        //Если название базы не было передано в параметре, то берём из Mnix\Core\BASE
         if (!isset($nameOfBase)) $nameOfBase = constant('Mnix\Core\BASE');
-        if (isset(self::$_instances[$nameOfBase])) {
-            return self::$_instances[$nameOfBase];
-        } else {
-            $typeOfBase = constant('Mnix\Db\\' . $nameOfBase . '\TYPE');
-            switch ($typeOfBase) {
+
+        //Если существует уже существует подключение в реестре, то возвращаем его
+        if (isset(self::$_instances[$nameOfBase])) return self::$_instances[$nameOfBase];
+        else {
+
+            if (!defined('Mnix\Db\\' . $nameOfBase . '\DBMS')) {
+                throw new Exception('Такой базы данных не существует в config.xml: ' . $nameOfBase);
+            }
+
+            $dbmsOfBase = constant('Mnix\Db\\' . $nameOfBase . '\DBMS');
+            switch ($paramObj['dbms' ] = $dbmsOfBase) {
                 case 'mysql':
                     $paramObj['login'] = constant('Mnix\Db\\' . $nameOfBase . '\LOGIN');
                     $paramObj['pass' ] = constant('Mnix\Db\\' . $nameOfBase . '\PASS' );
@@ -61,14 +68,11 @@ class Db
                     $paramObj['file'] = constant('Mnix\Db\\' . $nameOfBase . '\FILE');
                     break;
                 default:
-                    throw new Exception('Не существует такого типа базы данных: ' . $typeOfBase);
+                    throw new Exception('Не существует такого типа базы данных: ' . $dbmsOfBase);
                     break;
             }
-            $paramObj['type' ] = $typeOfBase;
         }
-        self::$_instances[$nameOfBase] = new static($paramObj);
-        Core::log('s', 'Создано подключение к базе данных: ' . $nameOfBase);
-        return self::$_instances[$nameOfBase];
+        return self::$_instances[$nameOfBase] = new static($paramObj);
     }
     /**
      * Защищенный конструктор
@@ -78,56 +82,38 @@ class Db
      */
     protected function __construct($param)
     {
-        $this->_type = $param['type'];
-        $driver = '\Mnix\Db\Driver\\' . $param['type'];
+        if (in_array($param['dbms'], array('mysql')))  $this->_type = 'Sql';
+        else $this->_type = 'Xml';
+
+        $driver = '\Mnix\Db\Driver\\' . $param['dbms'];
         $this->_driver = new $driver($param);
     }
     /**
-     * Возвращаем объект Mnix_Db_Select
-     *
-     * @return object(Mnix_Db_Select)
+     * @return object(Mnix\Db\Sql\Select)|object(Mnix\Db\Xml\Select)
      */
     public function select()
     {
-        $this->_SUID('select');
-        return new Mnix_Db_Select($this);
-    }
-    protected function _SUID($what)
-    {
-        $name = '\Mnix\Db\\' . $what;
+        return $this->_queryObject('Select');
     }
     public function update()
     {
-        return new Mnix_Db_Update($this);
+        return $this->_queryObject('Update');
     }
     public function insert()
     {
-        return new Mnix_Db_Insert($this);
+        return $this->_queryObject('Insert');
     }
     public function delete()
     {
-        return new Mnix_Db_Delete($this);
+        return $this->_queryObject('Delete');
     }
-    /**
-     * Запрос к БД
-     *
-     * Если $data не пусто, то сработает _placeHolder
-     *
-     * @param string $sql
-     * @param mixed $data
-     * @return array
-     */
-    public function query($sql, $data = null)
+    public function base()
     {
-        /*$this->_setDb();
-        if (isset($data)) $sql = $this->_placeHolder($sql, $data);
-        Mnix_Core::putTime('db');
-        $value = $this->_db->execute($sql);
-        Mnix_Core::putMessage(__CLASS__, 'sys', 'Query: ' . $sql . ' for ' . Mnix_Core::putTime('db', true));
-        Mnix_Core::putCount('db_q');
-        $err = $this->_db->getError();
-        if (!empty($err)) Mnix_Core::putMessage(__CLASS__, 'err', 'Error ' . $err);
-        return $value;*/
-        
+        return $this->_queryObject('Base');
+    }
+    protected function _queryObject($what)
+    {
+        $name = '\Mnix\Db\\' . $this->_type . '\\' . $what;
+        return new $name($this->_driver);
     }
 }
