@@ -7,7 +7,7 @@
  * @version 2009-07-22
  * @since 2008-10-01
  */
-namespace Mnix\Db\Sql;
+namespace Mnix\Db;
 /**
  * Формирование SQL-запроса
  *
@@ -190,7 +190,7 @@ abstract class Criteria {
      *
      * @return array
      */
-    abstract protected function _build();
+    //abstract protected function _build();
     /**
      * Хелпер к Собирателю SQL
      *

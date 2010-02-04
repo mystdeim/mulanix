@@ -10,7 +10,7 @@
         <db>
             <base>
                 <dbms>mysql</dbms>
-                <login>testuser</login>
+                <user>testuser</user>
                 <pass>12345</pass>
                 <host>localhost</host>
                 <base>cmf1</base>
