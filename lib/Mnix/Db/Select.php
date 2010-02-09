@@ -14,9 +14,11 @@ namespace Mnix\Db;
  * @category Mulanix
  * @package Mnix_Db
  */
-class Select extends \Mnix\Db\Criteria
+class Select extends Criteria
 {
-	/**
+    protected $_column = array();
+    protected $_order;
+    /**
      * Добавление предложения FROM
      *
      * Указываем таблицу:
@@ -38,18 +40,17 @@ class Select extends \Mnix\Db\Criteria
      *
      * Указываем таблицу и псевдонимы столбцов:
      * <code>
-     * //SELECT table.id AS i, table.text AS tx FROM table
+     * //SELECT table.id AS "i", table.text AS "tx" FROM table
      * $db->select()
      *    ->from('table',
      *           array('id' => 'i', 'text' => 'tx'))
      *    ->query();
      * </code>
      *
-     * Указываем несколько таблиц + в первой уточняем столбцы:
+     * Указываем несколько таблиц
      * <code>
-     * //SELECT table.id AS 'i', table.text AS 'tx' FROM table, table2
+     * //SELECT table.id AS "i", table.text AS "tx" FROM table, table2
      * $db->select()
-     *    ->from('table')
      *    ->from('table2')
      *    ->from('table', array('id' => 'i', 'text' => 'tx)
      *    ->query();
@@ -57,12 +58,13 @@ class Select extends \Mnix\Db\Criteria
      *
      * @param mixed $table таблица
      * @param mixed $columns столбцы
-     * @return object(Mnix_Db_Select)
+     * @return object(Mnix\Db\Select)
      */
-    public function from($table, $column = null)
+    public function table($table, $column = null)
     {
-        $this->_table[$table]['column'] = $this->_helpColumn($column);
-		return $this;
+        $this->_table[$table] = $table;
+        $this->_helpColumn($table, $column);
+        return $this;
     }
     /**
      * Добавление предложения FROM LEFT JOIN
@@ -82,112 +84,38 @@ class Select extends \Mnix\Db\Criteria
      */
     public function joinLeft($table, $on, $column = null)
     {
-        //var_dump($table);
-        $this->_table[current($table)]['join'] = array(key($table) =>
-            array(
-                'on' => $on,
-                'column' => $this->_helpColumn($column)
-            )
-        );
+        if (isset($this->_table[current($table)])) {
+            $this->_table[current($table)] .= ' LEFT JOIN '.key($table).' ON '.key($table).'.'.key($on).' = '.current($table).'.'.current($on);
+        }
+        $this->_helpColumn(key($table), $column);
         return $this;
     }
     /**
-     * @see Mnix_Db_Criterion
+     * Сортировки
+     *
+     * @param mixed $column
+     * @param mixed $desc
+     * @return object(Mnix\Db\Select)
      */
-    protected function _build()
-    {
-        $build['sql'] = 'SELECT ';
-        $build['data'] = array();
-        //FROM
-        foreach ($this->_table as $table => $value) {
-            //Column
-            if (isset($value['column'])) {
-                foreach ($value['column'] as $column => $alias) {
-                    if (isset($alias)) {
-                        $column_arr[]['sql'] = '?t AS ?s';
-                        $column_arr[count($column_arr)-1]['data'][] = $table.'.'.$column;
-                        $column_arr[count($column_arr)-1]['data'][] = $alias;
-                    } else {
-                        if ($column === '*') {
-                            $column_arr[]['sql'] = '?t.*';
-                            $column_arr[count($column_arr)-1]['data'][] = $table;
-                        } else {
-                            $column_arr[]['sql'] = '?t';
-                            $column_arr[count($column_arr)-1]['data'][] = $table.'.'.$column;
-                        }
-                    }
-                }
-            }
-            //Table
-            $table_arr[]['data'][] = $table;
-            if (isset($value['join'])) {
-                $join = $value['join'];
-                $jtable = key($join);
-                if (isset($value['join'][$jtable]['column'])) {
-                    foreach($value['join'][$jtable]['column'] as $column => $alias) {
-                        if (isset($alias)) {
-                            $column_arr[]['sql'] = '?t AS ?s';
-                            $column_arr[count($column_arr)-1]['data'][] = $jtable.'.'.$column;
-                            $column_arr[count($column_arr)-1]['data'][] = $alias;
-                        } else {
-                            $column_arr[]['sql'] = '?t';
-                            $column_arr[count($column_arr)-1]['data'][] = $jtable.'.'.$column;
-                        }
-                    }
-                }
-                $table_arr[count($table_arr)-1]['sql'] = '?t LEFT JOIN ?t ON ?t = ?t';
-                $table_arr[count($table_arr)-1]['data'][] = key($join);
-                $table_arr[count($table_arr)-1]['data'][] = $table . '.' .current($join[key($join)]['on']);
-                $table_arr[count($table_arr)-1]['data'][] = key($join) . '.' . key($join[key($join)]['on']);
-            } else {
-                $table_arr[count($table_arr)-1]['sql'] = '?t';
-            }
-        }
-        if (!isset($column_arr)) $column_arr = null;
-        $arr = $this->_helpBuild($column_arr);
-        $build['sql'] .= $arr['sql'];
-        $build['data'] = array_merge($build['data'], $arr['data']);
-        $arr = $this->_helpBuild($table_arr);
-        $build['sql'] .= ' FROM '. $arr['sql'];
-        $build['data'] = array_merge($build['data'], $arr['data']);
-        //WHERE
-        if ($this->_where) {
-            $arr = $this->_helpBuild($this->_where);
-            $sql = ' WHERE ' . $arr['sql'];
-            $build['data'] = array_merge($build['data'], $arr['data']);
-            $build['sql'] .= $sql;
-        }
-        //LIMIT
-        if (isset($this->_limit)) $build['sql'] .= $this->_limit;
-        return $build;
+    public function order($column, $desc = false) {
+        $this->_order = ' ORDER BY ' . $column;
+        if ($desc) $this->_order .= ' DESC';
+        return $this;
     }
-    /**
-     * Хелпер
-     *
-     * Приводит массив полей к стандартному виду:
-     * <code>
-     * array(
-     *     'field1' => 'alias1'
-     *     'field2' => 'alias2')
-     * </code>
-     * Если нет аливсов, то:
-     * <code>
-     * array(
-     *     'field1' => 'null'
-     *     'field2' => 'null')
-     * </code>
-     *
-     * @param array $column
-     * @return array
-     */
-    protected function _helpColumn($column)
+    protected function _helpColumn($table, $column)
     {
         if (isset($column)) {
-            if (!is_array($column)) $column = array($column);
-            if (is_int(key($column))) {
-                foreach ($column as $key => $val) $columns[$val] = null;
-            } else $columns = $column;
-        } else $columns = null;
-        return $columns;
+            if (is_array($column)) {
+                foreach ($column as $name => $alias) {
+                    if (is_int($name)) $temp = $alias;
+                    else $temp = $temp = $name . ' AS "'. $alias . '"';
+                    $this->_column[] = $table . '.' . $temp;
+                }
+            } else $this->_column[] = $table . '.' . $column;
+        }
+    }
+    protected function _queryBuilder()
+    {
+        return 'SELECT ' . implode(', ', $this->_column) . ' FROM ' . implode(', ', $this->_table);
     }
 }
