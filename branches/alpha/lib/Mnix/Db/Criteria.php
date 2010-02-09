@@ -1,11 +1,6 @@
 <?php
 /**
  * Mulanix Framework
- *
- * @category Mulanix
- * @package Mnix_Db
- * @version 2009-07-22
- * @since 2008-10-01
  */
 namespace Mnix\Db;
 /**
@@ -13,23 +8,21 @@ namespace Mnix\Db;
  *
  * Абстракный класс, содержащий некоторые повторяющиеся методы: where(), limit() и тп.
  * Представляет объектно-ориентированный интерфейс создания SQl-запросов.
- *
- * @category Mulanix
- * @package Mnix_Db
  */
 abstract class Criteria {
     /**
-     * Объект Mnix-Db
+     * Объект Mnix\Db\Driver
      *
-     * @var object(Mnix_Db)
+     * @var object(Mnix\Db\Driver)
      */
-    protected $_db;
+    protected $_pdo;
+    protected $_boundParams;
     /**
      * Массив условий where
      *
-     * @var array()
+     * @var string
      */
-    protected $_where = array();
+    protected $_where;
     /**
      * Строка с уловием лимита(строка вместо массива, для быстроты)
      *
@@ -39,97 +32,67 @@ abstract class Criteria {
     /**
      * Массив таблиц
      *
-     * Стуктура массива:
+     * Стуктура массива для класса \Mnix\Db\Select:
      * <code>
      * array(
-     *     0 => array(
-     *         'data' => array(
-     *             0 => 'data'
-     *          )
-     *         'sql' => 'sql'
-     *     )
+     *     'table0' => 'table0'
+     *     'table1' => 'table1'
      * )
      * </code>
+     * Для остальных классов:
+     * <code>
+     * array(
+     *     0 => 'table0'
+     *     1 => 'table1'
+     * )
+     * </code>
+     * 
      * @var array
      */
     protected $_table = array();
     /**
      * Конструктор
      *
-     * @param object(Mnix_Db) $obj
+     * @param object(Mnix\Db\Driver) $obj
      */
-    public function __construct($obj) {
-        $this->_db = $obj;
+    public function __construct($pdo) {
+        $this->_pdo = $pdo;
     }
     /**
      * Указываем таблицу
      *
      * @param mixed $table
-     * @return object(Mnix_Db_Criterion)
+     * @return object(Mnix\Db\Criterion)
      */
     public function table($table) {
-        $this->_table = $this->shielding($table, 't').' ';
+        $this->_table[] = $table;
         return $this;
     }
-    /**
-     * Сортировки
-     *
-     * @param mixed $condition
-     * @param mixed $desc
-     * @return object(Mnix_Db_Criterion)
-     */
-    public function order($condition, $desc = FALSE) {
-        if (!is_array($condition)) {
-            $this->_orderHelper($condition, $desc);
-        } else {
-            foreach ($condition as $value) {
-                $mass = explode(' ', $value);
-                if (isset($mass[1])&& $mass[1] === 'DESC') $mass[1] = TRUE;
-                else $mass[1] = FALSE;
-                $this->_orderHelper($mass[0], $mass[1]);
-            }
-        }
+    public function bindValue($parameter, $value, $type = \PDO::PARAM_STR)
+    {
+        $this->_boundParams[$parameter] = array(
+            'value' => $value,
+            'type' => $type
+        );
         return $this;
     }
     /**
      * Добавление предложения WHERE
      *
      * Примеры:
-     * 1. SELECT table.* FROM table WHERE field = 5
+     * 1. SELECT table.* FROM table WHERE id > 10
      * <code>
      * $db->select()
      *    ->from('table', '*')
-     *    ->where('?t = ?i', array('field', 5))
-     *    ->query();
-     * </code>
-     * 2. SELECT table.* FROM table WHERE field > 5 AND field2 = 'ыыыыы'
-     * <code>
-     * $db->select()
-     *    ->from('table', '*')
-     *    ->where('?t > ?i', array('field', 5))
-     *    ->where('?t = ?s', array('field2', 'ыыыыы'))
-     *    ->query();
+     *    ->where('id > 10')
+     *    ->execute();
      * </code>
      *
      * @param mixed $condition текстовое условие
-     * @param mixed $data данные
-     * @return object(Mnix_Db_Criterion)
+     * @return object(Mnix\Db\$this)
      */
-    public function where($condition, $data = null) {
-        if (!count($this->_where)) {
-            $this->_where[]['sql'] = $condition;
-            if (isset($data)) {
-                if (!is_array($data)) $this->_where[count($this->_where)-1]['data'][] = $data;
-                else $this->_where[count($this->_where)-1]['data'] = array_merge($data);
-            }
-        } else {
-            $this->_where[count($this->_where)-1]['sql'] .=' ?n '.$condition;
-            if (isset($data)) {
-                $this->_where[count($this->_where)-1]['data'][] = 'AND';
-                if (!is_array($data)) $this->_where[count($this->_where)-1]['data'][] = $data;
-                else $this->_where[count($this->_where)-1]['data'] = array_merge($this->_where[count($this->_where)-1]['data'], $data);
-            }
-        }
+    public function where($condition) {
+        $this->_where = ' WHERE ' . $condition;
         return $this;
     }
     /**
@@ -156,74 +119,26 @@ abstract class Criteria {
      * @return object(Mnix_Db_Criterion)
      */
     public function limit($first, $last = null) {
-        $this->_limit = ' LIMIT ' . (int)$first;
-        if (isset($last)) $this->_limit .= ', '.(int)$last;
+        $this->_limit = ' LIMIT ' . $first;
+        if (isset($last)) $this->_limit .= ', ' . $last;
         return $this;
     }
     /**
-     * Выполнение запроса через объект Mnix_Db
+     * Выполнение запроса
      *
-     * @return array()
+     * @return array
      */
-    public function query() {
-        $arr = $this->_build();
-        return $this->_db->query($arr['sql'], $arr['data']);
+    public function execute()
+    {
+        $statement = $this->_pdo->prepare($this->_queryBuilder());
+        foreach($this->_boundParams as $param => $val) {
+            $statement->bindValue($param, $val['value'], $val['type']);
+        }
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
     /**
      * Собиратель SQL
-     *
-     * Стуктура возвращаемого массива:
-     * <code>
-     * array(
-     *     0 => array(
-     *         'data' => array(
-     *             0 => 'data'
-     *          )
-     *         'sql' => 'sql'),
-     *     1 => array(
-     *         'data' => array(
-     *             0 => 'data'
-     *          )
-     *         'sql' => 'sql')
-     * )
-     * </code>
-     *
-     * @return array
      */
-    //abstract protected function _build();
-    /**
-     * Хелпер к Собирателю SQL
-     *
-     * На вход:
-     * <code>
-     * array(
-     *     0 => array(
-     *         'data' => 'table'
-     *         'sql'  => '?t'
-     *  )
-     * Стуктура возвращаемого массива:
-     * <code>
-     * array(
-     *     'data' => array(
-     *         0  => 'table'
-     *      )
-     *     'sql'  => '?t'
-     * )
-     * </code>
-     *
-     * @param array $arr
-     * @return array
-     */
-    protected function _helpBuild($arr) {
-        if (isset($arr)) {
-            $data = array();
-            foreach ($arr as $temp) {
-                $sql[] = $temp['sql'];
-                $data = array_merge($data, $temp['data']);
-            }
-            $build['sql'] = implode(', ', $sql);
-            $build['data'] = $data;
-            return $build;
-        } else return array('sql' => null, 'data' => array());
-    }
+    protected abstract function _queryBuilder();
 }

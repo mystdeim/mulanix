@@ -41,5 +41,9 @@ class Mnix_DriverTest extends PHPUnit_Extensions_Database_TestCase
     public function testConnect()
     {
         $this->assertEquals(1,1);
+             $sql = "SELECT * FROM person";
+     $statement = $this->getConnection()->getConnection()->query($sql);
+     $result = $statement->fetchAll();
+     var_dump($result);
     }
 }

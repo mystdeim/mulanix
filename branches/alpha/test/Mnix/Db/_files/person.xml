@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <person
+        id="1"
+        name="Peter"
+        surname="Mider"/>
+    <person
+        id="2"
+        name="Nageneril"
+        surname="Mudrapragram"/>
+    <person
+        id="3"
+        name="Strudomprassal"
+        surname="Vashapragram"/>
+</dataset>
