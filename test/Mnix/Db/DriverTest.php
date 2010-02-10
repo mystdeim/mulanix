@@ -2,6 +2,8 @@
 /**
  * Mulanix Framework
  */
+namespace Mnix\Db;
+
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Framework.php';
 
@@ -11,23 +13,25 @@ require_once '_files/DriverSub.php';
  *
  * @author deim
  */
-class Mnix_DriverTest extends PHPUnit_Extensions_Database_TestCase
+class DriverTest extends \PHPUnit_Extensions_Database_TestCase
 {
-    protected function getConnection()
+    public function  __construct()
     {
-        $this->connection = new Mnix\Db\DriverSub('sqlite::memory:');
-        return $this->createDefaultDBConnection($this->connection, 'sqlite');
-    }
-    protected function getDataSet()
-    {
+        $this->connection = new DriverSub('sqlite::memory:');
         $this->connection->query("
             CREATE TABLE person (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name VARCHAR(255),
-                surname VARCHAR(255),
-                age INTEGER
+                surname VARCHAR(255)
             );
         ");
+    }
+    protected function getConnection()
+    {
+        return $this->createDefaultDBConnection($this->connection, 'sqlite');
+    }
+    protected function getDataSet()
+    {
         return $this->createFlatXMLDataSet(__DIR__ . '/_files/person.xml');
     }
     public function tearDown()
@@ -36,14 +40,10 @@ class Mnix_DriverTest extends PHPUnit_Extensions_Database_TestCase
     }
     public function testConstruct()
     {
-        $this->assertEquals('Mnix\Db\DriverSub', get_class($this->connection));
+        $this->assertEquals('Mnix\Db\DriverSub', get_class($this->getConnection()->getConnection()));
     }
-    public function testConnect()
+    /*public function testConnect()
     {
         $this->assertEquals(1,1);
-             $sql = "SELECT * FROM person";
-     $statement = $this->getConnection()->getConnection()->query($sql);
-     $result = $statement->fetchAll();
-     var_dump($result);
-    }
+    }*/
 }

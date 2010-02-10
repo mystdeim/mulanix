@@ -27,4 +27,8 @@ class SelectSub extends Select
     {
         return call_user_func_array(array($this, $name), $arguments);
     }*/
+    public function queryBuilder()
+    {
+        return $this->_queryBuilder();
+    }
 }

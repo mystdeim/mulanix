@@ -2,6 +2,8 @@
 /**
  * Mulanix Framework
  */
+namespace Mnix\Db;
+
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Framework.php';
 
@@ -11,7 +13,7 @@ require_once '_files/CriteriaSub.php';
  *
  * @author deim
  */
-class CriteriaTest extends PHPUnit_Extensions_Database_TestCase
+class CriteriaTest extends \PHPUnit_Extensions_Database_TestCase
 {
     public function __construct()
     {
@@ -49,15 +51,15 @@ class CriteriaTest extends PHPUnit_Extensions_Database_TestCase
     public function testBind()
     {
         $criteria = new \Mnix\Db\CriteriaSub($this->getConnection()->getConnection());
-        $criteria->bindValue(':param0', 'value0', PDO::PARAM_INT)
-                        ->bindValue(':param1', 'value1', PDO::PARAM_STR);
+        $criteria->bindValue(':param0', 'value0', \PDO::PARAM_INT)
+                        ->bindValue(':param1', 'value1', \PDO::PARAM_STR);
         $expected = array(
             ':param0' => array(
                 'value' => 'value0',
-                'type'  => PDO::PARAM_INT),
+                'type'  => \PDO::PARAM_INT),
             ':param1' => array(
                 'value' => 'value1',
-                'type'  => PDO::PARAM_STR)
+                'type'  => \PDO::PARAM_STR)
         );
         $this->assertEquals($expected, $criteria->_boundParams);
     }
