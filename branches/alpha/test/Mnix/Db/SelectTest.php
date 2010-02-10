@@ -5,11 +5,13 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix\Db;
+
 require_once '_files/SelectSub.php';
 /**
  *
  */
-class Mnix_Db_SelectTest extends PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit_Framework_TestCase
 {
     protected $_select;
     protected function setUp()

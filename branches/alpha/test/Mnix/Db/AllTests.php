@@ -2,21 +2,27 @@
 /**
  * Mulanix Framework
  */
-require_once 'SqlTest.php';
-require_once 'MySqlTest.php';
+namespace Mnix\Db;
+
+require_once 'Driver/AllTests.php';
+require_once 'DriverTest.php';
+require_once 'CriteriaTest.php';
+require_once 'SelectTest.php';
 /**
  * Mulanix Framework
  *
  * @author deim
  */
-class Mnix_Db_Driver_AllTests
+class AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Mulanix - Db - Driver');
+        $suite = new \PHPUnit_Framework_TestSuite('Mulanix\Db');
 
-        $suite->addTestSuite('Mnix_Db_Driver_SqlTest');
-        $suite->addTestSuite('Mnix_Db_Driver_MySqlTest');
+        $suite->addTest(\Mnix\Db\Driver\AllTests::suite());
+        $suite->addTestSuite('\Mnix\Db\DriverTest');
+        $suite->addTestSuite('\Mnix\Db\CriteriaTest');
+        $suite->addTestSuite('\Mnix\Db\SelectTest');
 
         return $suite;
     }
