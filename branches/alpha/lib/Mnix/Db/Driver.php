@@ -15,5 +15,4 @@ class Driver extends \PDO
         parent::__construct($dsn, $username, $password, $driver_options);
         $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('Mnix\Db\Driver\Statement', array($this)));
     }
-
 }
