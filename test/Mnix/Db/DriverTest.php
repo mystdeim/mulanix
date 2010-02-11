@@ -34,16 +34,9 @@ class DriverTest extends \PHPUnit_Extensions_Database_TestCase
     {
         return $this->createFlatXMLDataSet(__DIR__ . '/_files/person.xml');
     }
-    public function tearDown()
-    {
-
-    }
     public function testConstruct()
     {
-        $this->assertEquals('Mnix\Db\DriverSub', get_class($this->getConnection()->getConnection()));
+        $driver = new DriverSub('sqlite::memory:');
+        $this->assertEquals('Mnix\Db\DriverSub', get_class($driver));
     }
-    /*public function testConnect()
-    {
-        $this->assertEquals(1,1);
-    }*/
 }

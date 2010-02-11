@@ -4,15 +4,18 @@
         id="1"
         name="Peter"
         surname="Mider"
-        age="20"/>
+        age="20"
+        sex="1"/>
     <person
         id="2"
-        name="Nageneril"
-        surname="Mudrapragram"
-        age="20"/>
+        name="N`ageneril"
+        surname="Mudra'pragram"
+        age="20"
+        sex="0"/>
     <person
         id="3"
         name="Strudomprassal"
         surname="Vashapragram"
-        age="22"/>
+        age="22"
+        sex="0"/>
 </dataset>

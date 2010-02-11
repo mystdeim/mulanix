@@ -102,4 +102,21 @@ class SelectTest extends \PHPUnit_Framework_TestCase
                 'SELECT table.*, jtable.test AS "jtable.test", jtable0.test AS "jtable0.test" FROM table LEFT JOIN jtable ON jtable.id = table.fk LEFT JOIN jtable0 ON jtable0.id = table.fk')
         );
     }
+    /**
+     * @dataProvider providerOrder
+     */
+    public function testOrder($column, $desc, $expected)
+    {
+        $actual = $this->_select->table('table', '*')
+                                ->order($column, $desc)
+                                ->queryBuilder();
+        $this->assertEquals($expected, $actual);
+    }
+    public function providerOrder()
+    {
+        return array(
+            array('id', false, 'SELECT table.* FROM table ORDER BY id'),
+            array('id', true, 'SELECT table.* FROM table ORDER BY id DESC')
+        );
+    }
 }

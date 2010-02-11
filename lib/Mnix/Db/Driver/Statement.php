@@ -34,13 +34,10 @@ class Statement extends \PDOStatement
                 $cast = function($value, $type) use ($pdo, $param) {
                             switch ($type) {
                                 case \PDO::PARAM_BOOL:
-                                    return (bool) $value;
-                                    break;
-                                case \PDO::PARAM_NULL:
-                                    return null;
+                                    return (bool)$value;
                                     break;
                                 case \PDO::PARAM_INT:
-                                    return (int) $value;
+                                    return (int)$value;
                                     break;
                                 default:
                                     return $pdo->quote($param['value'], $param['type']);
