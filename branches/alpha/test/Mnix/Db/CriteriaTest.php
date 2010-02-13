@@ -66,10 +66,12 @@ class CriteriaTest extends \PHPUnit_Extensions_Database_TestCase
     public function testExecute()
     {
         $criteria = new \Mnix\Db\CriteriaSub($this->getConnection()->getConnection());
-        $result = $criteria->table('person')
+        $result = $criteria->table('person', '*')
                                   ->where('id = :idValue')
                                   ->bindValue(':idValue', 1, \PDO::PARAM_INT)
+                //->queryBuilder();
                                   ->execute();
+        //var_dump($result);
         $expected = array(
             'id'      => 1,
             'name'    => 'Peter',

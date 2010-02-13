@@ -79,22 +79,26 @@ class Db
      */
     public function select()
     {
-        return new Db\Select($this);
+        return new Db\Select($this->_driver);
     }
     public function update()
     {
-        return  new Db\Update($this);
+        return  new Db\Update($this->_driver);
     }
     public function insert()
     {
-        return new Db\Insert($this);
+        return new Db\Insert($this->_driver);
     }
     public function delete()
     {
-        return new Db\Delete($this);
+        return new Db\Delete($this->_driver);
     }
     public function base()
     {
-        return new Db\Base($this);
+        return new Db\Base($this->_driver);
+    }
+    public function driver()
+    {
+        return $this->_driver;
     }
 }

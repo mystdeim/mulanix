@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
-    <simple>
-        
-    </simple>
-</root>
+<dataset>
+    <person
+        id="1"
+        name="Ivan"
+        surname="Ivanov"
+        age="20"
+        car_id="1"/>
+    <person
+        id="2"
+        name="Vasya"
+        surname="Vasiliev"
+        age="30"
+        car_id="2"/>
+    <car
+        id="1"
+        name="Ivan`s car"/>
+    <car
+        id="2"
+        name="Vasya`s car"/>
+</dataset>
