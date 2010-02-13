@@ -16,7 +16,7 @@ abstract class Criteria {
      * @var object(Mnix\Db\Driver)
      */
     protected $_pdo;
-    protected $_boundParams;
+    protected $_boundParams = array();
     /**
      * Массив условий where
      *
@@ -131,6 +131,7 @@ abstract class Criteria {
     public function execute()
     {
         $statement = $this->_pdo->prepare($this->_queryBuilder());
+        //var_dump($this->_queryBuilder());
         foreach($this->_boundParams as $param => $val) {
             $statement->bindValue($param, $val['value'], $val['type']);
         }
@@ -141,4 +142,16 @@ abstract class Criteria {
      * Собиратель SQL
      */
     protected abstract function _queryBuilder();
+    /*protected function _helpWhere()
+    {
+        if (count($this->_where)) {
+            if (count($this->_where) === 1) {
+                return current($this->_where);
+            } else {
+                foreach ($this->_where as $where) {
+
+                }
+            }
+        } else return null;
+    }*/
 }

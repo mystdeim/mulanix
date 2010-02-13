@@ -28,6 +28,7 @@ abstract class ActiveRecord
      * @var array
      */
     protected $_cortege = array();
+    protected $_driver;
     /**
      * Конструктор
      *
@@ -35,12 +36,27 @@ abstract class ActiveRecord
      */
     public function __construct($id = null)
     {
-        if (isset($id)) $this->_cortege['id'] = $id;
+        if (isset($id)) {
+            $this->_cortege['id'] = $id;
+        }
+    }
+    public function setDriver($driver)
+    {
+        $this->_driver = $driver;
+        return $this;
+    }
+    protected function _getDriver()
+    {
+        if (!isset($this->_driver)) $this->_driver = Db::connect()->driver();
+        return $this->_driver;
     }
     protected function _select()
     {
-        if (!isset($this->_table)) Mnix_Core::putMessage(__CLASS__, 'err', 'No table in ' . get_class($this));
-        $this->_select = Mnix_Db::connect()->select()->from($this->_table, '*');
+        //if (!isset($this->_table)) Mnix_Core::putMessage(__CLASS__, 'err', 'No table in ' . get_class($this));
+        //$this->_select = Db::connect()->select()->from($this->_table, '*');
+        $this->_select = new Db\Select($this->_getDriver());
+        $this->_select->table($this->_table, '*');
+        return $this->_select;
     }
     /**
      * Загрузка данных из бд
@@ -50,12 +66,19 @@ abstract class ActiveRecord
     protected function _load()
     {
         //Получаем объект из базы
-        if (!isset($this->_select)) $this->_select();
-        //Проверяем индитификатор
-        if (count($this->_cortege) === 1 && isset($this->_cortege['id'])) $this->_select->where('?t = ?i', array($this->_table.'.id', $this->_cortege['id']));
+        //if (!isset($this->_select)) $this->_select();
+        //Проверяем индетификатор
+        if (count($this->_cortege) === 1 && isset($this->_cortege['id'])) {
+            //var_dump($this->_select());
+            //$this->_select();
+            $this->_select()->where($this->_table.'.id = :id')
+                            ->bindValue(':id', $this->_cortege['id'], \PDO::PARAM_INT);
+            //var_dump($this->_select);
+        }
         $res = $this->_select
                 ->limit(1)
-                ->query();
+                ->execute();
+        //var_dump($res);
         if ($res) {
             $this->_setCortege($res[0]);
         } else {
@@ -278,5 +301,6 @@ abstract class ActiveRecord
      */
     public function load() {
         $this->_load();
+        return $this;
     }
 }

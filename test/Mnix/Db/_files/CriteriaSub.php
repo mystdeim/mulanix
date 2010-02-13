@@ -32,4 +32,8 @@ class CriteriaSub extends Criteria
     {
         return 'SELECT * FROM ' . implode(', ', $this->_table) . $this->_where;
     }
+    public function queryBuilder()
+    {
+        return $this->_queryBuilder();
+    }
 }
