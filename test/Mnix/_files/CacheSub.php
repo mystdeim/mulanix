@@ -9,10 +9,9 @@
 
 namespace Mnix;
 
-require_once dirname(dirname(__DIR__)) . '/boot/bootstrap.php';
-require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception.php';
-//require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Exception/Fatal.php';
-require_once dirname(dirname(__DIR__)) . '/lib/Mnix/Cache.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/boot/bootstrap.php';
+require_once \Mnix\Path\LIB . '/Mnix/Exception.php';
+require_once \Mnix\Path\LIB . '/Mnix/Cache.php';
 
 /**
  * @category Mulanix
