@@ -19,13 +19,21 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
  */
 class ActiveRecordSub extends ActiveRecord
 {
-    public function  __get($name)
+    public function _get($name)
     {
         return $this->$name;
     }
-    public function  __set($name,  $value)
+    public function _set($name, $value)
     {
         $this->$name = $value;
+    }
+    public function setAttribute($arr)
+    {
+        $this->_setAttribute($arr);
+    }
+    public function getAttribute($attr)
+    {
+        return $this->_getAttribute($attr);
     }
     public function select()
     {

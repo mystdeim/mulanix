@@ -93,9 +93,9 @@ abstract class ActiveRecord
      *
      * @param array $arr
      */
-    protected function _setCortege($arr)
+    protected function _setAttribute($arr)
     {
-        $this->_cortege = $arr;
+        $this->_cortege = array_merge($this->_cortege, $arr);
         //Проверяем кортеж на "жадность", преобразуем name.field=>data в name=array('field'=>data)
         foreach ($this->_cortege as $key => $value) {
             $field = explode('.', $key);
@@ -156,7 +156,8 @@ abstract class ActiveRecord
      * @param string $name
      * @return mixed
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         return $this->_getAttribute(array($name));
     }
     /**
@@ -165,9 +166,37 @@ abstract class ActiveRecord
      * @param string $name
      * @param mixed $value
      */
-    public function __set($name, $value) {
-        $this->_isLoad = true;
-        $this->_setCortege(array($name => $value));
+    public function __set($name, $value)
+    {
+        $this->_setAttribute(array($name => $value));
+    }
+    public function  __call($name, $arg = NULL)
+    {
+        //var_dump($name);
+        //var_dump($arg);
+        //Если в вызываемом методе больше 3 букв и вызван с аргументами
+        /*if (substr($name, 3) && $arg) {
+            //lib_System_Statistic::putMessage(__CLASS__, 'err', 'Неправильное обращение к атрибутам "'.$name.'" "'.implode(', ',$arg).'" в классе '.get_class($this));
+            return FALSE;
+        } else {*/
+            switch (substr($name, 0, 3)) {
+                case 'get':
+                    if (isset($arg[0])) {
+                        if (is_array($arg[0])) return $this->_getAttribute($arg[0]);
+                        else return $this->_getAttribute(array($arg[0]));
+                    } else {
+                        return $this->_getAttribute(array(strtolower(substr($name, 3))));
+                    }
+                    break;
+                case 'set':
+                    if (substr($name, 3)) {
+                        $this->_setAttribute(array(strtolower(substr($name, 3)) => $arg[0]));
+                    } else {
+                        //TODO: Exception
+                    }
+                    break;
+            }
+        //}
     }
     /**
      * Запрос кортежа
@@ -187,8 +216,7 @@ abstract class ActiveRecord
      * @return object(this)
      */
     public function set($arr) {
-        $this->_isLoad = true;
-        $this->_setCortege($arr);
+        $this->_setAttribute($arr);
         return $this;
     }
     /**
