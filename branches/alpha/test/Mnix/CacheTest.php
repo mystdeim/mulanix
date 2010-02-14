@@ -6,36 +6,37 @@
  * @version $Id: CoreTest.php 102 2009-09-29 12:56:35Z mystdeim $
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
 
-require_once 'CacheSub.php';
+require_once '_files/CacheSub.php';
 
 /**
  * @category Mulanix
  */
-class Mnix_CacheTest extends PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $this->assertEquals('Mnix\CacheSub', get_class($obj));
         $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest', $obj->_dir);
         unset($obj);
-        $obj = new Mnix\CacheSub('/test');
+        $obj = new CacheSub('/test');
         $this->assertEquals(\Mnix\Path\CACHE . '/test', $obj->_dir);
         unset($obj);
-        $obj = new Mnix\CacheSub('test');
+        $obj = new CacheSub('test');
         $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest/test', $obj->_dir);
     }
     public function testDir()
     {
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $this->assertEquals(\Mnix\Path\CACHE . '/Mnix/CacheTest', $obj->_dir);
         unset($obj);
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $obj->dir('/test');
         $this->assertEquals('/test', $obj->dir());
         unset($obj);
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $obj->dir('test');
         $this->assertEquals('/Mnix/CacheTest/test', $obj->dir());
         $this->assertEquals('Mnix\CacheSub', get_class($obj->dir('/dsd')));
@@ -45,13 +46,13 @@ class Mnix_CacheTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('Mnix\Exception', get_class($e));
         }
         unset($obj);
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $obj->dir('/');
         $this->assertEquals(\Mnix\Path\CACHE . '/', $obj->_dir);
     }
     public function testName()
     {
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $this->assertEquals($obj->_name, null);
         $obj->name('name1');
         $this->assertEquals('Mnix\CacheSub', get_class($obj->name('name')));
@@ -65,7 +66,7 @@ class Mnix_CacheTest extends PHPUnit_Framework_TestCase
     }
     public function testHash()
     {
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $this->assertEquals($obj->_hash, false);
         $this->assertEquals($obj->_hash, false);
         $obj->hash(true);
@@ -79,7 +80,7 @@ class Mnix_CacheTest extends PHPUnit_Framework_TestCase
     }
     public function testData()
     {
-        $obj = new Mnix\CacheSub();
+        $obj = new CacheSub();
         $this->assertEquals($obj->_data, null);
         $this->assertEquals('Mnix\CacheSub', get_class($obj->data('string')));
         $this->assertEquals(serialize('string'), $obj->_data);

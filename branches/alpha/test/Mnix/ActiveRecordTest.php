@@ -98,6 +98,13 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         );
         $this->assertEquals($expected, $obj->getAttribute(array('id', 'name', 'surname')));
     }
+    public function test__get()
+    {
+        $obj = new ActiveRecordSub();
+        $obj->_set('_isLoad', TRUE);
+        $obj->_set('_cortege', array('id' => 1));
+        $this->assertEquals(1, $obj->id);
+    }
     /*public function testSet()
     {
         $person = new ActiveRecord\Person(1);

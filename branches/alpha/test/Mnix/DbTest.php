@@ -5,6 +5,8 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
+namespace Mnix;
+
 require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Framework.php';
 
@@ -13,7 +15,7 @@ require_once '_files/DbSub.php';
 /**
  * Mulanix
  */
-class Mnix_DbTest extends PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit_Framework_TestCase
 {
     /*public function testConstruct()
     {
@@ -26,40 +28,40 @@ class Mnix_DbTest extends PHPUnit_Framework_TestCase
     }*/
     public function testConnect()
     {
-        $this->assertNull(Mnix\DbSub::instances());
+        $this->assertNull(DbSub::instances());
 
-        $db = Mnix\DbSub::connect('base0');
+        $db = DbSub::connect('base0');
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(Mnix\Db\base0\DBMS.':'.Mnix\Path\DB.'/'.Mnix\Db\base0\BASE , $db->_driver);
-        $this->assertEquals(1, count(\Mnix\DbSub::instances()));
+        $this->assertEquals(Db\base0\DBMS.':'.Path\DB.'/'.Db\base0\BASE , $db->_driver);
+        $this->assertEquals(1, count(DbSub::instances()));
 
-        $db = Mnix\DbSub::connect('base1');
+        $db = DbSub::connect('base1');
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(Mnix\Db\base1\DBMS.':dbname='.Mnix\Db\base1\BASE.';host='.Mnix\Db\base1\HOST.Mnix\Db\base1\USER.Mnix\Db\base1\PASS , $db->_driver);
-        $this->assertEquals(2, count(\Mnix\DbSub::instances()));
+        $this->assertEquals(Db\base1\DBMS.':dbname='.Db\base1\BASE.';host='.Db\base1\HOST.Db\base1\USER.Db\base1\PASS , $db->_driver);
+        $this->assertEquals(2, count(DbSub::instances()));
 
-        $db = Mnix\DbSub::connect('base3');
+        $db = DbSub::connect('base3');
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(Mnix\Db\base3\DBMS.':'.Mnix\Db\base3\BASE , $db->_driver);
-        $this->assertEquals(3, count(\Mnix\DbSub::instances()));
+        $this->assertEquals(Db\base3\DBMS.':'.Db\base3\BASE , $db->_driver);
+        $this->assertEquals(3, count(DbSub::instances()));
 
         //Пишем базу, которой не существует в конфиге
         try {
-            $db = Mnix\DbSub::connect('unExistBase');
+            $db = DbSub::connect('unExistBase');
             $this->fail();
-        } catch (\Mnix\Exception $e) {
+        } catch (Exception $e) {
             $this->assertEquals('Mnix\Exception', get_class($e));
         }
 
         unset($db);
         
-        $db = Mnix\DbSub::connect();
+        $db = DbSub::connect();
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(3, count(\Mnix\DbSub::instances()));
+        $this->assertEquals(3, count(DbSub::instances()));
     }
     public function testReturn()
     {
-        $db = new Mnix\DbSub(null, null, null);
+        $db = new DbSub(null, null, null);
         $this->assertEquals('Mnix\Db\Select', get_class($db->select()));
         $this->assertEquals('Mnix\Db\Update', get_class($db->update()));
         $this->assertEquals('Mnix\Db\Insert', get_class($db->insert()));

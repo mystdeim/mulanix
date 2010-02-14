@@ -6,21 +6,21 @@
  * @version $Id$
  * @author mystdeim <mysteim@gmail.com>
  */
-
+namespace Mnix;
 /**
  *
  * @see Mnix\ExceptionSub
  */
-require_once 'ExceptionSub.php';
+require_once '_files/ExceptionSub.php';
 
 /**
  * @category Mulanix
  */
-class Mnix_ExceptionTest extends PHPUnit_Framework_TestCase
+class ExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testSome()
     {
-        $e = new Mnix\Exception();
+        $e = new Exception();
         $this->assertEquals(get_class($e), 'Mnix\Exception');
     }
 }

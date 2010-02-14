@@ -7,7 +7,7 @@ namespace Mnix\Db;
 /**
  *
  */
-class Base extends \Mnix\Db\Criteria
+class Base
 {
 
 }
