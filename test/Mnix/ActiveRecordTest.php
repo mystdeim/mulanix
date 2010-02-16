@@ -61,27 +61,18 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $obj->setAttribute(array('id' => 1));
         $this->assertEquals(array('id' => 1), $obj->_get('_cortege'));
     }
+    public function testSet()
+    {
+        $obj = new ActiveRecordSub();
+        $obj->set(array('id'=>1));
+        $this->assertEquals(1, current($obj->_get('_cortege')));
+    }
     public function test__set()
     {
         $obj = new ActiveRecordSub();
         $this->assertEquals(array(), $obj->_get('_cortege'));
         $obj->id = 1;
         $this->assertEquals(array('id' => 1), $obj->_get('_cortege'));
-    }
-    public function test__callSet()
-    {
-        $obj = new ActiveRecordSub();
-        $this->assertEquals(array(), $obj->_get('_cortege'));
-        $obj->setId(1);
-        $this->assertEquals(array('id' => 1), $obj->_get('_cortege'));
-
-        $obj->set(array('age'=>21,'car_id'=>1));
-        $expected = array(
-            'id'      => 1,
-            'age'     => 21,
-            'car_id'  => 1
-        );
-        $this->assertEquals($expected, $obj->_get('_cortege'));
     }
     public function test_getAttribute()
     {
@@ -98,6 +89,19 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         );
         $this->assertEquals($expected, $obj->getAttribute(array('id', 'name', 'surname')));
     }
+    public function testGet()
+    {
+        $obj = new ActiveRecordSub();
+        $obj->_set('_isLoad', TRUE);
+
+        $obj->_set('_cortege', array('id' => 1, 'name'=>'Ivan', 'surname'=>'Ivanov'));
+        $expected = array(
+            'id'     => 1,
+            'name'   =>'Ivan',
+            'surname'=>'Ivanov'
+        );
+        $this->assertEquals($expected['name'], $obj->get('name'));
+    }
     public function test__get()
     {
         $obj = new ActiveRecordSub();
@@ -105,28 +109,39 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $obj->_set('_cortege', array('id' => 1));
         $this->assertEquals(1, $obj->id);
     }
-    /*public function testSet()
-    {
-        $person = new ActiveRecord\Person(1);
-        //$person->_set('_isLoad', TRUE);
-        $person->name = 'Ivan';
-        //var_dump($person);
-        $person->setSurname('Ivanov');
-        $person->set(array('age'=>21,'car_id'=>1));
-        $expected = array(
-            'id'      => 1,
-            'name'    => 'Ivan',
-            'surname' => 'Ivanov',
-            'age'     => 21,
-            'car_id'  => 1
-        );
-        $this->assertEquals($expected, $expected->_get('cortege'));
-    }*/
-    /*public function testSimple()
+    public function testSimple0()
     {
         $person = new ActiveRecord\Person(1);
         $person->setDriver($this->connection);
+
+        $expected = array(
+            'id'     => 1,
+            'name'   => "Ivan",
+            'surname'=> "Ivanov",
+            'age'    => 20,
+            'car_id' => 1
+        );
+
+        $this->assertEquals($expected['name'], $person->name);
+        $this->assertEquals($expected['surname'], $person->get(array('surname')));
+        $this->assertEquals($expected['age'], $person->get('age'));
+    }
+    public function testSimple1()
+    {
+        $person = new ActiveRecord\Person();
+        $person->setDriver($this->connection);
+
+        $person->id = 1;
         $person->load();
-        var_dump($person);
-    }*/
+
+        $expected = array(
+            'id'     => 1,
+            'name'   => "Ivan",
+            'surname'=> "Ivanov",
+            'age'    => 20,
+            'car_id' => 1
+        );
+
+        $this->assertEquals($expected['name'], $person->name);
+    }
 }

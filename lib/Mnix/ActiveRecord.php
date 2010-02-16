@@ -37,7 +37,11 @@ abstract class ActiveRecord
     public function __construct($id = null)
     {
         if (isset($id)) {
-            $this->_cortege['id'] = $id;
+            if (is_int($id)) {
+                $this->_cortege['id'] = $id;
+            } else {
+                
+            }
         }
     }
     public function setDriver($driver)
@@ -56,6 +60,9 @@ abstract class ActiveRecord
         //$this->_select = Db::connect()->select()->from($this->_table, '*');
         $this->_select = new Db\Select($this->_getDriver());
         $this->_select->table($this->_table, '*');
+        if (isset($this->_cortege['id'])) {
+            $this->_select->where($this->_table.'.id='.$this->_cortege['id']);
+        }
         return $this->_select;
     }
     /**
@@ -65,22 +72,32 @@ abstract class ActiveRecord
      */
     protected function _load()
     {
+        /*$res = $this->_driver->query('SELECT * FROM person', \PDO::FETCH_ASSOC);
+        foreach ($res as $row) {
+    var_dump($row);
+}*/
         //Получаем объект из базы
         //if (!isset($this->_select)) $this->_select();
         //Проверяем индетификатор
-        if (count($this->_cortege) === 1 && isset($this->_cortege['id'])) {
+        /*if (count($this->_cortege) === 1 && isset($this->_cortege['id'])) {
             //var_dump($this->_select());
             //$this->_select();
             $this->_select()->where($this->_table.'.id = :id')
                             ->bindValue(':id', $this->_cortege['id'], \PDO::PARAM_INT);
             //var_dump($this->_select);
+        }*/
+
+        if (!isset($this->_select)) {
+            $this->_select();
         }
+
         $res = $this->_select
                 ->limit(1)
                 ->execute();
         //var_dump($res);
-        if ($res) {
-            $this->_setCortege($res[0]);
+        if (count($res)) {
+            $this->_setAttribute(current($res));
+            $this->_isLoad = TRUE;
         } else {
             //TODO тут нужно кидать исключение
         }
@@ -116,7 +133,7 @@ abstract class ActiveRecord
     public function find($condition, $data = null) {
         $this->_select();
         $this->_select->where($condition, $data);
-        $this->_isLoad = false;
+        $this->_isLoad = FALSE;
         return $this;
     }
     /**
@@ -170,15 +187,9 @@ abstract class ActiveRecord
     {
         $this->_setAttribute(array($name => $value));
     }
-    public function  __call($name, $arg = NULL)
+    /*public function  __call($name, $arg = NULL)
     {
-        //var_dump($name);
-        //var_dump($arg);
-        //Если в вызываемом методе больше 3 букв и вызван с аргументами
-        /*if (substr($name, 3) && $arg) {
-            //lib_System_Statistic::putMessage(__CLASS__, 'err', 'Неправильное обращение к атрибутам "'.$name.'" "'.implode(', ',$arg).'" в классе '.get_class($this));
-            return FALSE;
-        } else {*/
+
             switch (substr($name, 0, 3)) {
                 case 'get':
                     if (isset($arg[0])) {
@@ -196,15 +207,16 @@ abstract class ActiveRecord
                     }
                     break;
             }
-        //}
-    }
+    }*/
     /**
      * Запрос кортежа
      *
      * @param array $arr
      * @return array
      */
-    public function get($arr) {
+    public function get($arr) 
+    {
+        if (!is_array($arr)) $arr = array($arr);
         return $this->_getAttribute($arr);
     }
     /**
