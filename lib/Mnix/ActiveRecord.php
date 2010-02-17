@@ -29,6 +29,7 @@ abstract class ActiveRecord
      */
     protected $_cortege = array();
     protected $_driver;
+    protected static $param;
     /**
      * Конструктор
      *
@@ -131,8 +132,7 @@ abstract class ActiveRecord
      * @return object(Mnix_ORM_Prototype)
      */
     public function find($condition, $data = null) {
-        $this->_select();
-        $this->_select->where($condition, $data);
+        $this->_select()->where($condition);
         $this->_isLoad = FALSE;
         return $this;
     }
@@ -141,13 +141,17 @@ abstract class ActiveRecord
      *
      * @return array
      */
-    public function getParam() {
-        if (isset($this->_has_one)) $data['has_one'] = $this->_has_one;
+    protected function _getParam() {
+        /*if (isset($this->_hasOne)) $data['has_one'] = $this->_has_one;
         if (isset($this->_has_many)) $data['has_many'] = $this->_has_many;
         $data['table'] = $this->_table;
         $sel = Mnix_Db::connect()->query('SHOW FIELDS FROM ?t', $this->_table);
         foreach ($sel as $temp) $data['fields'][] = $temp['Field'];
-        return $data;
+        return $data;*/
+
+        $res = $this->_driver->query('PRAGMA table_info(' . $this->_table . ')', \PDO::FETCH_ASSOC);
+        //foreach ($res as $temp) var_dump($temp);
+        //var_dump($res);
     }
     public function join($name) {
         if (isset($this->_has_one[$name])) {
@@ -245,9 +249,10 @@ abstract class ActiveRecord
             if (isset($this->_cortege[$att])) {
                 if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
                 else {
-                    $obj = new $this->_has_one[$att]['class'];
+                    /*$obj = new $this->_hasOne[$att]['class'];
                     $obj->set($this->_cortege[$att]);
-                    $data[$att] = $obj;
+                    $data[$att] = $obj;*/
+                    $data[$att] = $this->_getRelation($att, $data);
                 }
             } else $data[$att] = $this->_getRelation($att);
         }
@@ -256,27 +261,26 @@ abstract class ActiveRecord
         //В противном случае массив
         else return $data;
     }
-    protected function _getRelation($name) {
+    protected function _getRelation($name, $data = NULL) {
         //1:1
-        if (isset($this->_has_one[$name])) {
-            $class = $this->_has_one[$name]['class'];
-            $param = Mnix_ORM_Prototype::takeParam($class);
+        if (isset($this->_hasOne[$name])) {
+            $class = $this->_hasOne[$name]['class'];
+
             $obj = new $class;
-            if (isset($this->_has_one[$name]['fk'])) {
-                $obj->find('?t = ?i',
+
+            if (isset($this->_hasOne[$name]['fk'])) {
+                /*$obj->find('?t = ?i',
                         array(
                         $param['table'].'.'.$this->_has_one[$name]['fk'],
-                        $this->_cortege['id']));
+                        $this->_cortege['id']));*/
             } else {
-                $obj->find('?t = ?i',
-                        array(
-                        $param['table'].'.id',
-                        $this->_cortege[$this->_has_one[$name]['id']]));
+                $obj->id = $this->_cortege[$this->_hasOne[$name]['id']];
+                $obj->load();
                 //Удалям лишнее поле
-                unset($this->_cortege[$this->_has_one[$name]['id']]);
+                unset($this->_cortege[$this->_hasOne[$name]['id']]);
             }
             //Добавляем в объект данные из жадного запроса, если они существуют
-            if (isset($this->_cortege[$name])) $obj->set($this->_cortege[$name]);
+            if (isset($data)) $obj->set($data);
             return $obj;
         }
         //many
@@ -338,9 +342,12 @@ abstract class ActiveRecord
     }
     /**
      * Ручная загрузка
+     *
+     * Меняет лишь флаг загрузки на ложь, так вся загрузка всё равно ленивая и выполняется лишь по запросу атрибута
      */
-    public function load() {
-        $this->_load();
+    public function load()
+    {
+        $this->_isLoad = FALSE;
         return $this;
     }
 }
