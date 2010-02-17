@@ -14,6 +14,6 @@ class Person extends \Mnix\ActiveRecordSub
     protected $_hasOne = array(
         'car' => array(
             'class' => 'Mnix\ActiveRecordSub\Car',
-            'id'    => 'car_id'
+            'field' => 'person_id'
     ));
 }

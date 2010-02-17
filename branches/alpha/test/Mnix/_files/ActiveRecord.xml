@@ -4,18 +4,18 @@
         id="1"
         name="Ivan"
         surname="Ivanov"
-        age="20"
-        car_id="1"/>
+        age="20"/>
     <person
         id="2"
         name="Vasya"
         surname="Vasiliev"
-        age="30"
-        car_id="2"/>
+        age="30"/>
     <car
         id="1"
-        name="Ivan`s car"/>
+        name="Ivan`s car"
+        person_id="1"/>
     <car
         id="2"
-        name="Vasya`s car"/>
+        name="Vasya`s car"
+        person_id="2"/>
 </dataset>
