@@ -116,10 +116,9 @@ class Select extends Criteria
     }
     protected function _queryBuilder()
     {
-        return 'SELECT ' . implode(', ', $this->_column) . 
-               ' FROM ' . implode(', ', $this->_table) .
-               $this->_where .
-               $this->_order .
-               $this->_limit;
+        $sql = 'SELECT ' . implode(', ', $this->_column) . ' FROM ' . implode(', ', $this->_table);
+        if (isset($this->_where)) $sql .= ' WHERE ' . $this->_where;
+        $sql .= $this->_order . $this->_limit;
+        return $sql;
     }
 }

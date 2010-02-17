@@ -30,7 +30,7 @@ class CriteriaSub extends Criteria
     }*/
     protected function _queryBuilder()
     {
-        return 'SELECT * FROM ' . implode(', ', $this->_table) . $this->_where;
+        return 'SELECT * FROM ' . implode(', ', $this->_table) .  ' WHERE ' . $this->_where;
     }
     public function queryBuilder()
     {

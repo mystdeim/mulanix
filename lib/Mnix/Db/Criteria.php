@@ -92,7 +92,11 @@ abstract class Criteria {
      * @return object(Mnix\Db\$this)
      */
     public function where($condition) {
-        $this->_where = ' WHERE ' . $condition;
+        if (!isset($this->_where)) {
+            $this->_where = $condition;
+        } else {
+            $this->_where = '('.$this->_where.')' . ' AND ('.$condition.')';
+        }
         return $this;
     }
     /**
