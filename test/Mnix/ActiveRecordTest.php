@@ -25,14 +25,14 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name VARCHAR(255),
                 surname VARCHAR(255),
-                age INTEGER,
-                car_id INTEGER
+                age INTEGER
             );
         ");
         $this->connection->query("
             CREATE TABLE car (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(255)
+                name VARCHAR(255),
+                person_id INTEGER
             );
         ");
     }
@@ -110,7 +110,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $obj->_set('_cortege', array('id' => 1));
         $this->assertEquals(1, $obj->id);
     }
-    /*public function testLoadByOne()
+    public function testLoadByOne()
     {
         $person = new ActiveRecordSub\Person();
         $person->setDriver($this->connection);
@@ -129,7 +129,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $this->assertEquals($expected['name'], $person->name);
         $this->assertEquals($expected['surname'], $person->get(array('surname')));
         $this->assertEquals($expected['age'], $person->get('age'));
-    }*/
+    }
     public function testLoadByFew()
     {
         $person = new ActiveRecordSub\Person();
@@ -152,7 +152,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $this->assertEquals($expected['surname'], $person->get(array('surname')));
         $this->assertEquals($expected['age'], $person->get('age'));
     }
-    /*public function testSimple0()
+    public function testSimple0()
     {
         $person = new ActiveRecordSub\Person(1);
         $person->setDriver($this->connection);
@@ -165,6 +165,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
             'car_id' => 1
         );
 
+        $this->assertTrue($person->load());
         $this->assertEquals($expected['name'], $person->name);
         $this->assertEquals($expected['surname'], $person->get(array('surname')));
         $this->assertEquals($expected['age'], $person->get('age'));
@@ -191,12 +192,21 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     {
         $person = new ActiveRecordSub\Person(1);
         $person->setDriver($this->connection);
+        $person->load();
 
         $car = $person->car;
         $car->setDriver($this->connection);
-        //$car->forceLoad();
 
-        //var_dump($car);
+        $this->assertEquals('Ivan`s car', $car->name);
+    }
+    public function testCarBelongsTo()
+    {
+        $car = new ActiveRecordSub\Car(1);
+        $person->setDriver($this->connection);
+        $person->load();
+
+        $car = $person->car;
+        $car->setDriver($this->connection);
 
         $this->assertEquals('Ivan`s car', $car->name);
     }
@@ -206,5 +216,5 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $person->setDriver($this->connection);
 
         //var_dump($person->getParam('car'));
-    }*/
+    }
 }

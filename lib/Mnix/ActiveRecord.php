@@ -230,7 +230,9 @@ abstract class ActiveRecord
                     $data[$att] = $obj;*/
                     $data[$att] = $this->_getRelation($att, $data);
                 }
-            } else $data[$att] = $this->_getRelation($att);
+            } else {
+                $data[$att] = $this->_getRelation($att);
+            }
         }
         //Если запрос одного аттрибу, то его и возвращаем
         if (count($data) == 1) return current($data);
@@ -240,23 +242,16 @@ abstract class ActiveRecord
     protected function _getRelation($name, $data = NULL) {
         //1:1
         if (isset($this->_hasOne[$name])) {
+
             $class = $this->_hasOne[$name]['class'];
-
             $obj = new $class;
+            $obj->set(array($this->_hasOne[$name]['field'] => $this->_cortege['id']));
 
-            if (isset($this->_hasOne[$name]['fk'])) {
-                /*$obj->find('?t = ?i',
-                        array(
-                        $param['table'].'.'.$this->_has_one[$name]['fk'],
-                        $this->_cortege['id']));*/
-            } else {
-                $obj->id = $this->_cortege[$this->_hasOne[$name]['id']];
-                $obj->load();
-                //Удалям лишнее поле
-                unset($this->_cortege[$this->_hasOne[$name]['id']]);
-            }
             //Добавляем в объект данные из жадного запроса, если они существуют
             if (isset($data)) $obj->set($data);
+            //Если нет, грузим из базы
+            else $obj->load();
+            
             return $obj;
         }
         //many
@@ -327,12 +322,13 @@ abstract class ActiveRecord
             $condition = array();
             $temp = 0;
             foreach($this->_cortege as $key => $value) {
-                var_dump($value);
+                //var_dump($value);
                 $this->_select()->bindValue(':a' . $temp, $value);
-                $condition[] = $key . ' = :a' . $temp++;
+                $this->_select()->where($key . ' = :a' . $temp++);
+                //$condition[] = $key . ' = :a' . $temp++;
             }
-            var_dump(implode(' AND ', $condition));
-            $result = $this->_select()->where(implode(' AND ', $condition))->execute();
+            //var_dump(implode(' AND ', $condition));
+            $result = $this->_select()->execute();
             if (count($result) === 1) {
                 $this->_cortege = current($result);
                 return true;
@@ -340,7 +336,5 @@ abstract class ActiveRecord
                 return false;
             }
         }
-        /*$this->_isLoad = FALSE;
-        return $this;*/
     }
 }
