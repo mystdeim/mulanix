@@ -8,7 +8,8 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once '_files/ActiveRecordSub.php';
-require_once '_files/ActiveRecord/Person.php';
+require_once '_files/ActiveRecordSub/Person.php';
+require_once '_files/ActiveRecordSub/Car.php';
 /**
  * Mulanix Framework
  *
@@ -111,7 +112,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     }
     public function testSimple0()
     {
-        $person = new ActiveRecord\Person(1);
+        $person = new ActiveRecordSub\Person(1);
         $person->setDriver($this->connection);
 
         $expected = array(
@@ -128,7 +129,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     }
     public function testSimple1()
     {
-        $person = new ActiveRecord\Person();
+        $person = new ActiveRecordSub\Person();
         $person->setDriver($this->connection);
 
         $person->id = 1;
@@ -143,5 +144,38 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         );
 
         $this->assertEquals($expected['name'], $person->name);
+    }
+    public function testPersonHasOne()
+    {
+        $person = new ActiveRecordSub\Person(1);
+        $person->setDriver($this->connection);
+
+        $car = $person->car;
+        $car->setDriver($this->connection);
+        //$car->forceLoad();
+
+        //var_dump($car);
+
+        $this->assertEquals('Ivan`s car', $car->name);
+    }
+    public function testCarHasOne()
+    {
+        $car = new ActiveRecordSub\Car(1);
+        $car->setDriver($this->connection);
+
+        $person = $person->person;
+        $person->setDriver($this->connection);
+        //$car->forceLoad();
+
+        var_dump($car);
+
+        $this->assertEquals('Ivan', $person->name);
+    }
+    public function testgetParam()
+    {
+        $person = new ActiveRecordSub\Person(1);
+        $person->setDriver($this->connection);
+
+        var_dump($person->getParam('car'));
     }
 }

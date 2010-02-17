@@ -39,4 +39,12 @@ class ActiveRecordSub extends ActiveRecord
     {
         $this->_select();
     }
+    public function getParam()
+    {
+        return $this->_getParam();
+    }
+    public function forceLoad()
+    {
+        $this->_load();
+    }
 }
