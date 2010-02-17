@@ -110,7 +110,49 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $obj->_set('_cortege', array('id' => 1));
         $this->assertEquals(1, $obj->id);
     }
-    public function testSimple0()
+    /*public function testLoadByOne()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->setDriver($this->connection);
+
+        $person->id = 1;
+
+        $expected = array(
+            'id'     => 1,
+            'name'   => "Ivan",
+            'surname'=> "Ivanov",
+            'age'    => 20,
+            'car_id' => 1
+        );
+
+        $this->assertTrue($person->load());
+        $this->assertEquals($expected['name'], $person->name);
+        $this->assertEquals($expected['surname'], $person->get(array('surname')));
+        $this->assertEquals($expected['age'], $person->get('age'));
+    }*/
+    public function testLoadByFew()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->setDriver($this->connection);
+
+        $person->id = 1;
+        $person->name = 'Ivan';
+        $person->surname = 'Ivanov';
+
+        $expected = array(
+            'id'     => 1,
+            'name'   => "Ivan",
+            'surname'=> "Ivanov",
+            'age'    => 20,
+            'car_id' => 1
+        );
+
+        $this->assertTrue($person->load());
+        $this->assertEquals($expected['name'], $person->name);
+        $this->assertEquals($expected['surname'], $person->get(array('surname')));
+        $this->assertEquals($expected['age'], $person->get('age'));
+    }
+    /*public function testSimple0()
     {
         $person = new ActiveRecordSub\Person(1);
         $person->setDriver($this->connection);
@@ -158,24 +200,11 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals('Ivan`s car', $car->name);
     }
-    public function testCarHasOne()
-    {
-        $car = new ActiveRecordSub\Car(1);
-        $car->setDriver($this->connection);
-
-        $person = $person->person;
-        $person->setDriver($this->connection);
-        //$car->forceLoad();
-
-        var_dump($car);
-
-        $this->assertEquals('Ivan', $person->name);
-    }
     public function testgetParam()
     {
         $person = new ActiveRecordSub\Person(1);
         $person->setDriver($this->connection);
 
-        var_dump($person->getParam('car'));
-    }
+        //var_dump($person->getParam('car'));
+    }*/
 }

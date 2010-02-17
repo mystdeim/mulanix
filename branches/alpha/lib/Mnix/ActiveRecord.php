@@ -57,12 +57,9 @@ abstract class ActiveRecord
     }
     protected function _select()
     {
-        //if (!isset($this->_table)) Mnix_Core::putMessage(__CLASS__, 'err', 'No table in ' . get_class($this));
-        //$this->_select = Db::connect()->select()->from($this->_table, '*');
-        $this->_select = new Db\Select($this->_getDriver());
-        $this->_select->table($this->_table, '*');
-        if (isset($this->_cortege['id'])) {
-            $this->_select->where($this->_table.'.id='.$this->_cortege['id']);
+        if (!isset($this->_select)) {
+            $this->_select = new Db\Select($this->_getDriver());
+            $this->_select->table($this->_table, '*');
         }
         return $this->_select;
     }
@@ -191,27 +188,6 @@ abstract class ActiveRecord
     {
         $this->_setAttribute(array($name => $value));
     }
-    /*public function  __call($name, $arg = NULL)
-    {
-
-            switch (substr($name, 0, 3)) {
-                case 'get':
-                    if (isset($arg[0])) {
-                        if (is_array($arg[0])) return $this->_getAttribute($arg[0]);
-                        else return $this->_getAttribute(array($arg[0]));
-                    } else {
-                        return $this->_getAttribute(array(strtolower(substr($name, 3))));
-                    }
-                    break;
-                case 'set':
-                    if (substr($name, 3)) {
-                        $this->_setAttribute(array(strtolower(substr($name, 3)) => $arg[0]));
-                    } else {
-                        //TODO: Exception
-                    }
-                    break;
-            }
-    }*/
     /**
      * Запрос кортежа
      *
@@ -241,8 +217,8 @@ abstract class ActiveRecord
      * @param array $atts
      * @return mixed
      */
-    protected function _getAttribute($atts) {
-        if (!$this->_isLoad) $this->_load();
+    protected function _getAttribute($atts)
+    {
         //Обходим аттрибуты
         foreach ($atts as $att) {
             //Проверяем кортеж, если в кортеже есть массив, то это "жадные" данные!
@@ -341,13 +317,30 @@ abstract class ActiveRecord
         return $data;
     }
     /**
-     * Ручная загрузка
+     * Loading object from Database
      *
-     * Меняет лишь флаг загрузки на ложь, так вся загрузка всё равно ленивая и выполняется лишь по запросу атрибута
+     * @return bool
      */
     public function load()
     {
-        $this->_isLoad = FALSE;
-        return $this;
+        if (isset($this->_cortege)) {
+            $condition = array();
+            $temp = 0;
+            foreach($this->_cortege as $key => $value) {
+                var_dump($value);
+                $this->_select()->bindValue(':a' . $temp, $value);
+                $condition[] = $key . ' = :a' . $temp++;
+            }
+            var_dump(implode(' AND ', $condition));
+            $result = $this->_select()->where(implode(' AND ', $condition))->execute();
+            if (count($result) === 1) {
+                $this->_cortege = current($result);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        /*$this->_isLoad = FALSE;
+        return $this;*/
     }
 }

@@ -119,4 +119,28 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             array('id', true, 'SELECT table.* FROM table ORDER BY id DESC')
         );
     }
+    public function testWhere1()
+    {
+        $actual = $this->_select->table('table', '*')
+                                ->where('id = 1')
+                                ->queryBuilder();
+        $this->assertEquals('SELECT table.* FROM table WHERE id = 1', $actual);
+    }
+    public function testWhere2()
+    {
+        $actual = $this->_select->table('table', '*')
+                                ->where('id = 1')
+                                ->where('name = "Ivan"')
+                                ->queryBuilder();
+        $this->assertEquals('SELECT table.* FROM table WHERE (id = 1) AND (name = "Ivan")', $actual);
+    }
+    public function testWhere3()
+    {
+        $actual = $this->_select->table('table', '*')
+                                ->where('id = 1')
+                                ->where('name = "Ivan"')
+                                ->where('surname = "Ivanov"')
+                                ->queryBuilder();
+        $this->assertEquals('SELECT table.* FROM table WHERE ((id = 1) AND (name = "Ivan")) AND (surname = "Ivanov")', $actual);
+    }
 }
