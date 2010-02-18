@@ -10,5 +10,14 @@ namespace Mnix\ActiveRecord;
  */
 class Collection extends \ArrayObject
 {
-    //put your code here
+    protected $_select;
+    public function __construct($class)
+    {
+        /*$this->_param = Mnix_ORM_Prototype::takeParam($class);
+        $this->_param['class'] = $class;*/
+    }
+    public function putSelect($obj)
+    {
+        $this->_select = $obj;
+    }
 }

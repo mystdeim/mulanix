@@ -8,8 +8,10 @@ require_once 'PHPUnit/Extensions/Database/TestCase.php';
 require_once 'PHPUnit/Framework.php';
 
 require_once '_files/ActiveRecordSub.php';
+require_once 'ActiveRecord/_files/CollectionSub.php';
 require_once '_files/ActiveRecordSub/Person.php';
 require_once '_files/ActiveRecordSub/Car.php';
+require_once '_files/ActiveRecordSub/Comp.php';
 /**
  * Mulanix Framework
  *
@@ -271,7 +273,14 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $person = $car->person;
         $this->assertEquals('Ivan', $person->name);
     }
-    /*public function testPersonHasMany()
+    public function testComp()
+    {
+        $comp = new ActiveRecordSub\Comp();
+        $comp->id = 1;
+        $this->assertTrue($comp->load());
+        $this->assertEquals('Ivan`s comp 1', $comp->name);
+    }
+    public function testPersonHasMany()
     {
         $person = new ActiveRecordSub\Person();
         $person->id = 1;
@@ -279,5 +288,5 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
 
         $comps = $person->comps;
         $this->assertEquals(2, count($comps));
-    }*/
+    }
 }

@@ -188,6 +188,7 @@ abstract class ActiveRecord
      */
     public function __get($name)
     {
+        //if (in_array($name, array('_hasOne', '_hasMany', '_belongsTo'))) throw new \Mnix\Exception;
         return $this->_getAttribute(array($name));
     }
     /**
@@ -276,6 +277,16 @@ abstract class ActiveRecord
             $class = $this->_belongsTo[$name]['class'];
             $obj = new $class;
             $obj->set(array('id' => $this->_cortege[$this->_belongsTo[$name]['field']]));
+
+            return $obj;
+        }
+
+        //parent:childs
+        if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
+
+            $class = $this->_hasMany[$name]['class'];
+            $obj = new $class;
+            $obj->set(array($this->_hasMany[$name]['field'] => $this->_cortege['id']));
 
             return $obj;
         }
