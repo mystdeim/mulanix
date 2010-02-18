@@ -35,6 +35,13 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
                 person_id INTEGER
             );
         ");
+        $this->connection->query("
+            CREATE TABLE comp (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255),
+                person_id INTEGER
+            );
+        ");
     }
     protected function getConnection()
     {
@@ -46,6 +53,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     }
     public function testConstruct()
     {
+        ActiveRecordSub::setDriverToSub($this->connection);
         $obj = new ActiveRecordSub();
         $this->assertEquals('Mnix\ActiveRecordSub', get_class($obj));
         $this->assertFalse($obj->_get('_isLoad'));
@@ -113,7 +121,6 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     public function testLoadByOne()
     {
         $person = new ActiveRecordSub\Person();
-        $person->setDriver($this->connection);
 
         $person->id = 1;
 
@@ -133,7 +140,6 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     public function testLoadByFew()
     {
         $person = new ActiveRecordSub\Person();
-        $person->setDriver($this->connection);
 
         $person->id = 1;
         $person->name = 'Ivan';
@@ -155,14 +161,12 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     public function testSimple0()
     {
         $person = new ActiveRecordSub\Person(1);
-        $person->setDriver($this->connection);
 
         $expected = array(
             'id'     => 1,
             'name'   => "Ivan",
             'surname'=> "Ivanov",
-            'age'    => 20,
-            'car_id' => 1
+            'age'    => 20
         );
 
         $this->assertTrue($person->load());
@@ -173,7 +177,6 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     public function testSimple1()
     {
         $person = new ActiveRecordSub\Person();
-        $person->setDriver($this->connection);
 
         $person->id = 1;
         $person->load();
@@ -182,39 +185,99 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
             'id'     => 1,
             'name'   => "Ivan",
             'surname'=> "Ivanov",
-            'age'    => 20,
-            'car_id' => 1
+            'age'    => 20
         );
 
         $this->assertEquals($expected['name'], $person->name);
     }
     public function testPersonHasOne()
     {
-        $person = new ActiveRecordSub\Person(1);
-        $person->setDriver($this->connection);
-        $person->load();
+        $person = new ActiveRecordSub\Person();
+        $person->id = 1;
+        $this->assertTrue($person->load());
 
         $car = $person->car;
-        $car->setDriver($this->connection);
-
         $this->assertEquals('Ivan`s car', $car->name);
     }
     public function testCarBelongsTo()
     {
-        $car = new ActiveRecordSub\Car(1);
-        $person->setDriver($this->connection);
-        $person->load();
+        $car = new ActiveRecordSub\Car();
+        $car->id = 1;
+        $this->assertTrue($car->load());
+        //var_dump($car);
+
+        $person = $car->person;
+        $this->assertEquals('Ivan', $person->name);
+    }
+    public function test_getParam()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->id = 1;
+        $actual = $person->publicGetParam();
+
+        $expected = array(
+            'table' => 'person',
+            'field' => array(
+                'id',
+                'name',
+                'surname',
+                'age'
+            )
+        );
+        $this->assertEquals($expected, $actual);
+    }
+    public function testGetParam()
+    {
+        $actual = ActiveRecordSub\Person::GetParam();
+        $expected = array(
+            'table' => 'person',
+            'field' => array(
+                'id',
+                'name',
+                'surname',
+                'age'
+            )
+        );
+        $this->assertEquals($expected, $actual);
+        $actual = ActiveRecordSub\Car::GetParam();
+
+        $expected = array(
+            'table' => 'car',
+            'field' => array(
+                'id',
+                'name',
+                'person_id'
+            )
+        );
+        $this->assertEquals($expected, $actual);
+    }
+    public function testPersonHasOneJoin()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->id = 1;
+        $person->join('car');
+        $this->assertTrue($person->load());
 
         $car = $person->car;
-        $car->setDriver($this->connection);
-
         $this->assertEquals('Ivan`s car', $car->name);
     }
-    public function testgetParam()
+    public function testPersonBelongsToJoin()
     {
-        $person = new ActiveRecordSub\Person(1);
-        $person->setDriver($this->connection);
+        $car = new ActiveRecordSub\Car();
+        $car->id = 1;
+        $car->join('person');
+        $car->load();
 
-        //var_dump($person->getParam('car'));
+        $person = $car->person;
+        $this->assertEquals('Ivan', $person->name);
     }
+    /*public function testPersonHasMany()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->id = 1;
+        $person->load();
+
+        $comps = $person->comps;
+        $this->assertEquals(2, count($comps));
+    }*/
 }

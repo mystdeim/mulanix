@@ -134,8 +134,8 @@ abstract class Criteria {
      */
     public function execute()
     {
-        $statement = $this->_pdo->prepare($this->_queryBuilder());
         //var_dump($this->_queryBuilder());
+        $statement = $this->_pdo->prepare($this->_queryBuilder());
         foreach($this->_boundParams as $param => $val) {
             $statement->bindValue($param, $val['value'], $val['type']);
         }

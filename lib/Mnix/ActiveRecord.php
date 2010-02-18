@@ -28,8 +28,8 @@ abstract class ActiveRecord
      * @var array
      */
     protected $_cortege = array();
-    protected $_driver;
-    protected static $param;
+    protected $_driver = NULL;
+    protected static $param = NULL;
     /**
      * Конструктор
      *
@@ -134,39 +134,51 @@ abstract class ActiveRecord
         return $this;
     }
     /**
-     * Параметры
+     * Gets tablename & fields
      *
      * @return array
      */
-    protected function _getParam() {
-        /*if (isset($this->_hasOne)) $data['has_one'] = $this->_has_one;
-        if (isset($this->_has_many)) $data['has_many'] = $this->_has_many;
+    protected function _getParam()
+    {
+        //TODO: create for mysql, this works only for sqlite
         $data['table'] = $this->_table;
-        $sel = Mnix_Db::connect()->query('SHOW FIELDS FROM ?t', $this->_table);
-        foreach ($sel as $temp) $data['fields'][] = $temp['Field'];
-        return $data;*/
-
-        $res = $this->_driver->query('PRAGMA table_info(' . $this->_table . ')', \PDO::FETCH_ASSOC);
-        //foreach ($res as $temp) var_dump($temp);
-        //var_dump($res);
+        $res = $this->_getDriver()->query('PRAGMA table_info(' . $this->_table . ')', \PDO::FETCH_ASSOC);
+        foreach ($res as $temp) $data['field'][] = $temp['name'];
+        return $data;
     }
-    public function join($name) {
-        if (isset($this->_has_one[$name])) {
-            $jclass = $this->_has_one[$name]['class'];
-            $jparam = Mnix_ORM_Prototype::takeParam($jclass);
-            //Пересчитываем столбцы для соединямой таблицы
-            foreach ($jparam['fields'] as $key => $value) {
-                $jparam['fields'][$value] = $name.'.'.$value;
-                unset($jparam['fields'][$key]);
+    public function join($name) 
+    {
+        if (isset($this->_hasOne) && isset($this->_hasOne[$name])) {
+            $jclass = $this->_hasOne[$name]['class'];
+            $jparam = $jclass::getParam();
+            //$jparam = $jclass::getParam();
+
+            foreach ($jparam['field'] as $value) {
+                 $jfields[$value] = $name . '.' . $value;
             }
-            $this->_select = Mnix_Db::connect()->select()
-                    ->from($this->_table, '*')
+            $this->_select()
                     ->joinLeft(
-                    array($jparam['table']             => $this->_table),
-                    array($this->_has_one[$name]['fk'] => 'id'),
-                    $jparam['fields']);
+                        array($jparam['table']             => $this->_table),
+                        array($this->_hasOne[$name]['field'] => 'id'),
+                    $jfields);
         }
+
+        if (isset($this->_belongsTo) && isset($this->_belongsTo[$name])) {
+            $jclass = $this->_belongsTo[$name]['class'];
+            $jparam = $jclass::getParam();
+
+            foreach ($jparam['field'] as $value) {
+                 $jfields[$value] = $name . '.' . $value;
+            }
+            $this->_select()
+                    ->joinLeft(
+                        array($jparam['table']             => $this->_table),
+                        array('id' => $this->_belongsTo[$name]['field']),
+                    $jfields);
+        }
+
         return $this;
+
     }
     /**
      * Перегрузка обращения к членам класса
@@ -221,17 +233,19 @@ abstract class ActiveRecord
     {
         //Обходим аттрибуты
         foreach ($atts as $att) {
+            //var_dump($att);
             //Проверяем кортеж, если в кортеже есть массив, то это "жадные" данные!
             if (isset($this->_cortege[$att])) {
                 if (!is_array($this->_cortege[$att])) $data[$att] = $this->_cortege[$att];
                 else {
-                    /*$obj = new $this->_hasOne[$att]['class'];
+                    $obj = $this->_getRelation($att);
                     $obj->set($this->_cortege[$att]);
-                    $data[$att] = $obj;*/
-                    $data[$att] = $this->_getRelation($att, $data);
+                    $data[$att] = $obj;
                 }
             } else {
-                $data[$att] = $this->_getRelation($att);
+                $obj = $this->_getRelation($att);
+                $obj->load();
+                $data[$att] = $obj;
             }
         }
         //Если запрос одного аттрибу, то его и возвращаем
@@ -239,23 +253,35 @@ abstract class ActiveRecord
         //В противном случае массив
         else return $data;
     }
-    protected function _getRelation($name, $data = NULL) {
-        //1:1
-        if (isset($this->_hasOne[$name])) {
+    /**
+     * Set object of relation
+     *
+     * @param string $name
+     * @param array $data
+     * @return mixed
+     */
+    protected function _getRelation($name) {
+        //parent:child
+        if (isset($this->_hasOne) && isset($this->_hasOne[$name])) {
 
             $class = $this->_hasOne[$name]['class'];
             $obj = new $class;
             $obj->set(array($this->_hasOne[$name]['field'] => $this->_cortege['id']));
-
-            //Добавляем в объект данные из жадного запроса, если они существуют
-            if (isset($data)) $obj->set($data);
-            //Если нет, грузим из базы
-            else $obj->load();
             
             return $obj;
         }
+        //child:parent
+        if (isset($this->_belongsTo) && isset($this->_belongsTo[$name])) {
+
+            $class = $this->_belongsTo[$name]['class'];
+            $obj = new $class;
+            $obj->set(array('id' => $this->_cortege[$this->_belongsTo[$name]['field']]));
+
+            return $obj;
+        }
+
         //many
-        if (isset($this->_has_many[$name])) {
+        /*if (isset($this->_has_many[$name])) {
             //Создаём коллекцию
             $collection = new Mnix_ORM_Collection($this->_has_many[$name]['class']);
             //Many:many
@@ -293,7 +319,7 @@ abstract class ActiveRecord
             }
             $collection->putSelect($select);
             return $collection;
-        }
+        }*/
     }
     /**
      * Запрос парметров класса(таблица, поля и тп)
@@ -301,15 +327,14 @@ abstract class ActiveRecord
      * @param string $name
      * @return array
      */
-    public static function takeParam($name) {
-        //$data = lib_Service_Cache::get("usr/component/$name.php", __FILE__.$name, 'f', 'u');
-        //if (!$data) {
-        $obj = new $name;
-        $data = $obj->getParam();
-        //lib_Service_Cache::clear(__FILE__.$name);
-        //lib_Service_Cache::put("usr/component/$name.php", $data, __FILE__.$name, 'f', 's');
-        //}
-        return $data;
+    public static function getParam()
+    {
+        $name = get_called_class();
+        if (!isset(static::$param[$name])) {
+            $obj = new $name;
+            static::$param[$name] = $obj->_getParam();
+        }
+        return static::$param[$name];
     }
     /**
      * Loading object from Database
@@ -319,18 +344,23 @@ abstract class ActiveRecord
     public function load()
     {
         if (isset($this->_cortege)) {
-            $condition = array();
             $temp = 0;
             foreach($this->_cortege as $key => $value) {
-                //var_dump($value);
                 $this->_select()->bindValue(':a' . $temp, $value);
-                $this->_select()->where($key . ' = :a' . $temp++);
-                //$condition[] = $key . ' = :a' . $temp++;
+                $this->_select()->where($this->_table . '.' . $key . ' = :a' . $temp++);
             }
-            //var_dump(implode(' AND ', $condition));
             $result = $this->_select()->execute();
+            //var_dump($result);
             if (count($result) === 1) {
-                $this->_cortege = current($result);
+                foreach (current($result) as $key => $value) {
+                    //var_dump($key);
+                    $flag = explode('.', $key);
+                    if (count($flag) === 2) $data[$flag[0]][$flag[1]] = $value;
+                    else $data[$key] = $value;
+                }
+                //var_dump($data);
+                $this->_cortege = $data;
+                unset($this->_select);
                 return true;
             } else {
                 return false;
