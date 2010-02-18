@@ -8,9 +8,9 @@ namespace Mnix\ActiveRecordSub;
  *
  * @author deim
  */
-class Car extends \Mnix\ActiveRecordSub
+class Comp extends \Mnix\ActiveRecordSub
 {
-    protected $_table = 'car';
+    protected $_table = 'comp';
     protected $_belongsTo = array(
         'person' => array(
             'class' => 'Mnix\ActiveRecordSub\Person',

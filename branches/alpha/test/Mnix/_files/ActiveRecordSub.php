@@ -12,6 +12,7 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Driver.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Driver/Statement.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Criteria.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
+
 /**
  * Mulanix Framework
  *
@@ -19,6 +20,7 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
  */
 class ActiveRecordSub extends ActiveRecord
 {
+    protected static $_driverSub = NULL;
     public function _get($name)
     {
         return $this->$name;
@@ -39,12 +41,21 @@ class ActiveRecordSub extends ActiveRecord
     {
         $this->_select();
     }
-    public function getParam()
+    public function publicGetParam()
     {
         return $this->_getParam();
     }
     public function forceLoad()
     {
         $this->_load();
+    }
+    protected function _getDriver()
+    {
+        $this->_driver = self::$_driverSub;
+        return $this->_driver;
+    }
+    public static function setDriverToSub($driver)
+    {
+        self::$_driverSub = $driver;
     }
 }

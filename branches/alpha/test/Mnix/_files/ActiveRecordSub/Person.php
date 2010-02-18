@@ -16,4 +16,9 @@ class Person extends \Mnix\ActiveRecordSub
             'class' => 'Mnix\ActiveRecordSub\Car',
             'field' => 'person_id'
     ));
+    protected $_hasMany = array(
+        'comps' => array(
+            'class' => 'Mnix\ActiveRecordSub\Comp',
+            'field' => 'person_id'
+    ));
 }

@@ -18,4 +18,12 @@
         id="2"
         name="Vasya`s car"
         person_id="2"/>
+    <comp
+        id="1"
+        name="Ivan`s comp 1"
+        person_id="1"/>
+    <comp
+        id="2"
+        name="Ivan`s comp 2"
+        person_id="1"/>
 </dataset>
