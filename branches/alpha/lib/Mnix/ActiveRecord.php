@@ -292,6 +292,9 @@ abstract class ActiveRecord
         }
 
         //many
+        if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
+            
+        }
         /*if (isset($this->_has_many[$name])) {
             //Создаём коллекцию
             $collection = new Mnix_ORM_Collection($this->_has_many[$name]['class']);
