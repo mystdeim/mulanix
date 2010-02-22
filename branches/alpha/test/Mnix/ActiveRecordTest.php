@@ -56,6 +56,7 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     public function testConstruct()
     {
         ActiveRecordSub::setDriverToSub($this->connection);
+        ActiveRecord\CollectionSub::setDriverToSub($this->connection);
         $obj = new ActiveRecordSub();
         $this->assertEquals('Mnix\ActiveRecordSub', get_class($obj));
         $this->assertFalse($obj->_get('_isLoad'));
@@ -282,11 +283,28 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
     }
     public function testPersonHasMany()
     {
-        $person = new ActiveRecordSub\Person();
+        /*$person = new ActiveRecordSub\Person();
         $person->id = 1;
         $person->load();
 
         $comps = $person->comps;
-        $this->assertEquals(2, count($comps));
+        $this->assertEquals(2, count($comps));*/
+        $person1 = new ActiveRecordSub\Person(1);
+        $person1->load();
+        $person2 = new ActiveRecordSub\Person(2);
+        $person2->load();
+
+        $collection = new ActiveRecord\CollectionSub('Person');
+        $collection[] = $person1;
+        $collection[1] = $person2;
+
+        //var_dump($collection);
+
+        foreach ($collection as $temp) {
+            var_dump('test:');
+            var_dump($temp);
+        }
+        $this->assertEquals(2, count($collection));
+
     }
 }
