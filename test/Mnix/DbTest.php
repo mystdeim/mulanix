@@ -28,22 +28,18 @@ class DbTest extends \PHPUnit_Framework_TestCase
     }*/
     public function testConnect()
     {
+        DbSub::clearInstance();
         $this->assertNull(DbSub::instances());
 
         $db = DbSub::connect('base0');
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(Db\base0\DBMS.':'.Path\DB.'/'.Db\base0\BASE , $db->_driver);
+        $this->assertEquals(Db\base0\DBMS. ':' . Db\base0\BASE , $db->_driver);
         $this->assertEquals(1, count(DbSub::instances()));
 
         $db = DbSub::connect('base1');
         $this->assertEquals('Mnix\DbSub', get_class($db));
         $this->assertEquals(Db\base1\DBMS.':dbname='.Db\base1\BASE.';host='.Db\base1\HOST.Db\base1\USER.Db\base1\PASS , $db->_driver);
         $this->assertEquals(2, count(DbSub::instances()));
-
-        $db = DbSub::connect('base3');
-        $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(Db\base3\DBMS.':'.Db\base3\BASE , $db->_driver);
-        $this->assertEquals(3, count(DbSub::instances()));
 
         //Пишем базу, которой не существует в конфиге
         try {
@@ -57,7 +53,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         
         $db = DbSub::connect();
         $this->assertEquals('Mnix\DbSub', get_class($db));
-        $this->assertEquals(3, count(DbSub::instances()));
+        $this->assertEquals(2, count(DbSub::instances()));
     }
     public function testReturn()
     {
