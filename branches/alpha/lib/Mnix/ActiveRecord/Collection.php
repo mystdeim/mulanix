@@ -8,16 +8,17 @@ namespace Mnix\ActiveRecord;
  *
  * @author deim
  */
-class Collection implements \Iterator, \ArrayAccess, \Countable
+class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
 {
-    protected $_driver;
-    protected $_select;
     protected $_class;
-    protected $_array;
+    protected $_table;
+    protected $_array = array();
     protected $_index = 0;
     public function __construct($class)
     {
         $this->_class = $class;
+        $param = $class::getParam();
+        $this->_table = $param['table'];
     }
     public function putSelect($obj)
     {
@@ -26,11 +27,6 @@ class Collection implements \Iterator, \ArrayAccess, \Countable
     public function load()
     {
         $this->_load();
-    }
-    public function setDriver($driver)
-    {
-        $this->_driver = $driver;
-        return $this;
     }
 
     public function current()

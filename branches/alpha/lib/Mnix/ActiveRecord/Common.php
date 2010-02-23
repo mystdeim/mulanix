@@ -10,8 +10,13 @@ namespace Mnix\ActiveRecord;
  */
 abstract class Common
 {
-    protected $_driver;
-    protected $_select;
+    protected $_driver = NULL;
+    /**
+     * Объект Mnix\Db\Select
+     *
+     * @var object(Mnix\Db\Select)
+     */
+    protected $_select = NULL;
     protected function _getDriver()
     {
         if (!isset($this->_driver)) $this->_driver = \Mnix\Db::connect()->driver();

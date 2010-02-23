@@ -8,7 +8,7 @@ namespace Mnix;
  *
  * @author deim
  */
-abstract class ActiveRecord
+abstract class ActiveRecord extends ActiveRecord\Common
 {
     /**
      * Флаг загрузки
@@ -16,19 +16,13 @@ abstract class ActiveRecord
      * @var boolean
      */
     protected $_isLoad = false;
-    /**
-     * Объект Mnix\Db\Select
-     *
-     * @var object(Mnix\Db\Select)
-     */
-    protected $_select = null;
+
     /**
      * Кортеж
      *
      * @var array
      */
     protected $_cortege = array();
-    protected $_driver = NULL;
     protected static $param = NULL;
     /**
      * Конструктор
@@ -49,11 +43,6 @@ abstract class ActiveRecord
     {
         $this->_driver = $driver;
         return $this;
-    }
-    protected function _getDriver()
-    {
-        if (!isset($this->_driver)) $this->_driver = Db::connect()->driver();
-        return $this->_driver;
     }
     protected function _select()
     {
@@ -293,7 +282,8 @@ abstract class ActiveRecord
 
         //many
         if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
-            
+            $collection = new ActiveRecord\Collection($this->_hasMany['class']);
+            return $collection;
         }
         /*if (isset($this->_has_many[$name])) {
             //Создаём коллекцию
