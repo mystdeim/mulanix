@@ -14,7 +14,7 @@ abstract class Common
     protected $_select;
     protected function _getDriver()
     {
-        if (!isset($this->_driver)) $this->_driver = Db::connect()->driver();
+        if (!isset($this->_driver)) $this->_driver = \Mnix\Db::connect()->driver();
         return $this->_driver;
     }
     protected function _placeHolder($condition, $data = null)
@@ -45,16 +45,18 @@ abstract class Common
 
         switch ($mode) {
             case 'a':
-                return $this->_table . '.' . $value;
+                $mask = $this->_table . '.' . $value;
+                break;
             case 'i':
                 $mask = $mask($bind);
                 $bind[] = array($mask, $value, \PDO::PARAM_INT);
-                return $mask;
+                break;
             case 's':
                 $mask = $mask($bind);
                 $bind[] = array($mask, $value, \PDO::PARAM_STR);
-                return $mask;
+                break;
         }
-    }
 
+        return $mask;
+    }
 }

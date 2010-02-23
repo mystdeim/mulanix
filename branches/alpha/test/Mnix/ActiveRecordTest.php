@@ -300,10 +300,10 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
 
         //var_dump($collection);
 
-        foreach ($collection as $temp) {
+        /*foreach ($collection as $temp) {
             var_dump('test:');
             var_dump($temp);
-        }
+        }*/
         $this->assertEquals(2, count($collection));
 
     }
