@@ -14,6 +14,13 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
     protected $_table;
     protected $_members = array();
     protected $_index = 0;
+    /**
+     * Collection::find('?a = ?s AND ?a > ?i, array('name', 'Ivan', 'id', 10));
+     */
+    public static function find($condition, $data = NULL)
+    {
+
+    }
     public function __construct($class)
     {
         $this->_class = $class;
@@ -28,6 +35,7 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
     {
         $this->_load();
     }
+
 
     public function current()
     {
