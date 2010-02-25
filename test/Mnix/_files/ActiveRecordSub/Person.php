@@ -21,4 +21,12 @@ class Person extends \Mnix\ActiveRecordSub
             'class' => 'Mnix\ActiveRecordSub\Comp',
             'field' => 'person_id'
     ));
+    protected $_hasManyToMany = array(
+        'houses' => array(
+            'class'   => 'Mnix\ActiveRecordSub\House',
+            'field'   => 'person_id',
+            'foreign' => 'house_id',
+            'table'   => 'person2house'
+    ));
+
 }

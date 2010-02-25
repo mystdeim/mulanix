@@ -12,6 +12,7 @@ require_once 'ActiveRecord/_files/CollectionSub.php';
 require_once '_files/ActiveRecordSub/Person.php';
 require_once '_files/ActiveRecordSub/Car.php';
 require_once '_files/ActiveRecordSub/Comp.php';
+require_once '_files/ActiveRecordSub/House.php';
 /**
  * Mulanix Framework
  *
@@ -254,12 +255,15 @@ class ActiveRecordTest extends \DatabaseTestCaseSub
         $person->load();
 
         $comps = $person->comps;
-        var_dump($comps);
         $this->assertEquals(2, count($comps));
+    }
+    public function testPersonHasManyToMany()
+    {
+        $person = new ActiveRecordSub\Person();
+        $person->id = 1;
+        $person->load();
 
-        //var_dump($collection);
-
-        //foreach ($comps as $temp) var_dump($temp);
-
+        $houses = $person->houses;
+        $this->assertEquals(2, count($houses));
     }
 }
