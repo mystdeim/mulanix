@@ -7,11 +7,13 @@
  */
 
 require_once dirname(__DIR__) . '/boot/bootstrap.php';
+require_once __DIR__ . '/_files/DatabaseTestCaseSub.php';
 
 define('Mnix\Core\BASE', 'base0', false);
 
 define('Mnix\Db\base0\DBMS', 'sqlite', false);
 define('Mnix\Db\base0\BASE', ':memory:', false);
+define('Mnix\Db\base0\XML', __DIR__ . '/_files/testDB.xml', false);
 
 define('Mnix\Db\base1\DBMS', 'mysql', false);
 define('Mnix\Db\base1\USER', 'user', false);
