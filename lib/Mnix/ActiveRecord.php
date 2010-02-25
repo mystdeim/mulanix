@@ -10,6 +10,7 @@ namespace Mnix;
  */
 abstract class ActiveRecord extends ActiveRecord\Common
 {
+    const COLLECTION = 'Mnix\ActiveRecord\Collection';
     /**
      * Флаг загрузки
      *
@@ -260,6 +261,7 @@ abstract class ActiveRecord extends ActiveRecord\Common
             
             return $obj;
         }
+
         //child:parent
         if (isset($this->_belongsTo) && isset($this->_belongsTo[$name])) {
 
@@ -272,17 +274,21 @@ abstract class ActiveRecord extends ActiveRecord\Common
 
         //parent:childs
         if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
-
             $class = $this->_hasMany[$name]['class'];
-            $obj = new $class;
-            $obj->set(array($this->_hasMany[$name]['field'] => $this->_cortege['id']));
+            $collection = static::COLLECTION;
+            $collection = new $collection($class);
+            
+            $param = $class::getParam();
+            
+            $select = new \Mnix\Db\Select($this->_getDriver());
+            $select->table($param['table'], $param['field'])
+                   ->where($param['table'].'.'.$this->_hasMany[$name]['field'].' = ' . (int)$this->_cortege['id']);
 
-            return $obj;
-        }
-
-        //many
-        if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
-            $collection = new ActiveRecord\Collection($this->_hasMany['class']);
+            $collection->select($select);
+            var_dump($collection);
+            //$collection->load();
+            //var_dump($collection);
+            
             return $collection;
         }
         /*if (isset($this->_has_many[$name])) {

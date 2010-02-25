@@ -17,42 +17,8 @@ require_once '_files/ActiveRecordSub/Comp.php';
  *
  * @author deim
  */
-class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
+class ActiveRecordTest extends \DatabaseTestCaseSub
 {
-    public function  __construct()
-    {
-        $this->connection = new Db\Driver('sqlite::memory:');
-        $this->connection->query("
-            CREATE TABLE person (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(255),
-                surname VARCHAR(255),
-                age INTEGER
-            );
-        ");
-        $this->connection->query("
-            CREATE TABLE car (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(255),
-                person_id INTEGER
-            );
-        ");
-        $this->connection->query("
-            CREATE TABLE comp (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name VARCHAR(255),
-                person_id INTEGER
-            );
-        ");
-    }
-    protected function getConnection()
-    {
-        return $this->createDefaultDBConnection($this->connection, 'sqlite');
-    }
-    protected function getDataSet()
-    {
-        return $this->createFlatXMLDataSet(__DIR__ . '/_files/ActiveRecord.xml');
-    }
     public function testConstruct()
     {
         ActiveRecordSub::setDriverToSub($this->connection);
@@ -288,22 +254,12 @@ class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
         $person->load();
 
         $comps = $person->comps;
-        //$this->assertEquals(2, count($comps));
-        /*$person1 = new ActiveRecordSub\Person(1);
-        $person1->load();
-        $person2 = new ActiveRecordSub\Person(2);
-        $person2->load();
-
-        $collection = new ActiveRecord\CollectionSub('Mnix\ActiveRecordSub\Person');
-        $collection[] = $person1;
-        $collection[1] = $person2;*/
+        var_dump($comps);
+        $this->assertEquals(2, count($comps));
 
         //var_dump($collection);
 
-        /*foreach ($collection as $temp) {
-            var_dump('test:');
-            var_dump($temp);
-        }*/
+        //foreach ($comps as $temp) var_dump($temp);
 
     }
 }

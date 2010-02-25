@@ -23,6 +23,8 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
  */
 class ActiveRecordSub extends ActiveRecord
 {
+    const COLLECTION = 'Mnix\ActiveRecord\CollectionSub';
+    
     protected static $_driverSub = NULL;
     public function _get($name)
     {

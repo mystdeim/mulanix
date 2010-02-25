@@ -36,6 +36,19 @@ class DatabaseTestCaseSub extends \PHPUnit_Extensions_Database_TestCase
                 person_id INTEGER
             );
         ");
+        $this->connection->query("
+            CREATE TABLE person2house (
+                person_id INTEGER,
+                house_id INTEGER,
+                PRIMARY KEY (person_id, house_id)
+            );
+        ");
+        $this->connection->query("
+            CREATE TABLE house (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255)
+            );
+        ");
     }
     protected function getConnection()
     {
