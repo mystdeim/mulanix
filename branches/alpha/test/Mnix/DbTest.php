@@ -17,15 +17,6 @@ require_once '_files/DbSub.php';
  */
 class DbTest extends \PHPUnit_Framework_TestCase
 {
-    /*public function testConstruct()
-    {
-        $dms = 'sqlite:/base.db';
-        $db = new Mnix\DbSub($dms);
-        $this->assertEquals('sqlite:/base.db', $this->_driver);
-        $dms = 'sqlite:/base.db';
-        $db = new Mnix\DbSub($dms);
-        $this->assertEquals('sqlite:/base.db', $this->_driver);
-    }*/
     public function testConnect()
     {
         DbSub::clearInstance();
