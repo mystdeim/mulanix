@@ -12,7 +12,7 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
 {
     protected $_class;
     protected $_table;
-    protected $_array = array();
+    protected $_members = array();
     protected $_index = 0;
     public function __construct($class)
     {
@@ -20,7 +20,7 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
         $param = $class::getParam();
         $this->_table = $param['table'];
     }
-    public function putSelect($obj)
+    public function select($obj)
     {
         $this->_select = $obj;
     }
@@ -31,19 +31,19 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
 
     public function current()
     {
-        return current($this->_array);
+        return current($this->_members);
     }
     public function key()
     {
-        return key($this->_array);
+        return key($this->_members);
     }
     public function next()
     {
-        return next($this->_array);
+        return next($this->_members);
     }
     public function rewind()
     {
-        reset($this->_array);
+        reset($this->_members);
     }
     public function valid()
     {
@@ -51,8 +51,8 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
     }
     public function offsetSet($offset, $value)
     {
-        if (!isset($offset))  $this->_array[] = $value;
-        else $this->_array[$offset] = $value;
+        /*if (!isset($offset))  $this->_members[] = $value;
+        else $this->_members[$offset] = $value;*/
     }
     public function offsetExists($offset)
     {
@@ -69,35 +69,28 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
     }
     public function count()
     {
-        return count($this->_array);
+        var_dump(count($this->_members));
+        return count($this->_members);
     }
 
-    protected function _getDriver()
-    {
-        if (!isset($this->_driver)) $this->_driver = Db::connect()->driver();
-        return $this->_driver;
-    }
     protected function _select()
     {
         if (!isset($this->_select)) {
-            $this->_select = new Db\Select($this->_getDriver());
+            $this->_select = new \Mnix\Db\Select($this->_getDriver());
             $this->_select->table($this->_table, '*');
         }
         return $this->_select;
     }
     protected function _load()
     {
-        if (empty($this->_select)) $this->_select();
-        $res = $this->_select->query();
+        $res = $this->_select()->execute();
 
         //Создаём элементы коллекции
         foreach ($res as $temp) {
-            $obj = new $this->_param['class'];
+            $obj = new $this->_class;
             $obj->set($temp);
             $this->_members[] = $obj;
         }
-
-        $this->_isLoad = TRUE;
 
         //Потом можно удалить
         unset($this->_select);
