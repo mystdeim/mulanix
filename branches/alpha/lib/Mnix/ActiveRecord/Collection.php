@@ -69,7 +69,7 @@ class Collection extends Common implements \Iterator, \ArrayAccess, \Countable
     }
     public function count()
     {
-        var_dump(count($this->_members));
+        //var_dump(count($this->_members));
         return count($this->_members);
     }
 

@@ -258,8 +258,7 @@ abstract class ActiveRecord extends ActiveRecord\Common
             $class = $this->_hasOne[$name]['class'];
             $obj = new $class;
             $obj->set(array($this->_hasOne[$name]['field'] => $this->_cortege['id']));
-            
-            return $obj;
+
         }
 
         //child:parent
@@ -269,14 +268,13 @@ abstract class ActiveRecord extends ActiveRecord\Common
             $obj = new $class;
             $obj->set(array('id' => $this->_cortege[$this->_belongsTo[$name]['field']]));
 
-            return $obj;
         }
 
         //parent:childs
         if (isset($this->_hasMany) && isset($this->_hasMany[$name])) {
             $class = $this->_hasMany[$name]['class'];
             $collection = static::COLLECTION;
-            $collection = new $collection($class);
+            $obj = new $collection($class);
             
             $param = $class::getParam();
             
@@ -284,52 +282,28 @@ abstract class ActiveRecord extends ActiveRecord\Common
             $select->table($param['table'], $param['field'])
                    ->where($param['table'].'.'.$this->_hasMany[$name]['field'].' = ' . (int)$this->_cortege['id']);
 
-            $collection->select($select);
-            var_dump($collection);
-            //$collection->load();
-            //var_dump($collection);
-            
-            return $collection;
+            $obj->select($select);
         }
-        /*if (isset($this->_has_many[$name])) {
-            //Создаём коллекцию
-            $collection = new Mnix_ORM_Collection($this->_has_many[$name]['class']);
-            //Many:many
-            if (isset($this->_has_many[$name]['jtable'])) {
-                //Узнаём параметры создаваемого класса, обрабатываем атрибуты
-                $param2 = Mnix_ORM_Prototype::takeParam($this->_has_many[$name]['class']);
-                //foreach ($param2['fields'] as $k => &$v) $v = $param2['table'].'.'.$v;
-                $select = Mnix_Db::connect()
-                        ->select()
-                        ->from($this->_table)
-                        ->from($this->_has_many[$name]['jtable'])
-                        ->from($param2['table'], $param2['fields'])
-                        ->where('?t = ?t AND ?t = ?t AND ?t = ?i',
-                        array(
-                        $this->_table.'.id',
-                        $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['fk'],
-                        $param2['table'].'.id',
-                        $this->_has_many[$name]['jtable'].'.'.$this->_has_many[$name]['id'],
-                        $this->_table.'.id',
-                        $this->_cortege['id']
-                        )
-                );
-                //1:many
-            } else {
-                $param = Mnix_ORM_Prototype::takeParam($this->_has_many[$name]['class']);
-                $select = Mnix_Db::connect()
-                        ->select()
-                        ->from($param['table'], '*')
-                        ->where('?t = ?i',
-                        array(
-                        $param['table'].'.'.$this->_has_many[$name]['fk'],
-                        $this->_cortege['id']
-                        )
-                );
-            }
-            $collection->putSelect($select);
-            return $collection;
-        }*/
+
+        if (isset($this->_hasManyToMany) && isset($this->_hasManyToMany[$name])) {
+            $class = $this->_hasManyToMany[$name]['class'];
+            $collection = static::COLLECTION;
+            $obj = new $collection($class);
+            $relation = $this->_hasManyToMany[$name];
+
+            $param = $class::getParam();
+
+            $select = new \Mnix\Db\Select($this->_getDriver());
+            $select->table($this->_table)
+                   ->table($relation['table'])
+                   ->table($param['table'], $param['field'])
+                   ->where($relation['table'].'.'.$relation['field']  .' = '.$this->_table  .'.id AND '
+                         . $relation['table'].'.'.$relation['foreign'].' = '.$param['table'].'.id AND '
+                         . $relation['table'].'.'.$relation['field']  .' = '.(int)$this->_cortege['id']);
+
+            $obj->select($select);
+        }
+        return $obj;
     }
     /**
      * Запрос парметров класса(таблица, поля и тп)
