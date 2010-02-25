@@ -285,6 +285,7 @@ abstract class ActiveRecord extends ActiveRecord\Common
             $obj->select($select);
         }
 
+        //many:many
         if (isset($this->_hasManyToMany) && isset($this->_hasManyToMany[$name])) {
             $class = $this->_hasManyToMany[$name]['class'];
             $collection = static::COLLECTION;
