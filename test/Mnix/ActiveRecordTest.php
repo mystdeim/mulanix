@@ -4,9 +4,6 @@
  */
 namespace Mnix;
 
-require_once 'PHPUnit/Extensions/Database/TestCase.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once '_files/ActiveRecordSub.php';
 require_once 'ActiveRecord/_files/CollectionSub.php';
 require_once '_files/ActiveRecordSub/Person.php';
