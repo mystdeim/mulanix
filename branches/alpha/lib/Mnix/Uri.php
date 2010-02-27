@@ -13,20 +13,33 @@ class Uri extends ActiveRecord
 {
     protected $_table = 'mnix_uri';
     protected $_hasOne = array(
+        //belongsTo
                 'page' => array(
-                                'class'  => 'Mnix_Engine_Page',
-                                'id'     => 'page_id')
+                    'class'  => 'Mnix\Engine\Page',
+                    'field'  => 'uri_id'),
+        //belongsToMany
+                'lang' => array(
+                    'class' => 'Mnix\Engine\Lang',
+                    'field' => 'lang_id')
         );
+    protected static $_defaultLang = NULL;
     /**
      * Возвращаем текущий ури
      *
-     * @return Mnix_Uri
+     * @return object(Mnix\Uri)
      */
     public static function current()
     {
         $obj = new Uri;
-        $obj->_parse();
-        return $obj;
+        return $obj->_parse($_SERVER['PATH_INFO']);
+    }
+    public static function setDefaultLang($str)
+    {
+        self::$_defaultLang = $str;
+    }
+    public function _GET($str)
+    {
+        
     }
     /**
      * Делим адрес на составные части
@@ -44,17 +57,26 @@ class Uri extends ActiveRecord
         }
         return $data;
     }
+    protected function _getNext($parent_id, $string)
+    {
+        
+    }
+    protected function _getLang($str)
+    {
+        
+    }
     /**
-     * Парсер строку адреса и возвращаем ид страницы
+     * //Парсер строку адреса и возвращаем ид страницы
+     *
      *
      * @param string $data
-     * return int
+     * return object(Mnix\Uri)
      */
-    protected function _parse($data = null)
+    protected function _parse($data)
     {
-        if (isset($data)) $requests = self::_parts($data);
-        else $requests = self::_parts($_SERVER['REQUEST_URI']);
-        $db = Mnix_Db::connect();
+        /*if (isset($data)) $requests = self::_parts($data);
+        else $requests = $this->_explode($_SERVER['PATH_INFO']);
+        //$db = Mnix_Db::connect();
         $state = 1;
         $data = array();
         $parent = 0;
@@ -143,7 +165,59 @@ class Uri extends ActiveRecord
             }
         } while ($state);
         $this->set($uri);
-        return $id;
+        return $id;*/
+        $requests = $this->_explode($data);
+        $state = 1;
+        $parent_id = 0;
+        $i = 0;
+
+
+
+        do {
+            //var_dump('State: ' . $state);
+            switch ($state) {
+                //Берём слово из урл и проверяем язык
+                case 1:
+                    $request = array_shift($requests);
+                    if ($request) {
+                        if (strlen($request) === 2) {
+                            //Тут проверяем язык или ставим дефолтный
+                            //$this->_cortege['lang'] =
+                            $state = 2;
+                        } else $state = 3;
+                    }
+                    else $state = 0;
+                    break;
+                //Берём слово из урл
+                case 2:
+                    $request = array_shift($requests);
+                    if ($request) $state = 2;
+                    else $state = 0;
+                    break;
+                //Берём урл
+                case 3:
+                    $uri = $this->_getNext($parent_id, $request);
+                    if ($uri !== FALSE) {
+                        $state = 2;
+                    } else $state = 0;
+                    break;
+                //TODO
+                //Тут кидать исключение
+                default:
+                    var_dump('NO state!'.$state);
+                    break;
+            }
+            //Типa защита
+            $i++;
+            if ($i > 10) {
+                //TODO
+                //Тут кидать исключение
+                var_dump('TO MANY!');
+                break;
+            }
+        } while ($state);
+
+        return $uri;
     }
 
 }

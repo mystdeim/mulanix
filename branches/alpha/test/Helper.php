@@ -24,6 +24,8 @@ define('Mnix\Db\base1\BASE', 'basename', false);
 define('Mnix\Db\base2\DBMS', 'sqlite', false);
 define('Mnix\Db\base2\BASE', 'base.db', false);
 
+define('Mnix\Polyglot\DEFAULT', 'en', false);
+
 /**
  * Helping class
  */

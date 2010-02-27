@@ -28,4 +28,25 @@ class UriSub extends Uri
     {
         return $this->_explode($data);
     }
+    protected function _getNext($parent_id, $string)
+    {
+        $obj = new Uri();
+        switch ($parent_id) {
+            case 0:
+                $obj->set(array('id'=>1));
+                break;
+            case 1:
+                $obj->set(array('id'=>2, 'parent_id'=>0));
+                break;
+        }
+        return $obj;
+    }
+    protected function _getLang($str)
+    {
+
+    }
+    public function parse($data)
+    {
+        return $this->_parse($data);
+    }
 }

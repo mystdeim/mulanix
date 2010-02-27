@@ -5,11 +5,7 @@
 namespace Mnix;
 
 require_once '_files/UriSub.php';
-/*require_once 'ActiveRecord/_files/CollectionSub.php';
-require_once '_files/ActiveRecordSub/Person.php';
-require_once '_files/ActiveRecordSub/Car.php';
-require_once '_files/ActiveRecordSub/Comp.php';
-require_once '_files/ActiveRecordSub/House.php';*/
+
 /**
  * Mulanix Framework
  *
@@ -28,8 +24,29 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function providerExplode()
     {
         return array(
-            array('/ru', array('/', 'ru')),
+            array('', array('/')),
             array('/ru', array('/', 'ru'))
+        );
+    }
+    /**
+     * @dataProvider providerParse
+     */
+    public function testParse($data, $expected)
+    {
+        UriSub::setDefaultLang('ru');
+        $uri = new UriSub();
+        $actual = $uri->parse($data);
+        $this->assertEquals($expected, $actual->id);
+        //$this->assertEquals($expected, $actual->lang);
+    }
+    public function providerParse()
+    {
+        return array(
+            array('', 1),
+            array('/', 1),
+            array('////////', 1),
+            array('/ru', 1),
+            array('/en/', 1)
         );
     }
 }
