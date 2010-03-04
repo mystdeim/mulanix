@@ -72,13 +72,18 @@ class Acl
         if (isset($role)) $this->_role = $role;
         if (isset($resource)) $this->_resource = $resource;
 
-        $actions = $this->_resource->getPrivileges($this->_role);
-        if ($actions[$this->_action] === null) {
+        /*$actions = $this->_resource->getPrivileges($this->_role);
+        if (in_array($this->_action, array_keys($actions))) {
             $permission = $this->_getFromDb();
+            if (isset($actions[$this->_action]) && $permission) $permission = $actions[$this->_action]();
         } else {
-            $permission = $this->_getFromDb();
-            if ($permission) $permission = $actions[$this->_action]();
-        }
+            //TODO: no this rule
+            $permission = false;
+        }*/
+        $actions = $this->_resource->getPrivileges($this->_role);
+        $permission = $this->_getFromDb();
+        if (isset($actions[$this->_action]) && $permission) $permission = $actions[$this->_action]();
+
         return $permission;
     }
     protected function _getFromDb()
