@@ -37,7 +37,9 @@ class AclTest extends \PHPUnit_Framework_TestCase
             array(true , 'view'     , 'group-guest' , 'note'),
             array(false, 'edit'     , 'group-guest' , 'note'),
             array(false, 'editOwner', 'group-member', 'note'),
-            array(true , 'editOwner', 'lucky-user'  , 'note')
+            array(true , 'editOwner', 'lucky-user'  , 'note'),
+            array(false, 'editOwner', 'group-guest' , 'note'),
+            array(false, 'abcdefghi', 'group-guest' , 'note')
         );
     }
 }
