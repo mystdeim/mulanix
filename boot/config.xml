@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <config>
     <mnix>
+        <config>
+            <cache>1</cache>
+        </config>
         <acl>
             <tune>11</tune>
         </acl>

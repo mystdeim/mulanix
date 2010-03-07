@@ -2,22 +2,18 @@
  /**
  * Mulanix Framework
  *
- * @category Mulanix
- * @package Mnix_Config
  * @version $Id$
  */
+namespace Mnix;
 /**
  * Конфиг
- *
- * @category Mulanix
- * @package Mnix_Config
  */
-class Mnix_Config
+class Config
 {
     public static function load()
     {
-        $cache = new Mnix_Cache(__FILE__);
-        $cache->file(MNIX_PATH_CONFIG)
+        $cache = new Cache();
+        $cache->file(Path\CONFIG)
                 ->hash('f')
                 ->load();
         if (!$cache->get()) {
