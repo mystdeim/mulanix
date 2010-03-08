@@ -50,7 +50,7 @@ class CoreSub extends Core
     public function  __construct()
     {
         $this->_ignoreFunc[] = 'createNote';
-        parent::__construct();
+        //parent::__construct();
     }
     /**
      * __get
@@ -117,5 +117,11 @@ class CoreSub extends Core
         ob_start();
         parent::__destruct();
         ob_end_clean();
+    }
+    public function run()
+    {
+        $this->putLog('s', 'Run core');
+        $this->_crash = true;
+        return $this;
     }
 }

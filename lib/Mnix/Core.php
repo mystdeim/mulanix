@@ -66,7 +66,8 @@ class Core
         'putLog',
         '_createNote',
         '_autoload',
-        'autoloadRegister'
+        'autoloadRegister',
+        '_debugFinish'
     );
     /**
      * Получение экземпляра класса Mnix\Core
@@ -86,6 +87,7 @@ class Core
     protected function __construct()
     {
         spl_autoload_register('\Mnix\Core::autoloadRegister');
+
     }
     /**
      * Деструктор
@@ -99,12 +101,17 @@ class Core
     /**
      * Менеджер
      *
-     * @return object Mnix_Core
+     * @return object(Mnix\Core)
      */
     public function run()
     {
-        $this->putLog('s', 'Run core');
         $this->_crash = true;
+        $config = new Config(Path\CONFIG);
+        $config->load();
+        $this->putLog('s', 'Run core');
+
+        
+
         return $this;
     }
     /**
@@ -298,9 +305,9 @@ class Core
     protected function _autoload($class)
     {
         if (file_exists($this->_getPath($class))) {
-            $this->logCount('core_cls');
+            //$this->logCount('core_cls');
             require_once $this->_getPath($class);
-            $this->log('s', 'Load class: ' . $class);
+            //$this->log('s', 'Load class: ' . $class);
         } else {
             throw new Exception("Class '$class' isn`t exists", 1);
         }
