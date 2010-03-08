@@ -14,6 +14,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function test1()
     {
+        $cache = new Cache();
+        $cache->dir('/');
+        $cache->clear();
+
+        $config = new ConfigSub(__DIR__ . '/_files/ConfigSub/configSub.xml');
+        $config->load();
+
+        unset($config);
         $config = new ConfigSub(__DIR__ . '/_files/ConfigSub/configSub.xml');
         $config->load();
 
@@ -37,5 +45,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTRUE(is_float(\MnixSub\ATTR7));
         $this->assertEquals(10.7, \MnixSub\ATTR7);
+
+        $cache->clear();
     }
 }

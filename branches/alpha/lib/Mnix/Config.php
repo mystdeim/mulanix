@@ -10,19 +10,7 @@ namespace Mnix;
  */
 class Config
 {
-    //const FILE = Path\CONFIG;
     protected $_path;
-    /*public static function load()
-    {
-        $cache = new Cache();
-        $cache->file(Path\CONFIG)
-                ->hash('f')
-                ->load();
-        if (!$cache->get()) {
-            $writer = new Mnix_Config_Writer(&$cache);
-        }
-        require_once $cache->path();
-    }*/
     public function __construct($path)
     {
         $this->_path = $path;
@@ -36,10 +24,8 @@ class Config
         if (!$cache->load()) {
             $cache->clear();
             $content = $this->_write();
-
             $cache->data($content)->save();
         }
-
         require_once $cache->file();
     }
     protected function _write()
@@ -50,7 +36,6 @@ class Config
         $walk = function($xml, $prefix) use(&$content, &$walk) {
 
             foreach((array)$xml as $attr => $value) {
-                var_dump($attr);
                 if ($value instanceof \SimpleXMLElement) {
                     $attr[0] = strtoupper($attr[0]);
                     $walk($value, $prefix . $attr . '\\');
