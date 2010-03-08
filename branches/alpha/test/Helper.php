@@ -9,22 +9,22 @@
 require_once dirname(__DIR__) . '/boot/bootstrap.php';
 require_once __DIR__ . '/_files/DatabaseTestCaseSub.php';
 
-define('Mnix\Core\BASE', 'base0', false);
+define('Mnix\Core\BASE', 'base0');
 
-define('Mnix\Db\base0\DBMS', 'sqlite', false);
-define('Mnix\Db\base0\BASE', ':memory:', false);
-define('Mnix\Db\base0\XML', __DIR__ . '/_files/testDB.xml', false);
+define('Mnix\Db\base0\DBMS', 'sqlite');
+define('Mnix\Db\base0\BASE', ':memory:');
+define('Mnix\Db\base0\XML', __DIR__ . '/_files/testDB.xml');
 
-define('Mnix\Db\base1\DBMS', 'mysql', false);
-define('Mnix\Db\base1\USER', 'user', false);
-define('Mnix\Db\base1\PASS', 'password', false);
-define('Mnix\Db\base1\HOST', 'localhost', false);
-define('Mnix\Db\base1\BASE', 'basename', false);
+define('Mnix\Db\base1\DBMS', 'mysql');
+define('Mnix\Db\base1\USER', 'user');
+define('Mnix\Db\base1\PASS', 'password');
+define('Mnix\Db\base1\HOST', 'localhost');
+define('Mnix\Db\base1\BASE', 'basename');
 
-define('Mnix\Db\base2\DBMS', 'sqlite', false);
-define('Mnix\Db\base2\BASE', 'base.db', false);
+define('Mnix\Db\base2\DBMS', 'sqlite');
+define('Mnix\Db\base2\BASE', 'base.db');
 
-define('Mnix\Polyglot\DEFAULT', 'en', false);
+define('Mnix\Polyglot\DEFAULT', 'en');
 
 /**
  * Helping class

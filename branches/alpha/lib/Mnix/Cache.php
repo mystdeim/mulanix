@@ -40,6 +40,7 @@ class Cache
      * @var string
      */
     protected $_data = null;
+    protected $_serialize = true;
     /**
      * Конструктор
      *
@@ -64,6 +65,15 @@ class Cache
             $this->_dir($dir);
             return $this;
         } else return \str_replace(Path\CACHE, null, $this->_dir);
+    }
+    public function file()
+    {
+        return $this->_dir . '/' . $this->_name;
+    }
+    public function serialize($flag)
+    {
+        $this->_serialize = $flag;
+        return $this;
     }
     /**
      * Задаёт директорию
@@ -120,9 +130,13 @@ class Cache
     public function data($data = null)
     {
         if (isset($data)) {
-            $this->_data = serialize($data);
+            if ($this->_serialize) $data = serialize($data);
+            $this->_data = $data;
             return $this;
-        } else return unserialize($this->_data);
+        } else {
+            if ($this->_serialize) $this->_data = unserialize($this->_data);
+            return $this->_data;
+        }
     }
     /**
      * Имя для кэшируемых данных

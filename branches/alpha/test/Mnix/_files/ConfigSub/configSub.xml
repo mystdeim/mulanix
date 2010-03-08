@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <config>
-    <mnix>
+    <mnixsub>
         <attr1>0</attr1>
-        <attr2></attr2>
+        <attr2>5</attr2>
         <attr3>true</attr3>
         <attr4>false</attr4>
-        <attr5>string</attr5>
+        <attr5>text</attr5>
         <attr6>
             <attr61>text</attr61>
         </attr6>
-    </mnix>
+        <attr7>10.7</attr7>
+    </mnixsub>
 </config>
