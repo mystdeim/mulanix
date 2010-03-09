@@ -33,10 +33,10 @@ class UriSub extends Uri
         $obj = new Uri();
         switch ($parent_id) {
             case 0:
-                $obj->set(array('id'=>1));
+                $obj->set(array('id'=>1, 'name'=>'/', 'parent'=>0));
                 break;
             case 1:
-                $obj->set(array('id'=>2, 'parent_id'=>0));
+                $obj->set(array('id'=>2, 'parent'=>1, 'name'=>'help'));
                 break;
         }
         return $obj;
