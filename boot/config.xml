@@ -19,8 +19,8 @@
                 <base>cmf1</base>
             </base>
             <system>
-                <dbms>xml</dbms>
-                <file>system.xml</file>
+                <dbms>sqlite</dbms>
+                <file>system.db</file>
             </system>
         </db>
         <core>
