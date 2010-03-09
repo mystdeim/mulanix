@@ -66,7 +66,7 @@ class Uri extends ActiveRecord
     {
 
         $requests = $this->_explode($data);
-        array_shift($requests);
+        //array_shift($requests);
         $state = 1;
         $parent_id = 0;
         $i = 0;
