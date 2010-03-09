@@ -110,7 +110,9 @@ class Core
         $config->load();
         $this->putLog('s', 'Run core');
 
-        
+        var_dump($_SERVER);
+        $url = Uri::current();
+        var_dump($url);
 
         return $this;
     }
