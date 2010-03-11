@@ -14,6 +14,8 @@ class Uri extends ActiveRecord
     protected $_table = 'mnix_uri';
     protected $_lang  = null;
     protected $_uri   = null;
+    protected $_get   = null;
+    protected $_param = array();
     public function  __construct()
     {
 
@@ -27,6 +29,11 @@ class Uri extends ActiveRecord
     public function putUri($uri)
     {
         $this->_uri = $this->_explode($uri);
+        return $this;
+    }
+    public function putGet($get)
+    {
+        $this->_get = $get;
         return $this;
     }
     public function putLangObj($lang)
@@ -43,6 +50,11 @@ class Uri extends ActiveRecord
             return $this->_lang;
         } else return false;
     }
+    public function Param()
+    {
+        //var_dump($this->_param);
+        return $this->_param;
+    }
     public function parse()
     {
         $this->_cortege['id'] = 1;
@@ -58,7 +70,7 @@ class Uri extends ActiveRecord
                     else $state = 3;
                     break;
                 case 2:
-                    if ($this->_checkUri($this->_cortege['id'], $request)) {
+                    if ($this->_checkUri($request)) {
                         $state = 4;
                         $flag  = true;
                     } else {
@@ -99,18 +111,50 @@ class Uri extends ActiveRecord
     }
     protected function _checkUri($request)
     {
-        $collection = $this->_getParts($this->_cortege['id']);
+        $flag = false;
+        $uries = $this->_getUries($this->_cortege['id']);
+        
+        foreach ($uries as $uri) {
+            $parts = $this->_getParts($uri['id']);
 
-        $regexp = '';
-        foreach ($collection as $temp) $regexp .= $temp->regexp;
+            $regexp = '';
+            foreach ($parts as $part) $regexp .= '('.$part['regexp'].')';
+
+            if (preg_match('/^'.$regexp.'$/', $request)) {
+
+                //Смотрим параметры в ЧПУ
+                foreach ($parts as $part) {
+                    if ($part['type']) {
+                        preg_match('/'.$part['regexp'].'/', $request, $pocket);
+                        $this->_param[$part['name']] = $pocket[0];
+                    }
+                    $request = preg_replace('/'.$part['regexp'].'/', '', $request);
+                }
+
+                //Проверяем параметры в ЧПУ
+                $gets = $this->_getGetParams($uri['id']);
+                foreach($gets as $get) {
+                    if (isset($this->_get[$get['name']])) 
+                        $this->_param[$get['name']] = $this->_get[$get['name']];
+                }
+
+                $flag = true;
+                break;
+            }
+        }
+        return $flag;
     }
-    protected function _getUri($request)
+    protected function _getUries($parent)
     {
         
     }
-    protected function _getParts()
+    protected function _getParts($parent)
     {
         
+    }
+    protected function _getGetParams($parent)
+    {
+
     }
     /**
      * //Парсер строку адреса и возвращаем ид страницы
