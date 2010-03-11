@@ -156,40 +156,4 @@ class Uri extends ActiveRecord
     {
 
     }
-    /**
-     * //Парсер строку адреса и возвращаем ид страницы
-     *
-     * @param string $data
-     * return object(Mnix\Uri)
-     */
-    protected function _parse($data)
-    {
-        $requests = $this->_explode($data);
-        $name = array_shift($requests);
-
-        $uri = $this->_getNext(0, $name);
-        $this->_checkLang(self::$_defaultLang);
-        //var_dump($this->_lang);
-        
-        //Проверяем язык
-        $name = array_shift($requests);
-        if ($name) {
-            if (strlen($name) === 2) {
-                //var_dump($name);
-                if (!$this->_checkLang($name)) return $this->_getNext(1, '404');
-                $name = array_shift($requests);
-            }
-        }
-        
-        //Смотрим остальные
-        while ($name) {
-            $uriNew = $this->_getNext($uri->id, $name);
-            if ($uriNew !== false) $uri = $uriNew;
-            else return $this->_getNext(1, '404');
-            $name = array_shift($requests);
-        }
-        
-        return $uri;
-    }
-
 }
