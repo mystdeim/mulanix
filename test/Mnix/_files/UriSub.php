@@ -16,6 +16,16 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Driver.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Driver/Statement.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Criteria.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
+require_once \Mnix\Path\LIB . '/Mnix/Core/Lang.php';
+
+class PartMok
+{
+    public $regexp;
+    public function __construct($regexp)
+    {
+        $this->regexp = $regexp;
+    }
+}
 
 /**
  * Mulanix Framework
@@ -28,25 +38,42 @@ class UriSub extends Uri
     {
         return $this->_explode($data);
     }
-    protected function _getNext($parent_id, $string)
-    {
-        $obj = new Uri();
-        switch ($parent_id) {
-            case 0:
-                $obj->set(array('id'=>1, 'name'=>'/', 'parent'=>0));
-                break;
-            case 1:
-                $obj->set(array('id'=>2, 'parent'=>1, 'name'=>'help'));
-                break;
-        }
-        return $obj;
-    }
-    protected function _getLang($str)
-    {
 
-    }
-    public function parse($data)
+    protected function _checkUri($parent, $uri)
     {
-        return $this->_parse($data);
+        $flag = false;
+        if ($parent === 0) $flag = true;
+        if ($parent === 1) {
+            if ($uri === 'help' || $uri === '404') $flag = true;
+        }
+
+        return $flag;
+    }
+    protected function _getUri($request)
+    {
+        $obj = new UriSub();
+
+        if ($parent === 1) {
+            switch ($request) {
+                case 'help':
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    protected function _getParts()
+    {
+        switch ($this->_cortege['id']) {
+            case 2:
+                $arr = array(new PartMok('help'));
+                break;
+            case 3:
+                $arr = array(new PartMok('page'), new PartMok('int'));
+                break;
+            }
+        return $arr;
     }
 }
