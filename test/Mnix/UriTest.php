@@ -41,10 +41,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             array(''          , array()),
             array('/ru'       , array('ru')),
             array('/en///////', array('en')),
-            array('/ru/page1/', array('ru', 'page1'))/*,
-            array('/?a=fg',     array()),
-            array('/ru?df=df', array('ru')),
-            array('/ru/?sf=f', array('ru'))*/
+            array('/ru/page1/', array('ru', 'page1'))
         );
     }
     /**
@@ -82,7 +79,33 @@ class UriTest extends \PHPUnit_Framework_TestCase
         return array(
             array(''    , true),
             array('help', true),
-            array('errr', false)
+            array('errr', false),
+            array('page', true),
+            array('page1', true),
+            array('pageA', false)
+        );
+    }
+    /**
+     * @dataProvider providerParam
+     */
+    public function testParam($request, $get, $expected)
+    {
+        $uri = new UriSub();
+        $uri->putUri($request);
+        $uri->putGet($get);
+        $uri->parse();
+        $this->assertEquals($expected, $uri->param());
+    }
+    public function providerParam()
+    {
+        return array(
+            array(''    , '', array()),
+            array('help', '', array()),
+            array('errr', '', array()),
+            array('page', '', array('number'=>null)),
+            array('page1', '', array('number'=>1)),
+            array('page', array('id'=>10), array('number'=>null)),
+            array('help', array('id'=>10), array('id'=>10))
         );
     }
 }

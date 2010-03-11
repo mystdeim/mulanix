@@ -18,15 +18,6 @@ require_once \Mnix\Path\LIB . '/Mnix/Db/Criteria.php';
 require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
 require_once \Mnix\Path\LIB . '/Mnix/Core/Lang.php';
 
-class PartMok
-{
-    public $regexp;
-    public function __construct($regexp)
-    {
-        $this->regexp = $regexp;
-    }
-}
-
 /**
  * Mulanix Framework
  *
@@ -38,42 +29,54 @@ class UriSub extends Uri
     {
         return $this->_explode($data);
     }
-
-    protected function _checkUri($parent, $uri)
+    protected function _getUries($parent)
     {
-        $flag = false;
-        if ($parent === 0) $flag = true;
-        if ($parent === 1) {
-            if ($uri === 'help' || $uri === '404') $flag = true;
+        $all = array(
+            array('id'=>1, 'parent'=>0),
+            array('id'=>2, 'parent'=>1),
+            array('id'=>3, 'parent'=>1)
+        );
+
+        $res = array();
+        foreach ($all as $one) {
+            if ($one['parent'] == $parent) $res[] = $one;
         }
 
-        return $flag;
+        return $res;
     }
-    protected function _getUri($request)
+    /**
+     * type = false => static url
+     * type = true  => param
+     *
+     * @param <type> $parent
+     * @return <type>
+     */
+    protected function _getParts($parent)
     {
-        $obj = new UriSub();
+        $all = array(
+            array('id'=>1, 'name'=>''      , 'regexp'=>'help', 'parent'=>2, 'type'=>false, 'weight'=>1),
+            array('id'=>2, 'name'=>''      , 'regexp'=>'page', 'parent'=>3, 'type'=>false, 'weight'=>1),
+            array('id'=>3, 'name'=>'number', 'regexp'=>'\d*' , 'parent'=>3, 'type'=>true , 'weight'=>2)
+        );
 
-        if ($parent === 1) {
-            switch ($request) {
-                case 'help':
-
-                    break;
-
-                default:
-                    break;
-            }
+        $res = array();
+        foreach ($all as $one) {
+            if ($one['parent'] == $parent) $res[] = $one;
         }
+
+        return $res;
     }
-    protected function _getParts()
+    protected function _getGetParams($parent)
     {
-        switch ($this->_cortege['id']) {
-            case 2:
-                $arr = array(new PartMok('help'));
-                break;
-            case 3:
-                $arr = array(new PartMok('page'), new PartMok('int'));
-                break;
-            }
-        return $arr;
+        $all = array(
+            array('id'=>1, 'parent'=>2, 'name'=>'id')
+        );
+
+        $res = array();
+        foreach ($all as $one) {
+            if ($one['parent'] == $parent) $res[] = $one;
+        }
+
+        return $res;
     }
 }
