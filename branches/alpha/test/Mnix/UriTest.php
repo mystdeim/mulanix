@@ -5,20 +5,7 @@
 namespace Mnix;
 
 require_once '_files/UriSub.php';
-
-class LangMok
-{
-    public $short;
-    public function __construct($short = null)
-    {
-        $this->short = $short;
-    }
-    public function load()
-    {
-        if ($this->short === 'ru' || $this->short === 'en') return true;
-        else return false;
-    }
-}
+require_once '_files/UriSub/LangMok.php';
 
 /**
  * Mulanix Framework
@@ -51,7 +38,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         $uri = new UriSub();
         $uri->putUri($request);
-        $uri->putLangObj(new LangMok);
+        $uri->putLangObj(new UriSub\LangMok);
         $lang = $uri->getLang();
         $this->assertEquals($expected, $lang);
     }
@@ -59,8 +46,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(''  , false),
-            array('ru', new LangMok('ru')),
-            array('en', new LangMok('en')),
+            array('ru', new UriSub\LangMok('ru')),
+            array('en', new UriSub\LangMok('en')),
             array('fr', false)
         );
     }
