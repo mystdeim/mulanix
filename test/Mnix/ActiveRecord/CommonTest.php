@@ -25,7 +25,6 @@ class CommonTest extends \PHPUnit_Framework_TestCase
     public function testShielding($value, $mode, $bind, $expected)
     {
         $obj = new CommonSub();
-        //$bindLocal = $bind;
         $actual = $obj->shielding($value, $mode, $bind);
         $this->assertEquals($expected['string'], $actual);
         $this->assertEquals($expected['bind'], $bind);

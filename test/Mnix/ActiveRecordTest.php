@@ -19,8 +19,7 @@ class ActiveRecordTest extends \DatabaseTestCaseSub
 {
     public function testConstruct()
     {
-        ActiveRecordSub::setDriverToSub($this->connection);
-        ActiveRecord\CollectionSub::setDriverToSub($this->connection);
+        ActiveRecord::setDb($this->connection);
         $obj = new ActiveRecordSub();
         $this->assertEquals('Mnix\ActiveRecordSub', get_class($obj));
         $this->assertFalse($obj->_get('_isLoad'));

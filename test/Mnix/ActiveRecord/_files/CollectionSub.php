@@ -32,13 +32,4 @@ class CollectionSub extends Collection
     {
         $this->$name = $value;
     }
-    protected function _getDriver()
-    {
-        $this->_driver = self::$_driverSub;
-        return $this->_driver;
-    }
-    public static function setDriverToSub($driver)
-    {
-        self::$_driverSub = $driver;
-    }
 }

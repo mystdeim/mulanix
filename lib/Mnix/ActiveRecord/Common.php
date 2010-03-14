@@ -10,17 +10,23 @@ namespace Mnix\ActiveRecord;
  */
 abstract class Common
 {
-    protected $_driver = NULL;
+    protected static $_driver = NULL;
     /**
      * Объект Mnix\Db\Select
      *
      * @var object(Mnix\Db\Select)
      */
     protected $_select = NULL;
+    public static function setDb($db)
+    {
+        self::$_driver = $db;
+    }
     protected function _getDriver()
     {
-        if (!isset($this->_driver)) $this->_driver = \Mnix\Db::connect()->driver();
-        return $this->_driver;
+        if (!isset($this->_driver)) {
+            //$this->_driver = \Mnix\Db::connect()->driver();
+            return self::$_driver;
+        }
     }
     protected function _placeHolder($condition, $data = null)
     {

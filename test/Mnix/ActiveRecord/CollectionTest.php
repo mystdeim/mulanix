@@ -19,8 +19,7 @@ class CollectionTest extends \DatabaseTestCaseSub
 {
     public function test1()
     {
-        \Mnix\ActiveRecordSub::setDriverToSub($this->connection);
-        CollectionSub::setDriverToSub($this->connection);
+        \Mnix\ActiveRecord::setDb($this->connection);
     }
     public function testSimpleLoad()
     {
