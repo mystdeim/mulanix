@@ -110,9 +110,19 @@ class Core
         $config->load();
         $this->putLog('s', 'Run core');
 
+        $db = Db::connect();
+        var_dump($db);
+        var_dump($db->driver());
+        ActiveRecord::setDb($db->driver());
+
         var_dump($_SERVER);
-        $url = Uri::current();
-        var_dump($url);
+        //$uri = new Uri();
+        var_dump($_SERVER['REQUEST_URI']);
+        $uri->putUri($_SERVER['REQUEST_URI']);
+
+        var_dump($uri);
+        $uri->parse();
+        var_dump($uri);
 
         return $this;
     }

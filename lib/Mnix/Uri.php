@@ -100,8 +100,8 @@ class Uri extends ActiveRecord
     protected function _explode($data)
     {
         //Deleting $_GET parametrs
-        //$data = explode('?', $data);
-        $requests = explode('/', $data);
+        $data = explode('?', $data);
+        $requests = explode('/', $data[0]);
         $data = array();
         //Анализируем на повторяющиеся ''
         foreach ($requests as $request) {
