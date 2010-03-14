@@ -64,12 +64,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function providerParse()
     {
         return array(
-            array(''    , true),
-            array('help', true),
-            array('errr', false),
-            array('page', true),
-            array('page1', true),
-            array('pageA', false)
+            array('/'    , true),
+            array('/help', true),
+            array('/errr', false),
+            array('/page', true),
+            array('/page1', true),
+            array('/pageA', false)
         );
     }
     /**
