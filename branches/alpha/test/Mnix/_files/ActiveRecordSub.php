@@ -25,7 +25,6 @@ class ActiveRecordSub extends ActiveRecord
 {
     const COLLECTION = 'Mnix\ActiveRecord\CollectionSub';
     
-    protected static $_driverSub = NULL;
     public function _get($name)
     {
         return $this->$name;
@@ -53,14 +52,5 @@ class ActiveRecordSub extends ActiveRecord
     public function forceLoad()
     {
         $this->_load();
-    }
-    protected function _getDriver()
-    {
-        $this->_driver = self::$_driverSub;
-        return $this->_driver;
-    }
-    public static function setDriverToSub($driver)
-    {
-        self::$_driverSub = $driver;
     }
 }
