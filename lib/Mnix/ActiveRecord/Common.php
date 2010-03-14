@@ -23,10 +23,7 @@ abstract class Common
     }
     protected function _getDriver()
     {
-        if (!isset($this->_driver)) {
-            //$this->_driver = \Mnix\Db::connect()->driver();
-            return self::$_driver;
-        }
+        return self::$_driver;
     }
     protected function _placeHolder($condition, $data = null)
     {
