@@ -41,11 +41,4 @@
     <house
         id="2"
         name="Small House"/>
-
-    <mnix_lang
-        id="1"
-        short="en"/>
-    <mnix_lang
-        id="2"
-        short="ru"/>
 </dataset>

@@ -37,7 +37,7 @@ class RequestUriTest extends \PHPUnit_Framework_TestCase
     {
         $uri = new RequestUriSub();
         $uri->putQuery($data);
-        $uri->langExists();
+        //$uri->langExists();
         //$this->assertEquals($uri->langExists(), $flag);
         $langObj = $uri->getLang();
         //if ($flag) $this->assertEquals($lang->short, $langObj->short);
