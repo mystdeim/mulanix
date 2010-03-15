@@ -13,6 +13,7 @@ class DatabaseTestCaseSub extends \PHPUnit_Extensions_Database_TestCase
 {
     public function __construct()
     {
+        var_dump('!!!!!');
         $this->connection = new \PDO('sqlite::memory:');
         $this->connection->query("
             CREATE TABLE person (
