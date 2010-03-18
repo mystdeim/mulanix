@@ -7,10 +7,13 @@ namespace Mnix;
 require_once dirname(dirname(__DIR__)) . '/Helper.php';
 
 require_once \Mnix\Path\LIB . '/Mnix/RequestUri.php';
+require_once \Mnix\Path\LIB . '/Mnix/Db.php';
+require_once \Mnix\Path\LIB . '/Mnix/Db/Criteria.php';
+require_once \Mnix\Path\LIB . '/Mnix/Db/Select.php';
 require_once \Mnix\Path\LIB . '/Mnix/ActiveRecord/Common.php';
 require_once \Mnix\Path\LIB . '/Mnix/ActiveRecord.php';
 require_once \Mnix\Path\LIB . '/Mnix/Lang.php';
-//require_once \Mnix\Path\LIB . '/Mnix/Uri.php';
+require_once \Mnix\Path\LIB . '/Mnix/Uri.php';
 /**
  * Mulanix Framework
  *

@@ -23,12 +23,14 @@ class RequestUri
     public function langExists()
     {
         $lang = new LANG;
-        $lang->short = 'en';
-        if ($lang->load()) {
+        $lang->short = array_shift($this->_query);
+        var_dump($lang->short);
+        var_dump($lang->load());
+        /*if (isset($lang->short) && $lang->load()) {
             $this->_lang = $lang;
             return true;
         }
-        else return false;
+        else */return false;
     }
     public function getLang()
     {

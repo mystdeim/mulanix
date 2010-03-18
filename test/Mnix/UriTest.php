@@ -17,7 +17,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerExplode
      */
-    public function testExplode($data, $expected)
+    /*public function testExplode($data, $expected)
     {
         $uri = new UriSub();
         $this->assertEquals($expected, $uri->explode($data));
@@ -30,11 +30,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
             array('/en///////', array('en')),
             array('/ru/page1/', array('ru', 'page1'))
         );
-    }
+    }*/
     /**
      * @dataProvider providerGetLang
      */
-    public function testGetLang($request, $expected)
+    /*public function testGetLang($request, $expected)
     {
         $uri = new UriSub();
         $uri->putUri($request);
@@ -50,12 +50,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
             array('en', new UriSub\LangMok('en')),
             array('fr', false)
         );
-    }
+    }*/
 
     /**
      * @dataProvider providerParse
      */
-    public function testParse($request, $expected)
+    /*public function testParse($request, $expected)
     {
         $uri = new UriSub();
         $uri->putUri($request);
@@ -71,11 +71,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
             array('/page1', true),
             array('/pageA', false)
         );
-    }
+    }*/
     /**
      * @dataProvider providerParam
      */
-    public function testParam($request, $get, $expected)
+    /*public function testParam($request, $get, $expected)
     {
         $uri = new UriSub();
         $uri->putUri($request);
@@ -94,5 +94,5 @@ class UriTest extends \PHPUnit_Framework_TestCase
             array('page', array('id'=>10), array('number'=>null)),
             array('help', array('id'=>10), array('id'=>10))
         );
-    }
+    }*/
 }
