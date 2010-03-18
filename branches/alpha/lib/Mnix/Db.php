@@ -64,6 +64,10 @@ class Db
         }
         return self::$_instances[$nameOfBase] = new static($dsn, $user, $pass);
     }
+    public static function putDriver($nameOfBase, $driver)
+    {
+        self::$_instances[$nameOfBase] = $driver;
+    }
     /**
      * Защищенный конструктор
      *
@@ -97,7 +101,15 @@ class Db
     {
         return new Db\Base($this->_driver);
     }
+    /**
+     * @deprecated
+     * @return <type>
+     */
     public function driver()
+    {
+        return $this->_driver;
+    }
+    public function getDriver($driver)
     {
         return $this->_driver;
     }

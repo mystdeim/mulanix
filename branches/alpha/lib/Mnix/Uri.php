@@ -12,25 +12,6 @@ namespace Mnix;
 class Uri extends ActiveRecord
 {
     protected $_table = 'mnix_uri';
-    protected $_lang  = null;
-    protected $_uri   = null;
-    protected $_get   = null;
-    protected $_param = array();
-    public function  __construct()
-    {
-
-    }
-    /**
-     * Передаётся строка запроса $_SERVER['PATH_INFO']
-     *
-     * @param string $uri
-     * @return object(Mnix\Uri)
-     */
-    public function putUri($uri)
-    {
-        $this->_uri = $this->_explode($uri);
-        return $this;
-    }
     public function putGet($get)
     {
         $this->_get = $get;

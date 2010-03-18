@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <uri
+    <mnix_uri
         id="1"
         parent="0"/>
-    <uri
+    <mnix_uri
         id="2"
         parent="1"/>
+    <mnix_lang
+        id="1"
+        short="en"/>
+    <mnix_lang
+        id="2"
+        short="ru"/>
 </dataset>
