@@ -6,8 +6,10 @@
  * @author mystdeim <mysteim@gmail.com>
  */
 
+require_once 'PHPUnit/Extensions/Database/TestCase.php';
+require_once 'PHPUnit/Framework.php';
+
 require_once dirname(__DIR__) . '/boot/bootstrap.php';
-require_once __DIR__ . '/_files/DatabaseTestCaseSub.php';
 
 define('Mnix\Core\BASE', 'base0');
 
