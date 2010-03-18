@@ -11,8 +11,23 @@ require_once '_files/RequestUriSub.php';
  *
  * @author deim
  */
-class RequestUriTest extends \PHPUnit_Framework_TestCase
+class RequestUriTest extends \PHPUnit_Extensions_Database_TestCase
 {
+    protected function getConnection()
+    {
+        $this->connection = new \PDO('sqlite::memory:');
+        $this->connection->query("
+            CREATE TABLE uri (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                parent INTEGER
+            );
+        ");
+        return $this->createDefaultDBConnection($this->connection, 'sqlite');
+    }
+    protected function getDataSet()
+    {
+        return $this->createFlatXMLDataSet(__DIR__ . '/_files/RequestUriSub/db.xml');
+    }
     /**
      * @dataProvider providerExplode
      */

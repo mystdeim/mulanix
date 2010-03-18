@@ -15,8 +15,52 @@ require_once '_files/ActiveRecordSub/House.php';
  *
  * @author deim
  */
-class ActiveRecordTest extends \DatabaseTestCaseSub
+class ActiveRecordTest extends \PHPUnit_Extensions_Database_TestCase
 {
+    protected function getConnection()
+    {
+        $this->connection = new \PDO('sqlite::memory:');
+        $this->connection->query("
+            CREATE TABLE person (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255),
+                surname VARCHAR(255),
+                age INTEGER
+            );
+        ");
+        $this->connection->query("
+            CREATE TABLE car (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255),
+                person_id INTEGER
+            );
+        ");
+        $this->connection->query("
+            CREATE TABLE comp (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255),
+                person_id INTEGER
+            );
+        ");
+        $this->connection->query("
+            CREATE TABLE person2house (
+                person_id INTEGER,
+                house_id INTEGER,
+                PRIMARY KEY (person_id, house_id)
+            );
+        ");
+        $this->connection->query("
+            CREATE TABLE house (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255)
+            );
+        ");
+        return $this->createDefaultDBConnection($this->connection, 'sqlite');
+    }
+    protected function getDataSet()
+    {
+        return $this->createFlatXMLDataSet(__DIR__ . '/_files/ActiveRecordSub/db.xml');
+    }
     public function testConstruct()
     {
         ActiveRecord::setDb($this->connection);
